@@ -20,6 +20,8 @@ public enum TradeSourceEnum implements I18nSupport {
     CASHIER_CODE("cashier_code"),
     /// 网关收银台
     CASHIER("cashier"),
+    /// 商户收银(PC 收款精灵)
+    MCH_CASHIER("mch_cashier"),
     /// 聚合扫码
     AGGRESS_PAY("aggress_pay"),
     /// 易支付协议

@@ -154,4 +154,9 @@
   "fundFlow": {
     "notFound": "Fund flow not found"
   }
+,
+  "cashier": {
+    "processing": "Cashier is processing, please do not repeat the operation",
+    "bizOrderAmountMismatch": "The merchant order number already exists with a different amount; please scan again"
+  }
 }

@@ -5,4 +5,6 @@
   "cashier": "キャッシャー決済",
   "aggress_pay": "アグリゲート決済",
   "easy_pay": "EasyPayプロトコル"
+,
+  "mch_cashier": "加盟店レジ"
 }

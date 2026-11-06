@@ -21,6 +21,7 @@
         <module>daxpay-payment-app-merchant</module>
         <module>daxpay-payment-unipay</module>
         <module>daxpay-payment-merchant</module>
+        <module>daxpay-payment-elf</module>
     </modules>
 
 </project>

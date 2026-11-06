@@ -1,5 +1,10 @@
 {
   "field": {
+    "clientOrderNo": {
+      "notBlank": "商戶訂單號不可為空",
+      "size": "商戶訂單號長度需在8~64位之間",
+      "pattern": "商戶訂單號只能包含字母、數字、底線和中劃線"
+    },
     "deviceSn": {
       "notBlank": "裝置序列號不能為空"
     },
@@ -175,6 +180,7 @@
       "size": "支付標題不可超過100位"
     },
     "authCode": {
+      "notBlank": "付款碼不可為空",
       "size": "付款碼不可超過128位"
     },
     "clientIp": {
@@ -502,6 +508,7 @@
     },
     "storeNo": {
       "size": "門店編號不可超過64位",
+      "size32": "門店號不可超過32位",
       "terminalSize": "門店編號不可超過32位",
       "notBlank": "門店編號不可為空"
     },

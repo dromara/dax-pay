@@ -79,6 +79,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- PC 收款精灵专属端（/elf/**，身份域 merchant） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-elf</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 设备域内核（虚拟设备：收款播报 APP 台账/激活/推送） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

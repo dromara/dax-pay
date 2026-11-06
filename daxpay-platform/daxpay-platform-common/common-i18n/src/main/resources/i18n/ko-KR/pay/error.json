@@ -154,4 +154,9 @@
   "fundFlow": {
     "notFound": "자금 흐름이 존재하지 않습니다"
   }
+,
+  "cashier": {
+    "processing": "계산 처리 중입니다. 다시 조작하지 마세요.",
+    "bizOrderAmountMismatch": "가맹점 주문번호가 이미 존재하며 금액이 일치하지 않습니다. 다시 스캔하세요."
+  }
 }

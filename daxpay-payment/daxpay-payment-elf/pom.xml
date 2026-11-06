@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.daxpay.open</groupId>
+        <artifactId>daxpay-payment</artifactId>
+        <version>4.0.0-beta10</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>daxpay-payment-elf</artifactId>
+    <packaging>jar</packaging>
+    <description>PC收款精灵专属端（/elf/**）；身份域仍 merchant，收银端点复用 payment-merchant Service</description>
+
+    <dependencies>
+        <!-- lombok（provided 不传递，需显式声明） -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 商户端（复用 MchCashierPayService 等收银业务层与 payment-core 传递依赖） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-merchant</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

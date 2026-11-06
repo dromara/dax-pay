@@ -5,4 +5,6 @@
   "cashier": "收银台支付",
   "aggress_pay": "聚合支付",
   "easy_pay": "易支付协议"
+,
+  "mch_cashier": "商户收银"
 }

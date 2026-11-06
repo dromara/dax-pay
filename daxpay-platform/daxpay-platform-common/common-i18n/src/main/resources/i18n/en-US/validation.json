@@ -1,5 +1,10 @@
 {
   "field": {
+    "clientOrderNo": {
+      "notBlank": "Merchant order number is required",
+      "size": "Merchant order number must be between 8 and 64 characters",
+      "pattern": "Merchant order number may contain only letters, digits, underscores and hyphens"
+    },
     "deviceSn": {
       "notBlank": "Device serial number cannot be blank"
     },
@@ -175,6 +180,7 @@
       "size": "Title cannot exceed 100 characters"
     },
     "authCode": {
+      "notBlank": "Payment code is required",
       "size": "Payment code cannot exceed 128 characters"
     },
     "clientIp": {
@@ -506,6 +512,7 @@
     },
     "storeNo": {
       "size": "Store number cannot exceed 64 characters",
+      "size32": "Store number cannot exceed 32 characters",
       "terminalSize": "Store number cannot exceed 32 characters",
       "notBlank": "Store number cannot be blank"
     },

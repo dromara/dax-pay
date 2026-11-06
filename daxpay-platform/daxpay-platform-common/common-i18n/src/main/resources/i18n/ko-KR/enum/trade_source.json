@@ -5,4 +5,6 @@
   "cashier": "캐시어 결제",
   "aggress_pay": "통합 결제",
   "easy_pay": "EasyPay 프로토콜"
+,
+  "mch_cashier": "가맹점 계산"
 }

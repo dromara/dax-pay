@@ -3744,6 +3744,7 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_role (id, code, client_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (1, 'admin_admin', 'admin', true, '系统内置运营管理员角色', 1, 1, 0, false, '2026-07-14 07:08:13.608733+00', '2026-07-14 07:08:13.608733+00', 'role.admin_admin');
 INSERT INTO public.iam_role (id, code, client_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2, 'merchant_admin', 'merchant', true, '系统内置商户管理员角色', 1, 1, 0, false, '2026-07-14 07:08:13.608733+00', '2026-07-14 07:08:13.608733+00', 'role.merchant_admin');
 INSERT INTO public.iam_role (id, code, client_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (3, 'merchant_user', 'merchant', true, '系统内置商户普通用户角色', 1, 1, 0, false, '2026-10-09 00:00:00+00', '2026-10-09 00:00:00+00', 'role.merchant_user');
+INSERT INTO public.iam_role (id, code, client_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (6, 'merchant_cashier', 'merchant', true, '系统内置商户收银员角色', 1, 1, 0, false, '2026-11-06 00:00:00+00', '2026-11-06 00:00:00+00', 'role.merchant_cashier');
 
 --
 -- Data for Name: iam_role_code; Type: TABLE DATA; Schema: public; Owner: -
@@ -3961,6 +3962,10 @@ INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000003
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000003002, 1, 2079866296000002002);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000003003, 2, 2079866296000002003);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000003004, 2, 2079866296000002004);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2084000000000000011, 6, 2072377871723388928);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2084000000000000012, 6, 2072377871668862976);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2084000000000000013, 6, 2072990657130180609);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2084000000000000014, 6, 2072990657130180608);
 
 --
 -- Data for Name: iam_user_expand_info; Type: TABLE DATA; Schema: public; Owner: -
@@ -4976,4 +4981,9 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091201, 3, 9
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091202, 3, 91202);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091203, 3, 91203);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091204, 3, 91204);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2084000000000000001, 6, 91100);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2084000000000000002, 6, 91103);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2084000000000000003, 6, 91110);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2084000000000000004, 6, 91111);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2084000000000000005, 6, 91112);
 

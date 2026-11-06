@@ -154,4 +154,9 @@
   "fundFlow": {
     "notFound": "資金フローが存在しません"
   }
+,
+  "cashier": {
+    "processing": "レジ処理中です。繰り返し操作しないでください",
+    "bizOrderAmountMismatch": "加盟店注文番号は既に存在し、金額が一致しません。再スキャンしてください"
+  }
 }

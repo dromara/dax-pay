@@ -154,4 +154,9 @@
   "fundFlow": {
     "notFound": "资金流水不存在"
   }
+,
+  "cashier": {
+    "processing": "收银处理中，请勿重复操作",
+    "bizOrderAmountMismatch": "商户订单号已存在且金额不一致，请重新扫码"
+  }
 }
