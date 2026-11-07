@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.admin.controller.device;
 
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalParam;
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalRegisterParam;
+import cn.daxpay.open.payment.admin.param.device.ChannelTerminalReportParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.admin.service.device.ChannelTerminalAdminService;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
@@ -117,5 +118,36 @@ public class ChannelTerminalAdminController {
     public Result<List<TerminalDeviceResult>> listBoundSystem(
             @NotNull(message = "{validation.field.id.notNull}") Long channelTerminalId) {
         return Res.ok(channelTerminalAdminService.listBoundSystem(channelTerminalId));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "通道支持的终端报送类型")
+    @GetMapping("/terminal-types")
+    public Result<List<String>> terminalTypes(@NotBlank(message = "{validation.field.product.notBlank}") String product) {
+        return Res.ok(channelTerminalAdminService.terminalTypes(product));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "终端报备(调通道API; 未绑定时报备需选择系统终端)")
+    @PostMapping("/report")
+    public Result<Void> report(@RequestBody @Validated ChannelTerminalReportParam param) {
+        channelTerminalAdminService.report(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "终端注销(调通道API; 人工通道直接置已注销)")
+    @PostMapping("/cancel")
+    public Result<Void> cancel(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        channelTerminalAdminService.cancel(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "终端状态同步(调通道API回读实际状态)")
+    @PostMapping("/sync")
+    public Result<Void> sync(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        channelTerminalAdminService.sync(id);
+        return Res.ok();
     }
 }

@@ -10,10 +10,12 @@ import cn.daxpay.open.channel.mock.client.req.MockPayReq;
 import cn.daxpay.open.channel.mock.client.req.MockRefundReq;
 import cn.daxpay.open.channel.mock.client.req.MockRefundSyncReq;
 import cn.daxpay.open.channel.mock.client.req.MockSyncReq;
+import cn.daxpay.open.channel.mock.client.req.MockTerminalOperateReq;
 import cn.daxpay.open.channel.mock.client.resp.MockAllocResp;
 import cn.daxpay.open.channel.mock.client.resp.MockCallbackParseResp;
 import cn.daxpay.open.channel.mock.client.resp.MockCloseResp;
 import cn.daxpay.open.channel.mock.client.resp.MockPayResp;
+import cn.daxpay.open.channel.mock.client.resp.MockTerminalOperateResp;
 import cn.daxpay.open.channel.mock.client.resp.MockRefundResp;
 import cn.daxpay.open.channel.mock.client.resp.MockRefundSyncResp;
 import cn.daxpay.open.channel.mock.client.resp.MockSyncResp;
@@ -28,8 +30,9 @@ import org.springframework.web.service.annotation.PostExchange;
 /// 声明式 HTTP 接口, 调用通道子应用 one 的 mock 模块
 /// (one 内 daxpay-channel-mock 模块扮演「模拟网关 SDK」, 路径前缀 `/channel/mock`)。
 /// 凭证随请求 body 下发, 传输层 AES-GCM 加密由平台统一挂载。
-/// 一期仅直连单产品 `mock_pay`: 支付/同步/关单/退款/退款同步/回调解析/分账族共 12 个端点;
-/// 进件(onb)、终端(terminal)、预授权(preauth)、对账(bill)端点不在一期范围。
+/// 一期仅直连单产品 `mock_pay`: 支付/同步/关单/退款/退款同步/回调解析/分账族共 12 个端点,
+/// 另有终端报备族(register/cancel/sync)3 个端点。
+/// 进件(onb)、预授权(preauth)、对账(bill)端点不在一期范围。
 /// 通道商户建档为纯本地登记(不调子应用), 无 mch/register 端点。
 @HttpExchange(accept = MediaType.APPLICATION_JSON_VALUE, contentType = MediaType.APPLICATION_JSON_VALUE)
 public interface MockChannelClient {
@@ -81,4 +84,16 @@ public interface MockChannelClient {
     /// 解绑分账接收方(mock 零资料接入恒成功仅留痕)
     @PostExchange("/channel/mock/alloc-receiver/unbind")
     DaxResult<Void> allocReceiverUnbind(@RequestBody MockAllocReceiverReq req);
+
+    /// 终端报备(mock 侧按三元组幂等, 重复报备返回原通道侧终端号)
+    @PostExchange("/channel/mock/terminal/register")
+    DaxResult<MockTerminalOperateResp> terminalRegister(@RequestBody MockTerminalOperateReq req);
+
+    /// 终端注销(mock 侧置 CANCELLED, 已注销重复注销幂等)
+    @PostExchange("/channel/mock/terminal/cancel")
+    DaxResult<Void> terminalCancel(@RequestBody MockTerminalOperateReq req);
+
+    /// 终端状态回读(报备/同步成功回传通道侧终端号)
+    @PostExchange("/channel/mock/terminal/sync")
+    DaxResult<MockTerminalOperateResp> terminalSync(@RequestBody MockTerminalOperateReq req);
 }

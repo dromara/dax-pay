@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "終端未掛載門店, 無法設為預設",
   "defaultCannotDelete": "門店預設終端不可刪除, 請先取消預設或轉交其他終端",
   "batchSystemNotFound": "部分系統終端不存在, 請重新整理後重試",
-  "batchMchMismatch": "系統終端須屬於同一商戶"
+  "batchMchMismatch": "系統終端須屬於同一商戶",
+  "reportDuplicate": "該終端已報備, 如需重新報備請先註銷",
+  "strategyNotFound": "該通道不支援自動報備, 請使用手動調整登記通道終端號",
+  "terminalNotSelected": "請選擇系統終端後再報備",
+  "rebindSubmitted": "該終端已報備, 更換系統終端請先註銷終端",
+  "ownerMissing": "通道終端未綁定系統終端, 請先綁定",
+  "cancelUnsupported": "該通道不支援終端註銷",
+  "syncUnsupported": "該通道不支援終端同步"
 }

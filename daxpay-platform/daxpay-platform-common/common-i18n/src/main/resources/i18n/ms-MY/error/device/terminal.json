@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "Terminal belum dipautkan ke kedai, tidak boleh ditetapkan sebagai terminal lalai",
   "defaultCannotDelete": "Terminal lalai kedai tidak boleh dipadam, batalkan status lalai atau pindahkan ke terminal lain dahulu",
   "batchSystemNotFound": "Sebahagian terminal sistem tidak wujud, sila muat semula dan cuba lagi",
-  "batchMchMismatch": "Terminal sistem mesti milik merchant yang sama"
+  "batchMchMismatch": "Terminal sistem mesti milik merchant yang sama",
+  "reportDuplicate": "Terminal ini telah dilaporkan, batalkan dahulu sebelum melaporkan semula",
+  "strategyNotFound": "Saluran ini tidak menyokong pelaporan automatik, daftarkan nombor terminal saluran melalui penyesuaian manual",
+  "terminalNotSelected": "Pilih terminal sistem sebelum melaporkan",
+  "rebindSubmitted": "Terminal ini telah dilaporkan, batalkan dahulu sebelum menukar terminal sistem",
+  "ownerMissing": "Terminal saluran belum terikat kepada terminal sistem, ikatkan dahulu",
+  "cancelUnsupported": "Saluran ini tidak menyokong pembatalan terminal",
+  "syncUnsupported": "Saluran ini tidak menyokong penyegerakan status terminal"
 }

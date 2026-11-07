@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "终端未挂载门店, 无法设为默认",
   "defaultCannotDelete": "门店默认终端不可删除, 请先取消默认或转交其他终端",
   "batchSystemNotFound": "部分系统终端不存在, 请刷新后重试",
-  "batchMchMismatch": "系统终端须属于同一商户"
+  "batchMchMismatch": "系统终端须属于同一商户",
+  "reportDuplicate": "该终端已报备, 如需重新报备请先注销",
+  "strategyNotFound": "该通道不支持自动报备, 请使用手动调整登记通道终端号",
+  "terminalNotSelected": "请选择系统终端后再报备",
+  "rebindSubmitted": "该终端已报备, 更换系统终端请先注销终端",
+  "ownerMissing": "通道终端未绑定系统终端, 请先绑定",
+  "cancelUnsupported": "该通道不支持终端注销",
+  "syncUnsupported": "该通道不支持终端同步"
 }

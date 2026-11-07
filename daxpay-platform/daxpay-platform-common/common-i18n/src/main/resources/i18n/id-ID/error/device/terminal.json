@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "Terminal belum terikat ke toko, tidak dapat dijadikan terminal bawaan",
   "defaultCannotDelete": "Terminal bawaan toko tidak dapat dihapus, batalkan status bawaan atau alihkan ke terminal lain terlebih dahulu",
   "batchSystemNotFound": "Sebagian terminal sistem tidak ditemukan, muat ulang dan coba lagi",
-  "batchMchMismatch": "Terminal sistem harus milik merchant yang sama"
+  "batchMchMismatch": "Terminal sistem harus milik merchant yang sama",
+  "reportDuplicate": "Terminal ini sudah dilaporkan, batalkan dulu sebelum melaporkan ulang",
+  "strategyNotFound": "Kanal ini tidak mendukung pelaporan otomatis, daftarkan nomor terminal kanal melalui penyesuaian manual",
+  "terminalNotSelected": "Pilih terminal sistem sebelum melaporkan",
+  "rebindSubmitted": "Terminal ini sudah dilaporkan, batalkan dulu sebelum mengganti terminal sistem",
+  "ownerMissing": "Terminal kanal belum terikat ke terminal sistem, ikatkan terlebih dahulu",
+  "cancelUnsupported": "Kanal ini tidak mendukung pembatalan terminal",
+  "syncUnsupported": "Kanal ini tidak mendukung sinkronisasi status terminal"
 }

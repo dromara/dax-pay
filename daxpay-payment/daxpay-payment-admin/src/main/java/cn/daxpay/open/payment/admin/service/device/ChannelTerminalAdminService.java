@@ -2,8 +2,10 @@ package cn.daxpay.open.payment.admin.service.device;
 
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalParam;
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalRegisterParam;
+import cn.daxpay.open.payment.admin.param.device.ChannelTerminalReportParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.device.enums.TerminalTypeEnum;
+import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
@@ -14,7 +16,9 @@ import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
 import cn.daxpay.open.payment.device.terminal.service.TerminalBindSupport;
+import cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
@@ -41,10 +45,10 @@ import java.util.stream.Collectors;
 
 /// # 通道终端台账管理(运营端)
 ///
-/// 挂在通道商户下人工登记通道侧终端号与状态; 不调用通道报备 API。
-/// 关联关系在新增建档/手动绑定时建立(建档即绑定):
+/// 挂在通道商户下维护通道侧终端号与状态。关联关系在新增建档/报备/手动绑定时建立(报备即绑定):
 /// - 一条通道终端只归属一个系统终端; 同一系统终端在同一通道商户下按报送类型各一条;
-/// - 通道侧终端号与登记状态由手动登记([ChannelTerminalAdminService#register])回写。
+/// - 自动报备通道: 报备/注销/同步经通道报备策略([AbsChannelTerminalStrategy])调通道 API 回写状态与通道侧终端号;
+/// - 无报备策略的通道走人工登记([ChannelTerminalAdminService#register]), 不调通道。
 /// 绑定规则校验见 [TerminalBindSupport]。
 @Slf4j
 @Service
@@ -227,6 +231,145 @@ public class ChannelTerminalAdminService {
                 .collect(Collectors.toList());
         transService.translate(results);
         return results;
+    }
+
+    /// 查询通道支持的终端报送类型(无报备策略的通道返回空列表)
+    public List<String> terminalTypes(String product) {
+        return PaymentStrategyFactory.findOptionallyByProduct(product, AbsChannelTerminalStrategy.class)
+                .map(AbsChannelTerminalStrategy::getTerminalTypes)
+                .orElse(List.of());
+    }
+
+    /// 终端报备(报备即绑定): 调通道 API 报备并同步建立关联
+    ///
+    /// - 已绑定的通道终端沿绑发起, 未绑定须选择系统终端;
+    /// - 已报送状态拒绝重复报备, 须先注销;
+    /// - 更换系统终端须先注销(通道侧设备标识已上交, 换终端等于换设备);
+    /// - 通道调用失败保留绑定关系并落 error, 重试无需重新选择;
+    /// - 不支持自动报备的通道请使用手动登记([ChannelTerminalAdminService#register])。
+    @Transactional(rollbackFor = Exception.class)
+    public void report(ChannelTerminalReportParam param) {
+        ChannelTerminal entity = channelTerminalManager.findById(param.getId())
+                // 终端: 通道终端不存在
+                .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
+        if (ChannelTerminalStatusEnum.SUBMIT.getCode().equals(entity.getStatus())) {
+            // 终端: 已报送不可重复报备
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.reportDuplicate");
+        }
+        String systemTerminalNo = this.resolveAndEnsureBind(entity, param.getSystemTerminalNo());
+        // 无报备策略的通道不支持自动报备
+        AbsChannelTerminalStrategy strategy = PaymentStrategyFactory
+                .findOptionallyByProduct(entity.getProduct(), AbsChannelTerminalStrategy.class).orElse(null);
+        if (strategy == null) {
+            // 终端: 通道无报备策略
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.strategyNotFound");
+        }
+        // 通道调用异常也按失败回写(不向上抛, 保证已建立的绑定不被事务回滚)
+        TerminalOperateResult result;
+        try {
+            result = strategy.submit(entity, systemTerminalNo);
+        } catch (Exception e) {
+            log.warn("终端报备调用异常: channelMchNo={}, systemTerminalNo={}",
+                    entity.getChannelMchNo(), systemTerminalNo, e);
+            result = TerminalOperateResult.fail(e.getMessage());
+        }
+        this.applyOperateResult(entity, result);
+    }
+
+    /// 终端注销(自动通道调通道 API; 人工通道直接置已注销)
+    @Transactional(rollbackFor = Exception.class)
+    public void cancel(Long id) {
+        ChannelTerminal entity = channelTerminalManager.findById(id)
+                // 终端: 通道终端不存在
+                .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
+        AbsChannelTerminalStrategy strategy = PaymentStrategyFactory
+                .findOptionallyByProduct(entity.getProduct(), AbsChannelTerminalStrategy.class).orElse(null);
+        if (strategy == null) {
+            // 人工通道无通道调用: 直接置已注销, 保留通道侧终端号与绑定关系(便于重新报备)
+            if (!ChannelTerminalStatusEnum.LOGGED.getCode().equals(entity.getStatus())) {
+                entity.setStatus(ChannelTerminalStatusEnum.LOGGED.getCode());
+                entity.setErrorMsg(null);
+                channelTerminalManager.updateById(entity);
+            }
+            return;
+        }
+        TerminalOperateResult result = strategy.cancel(entity, this.requireBoundSystemTerminalNo(entity));
+        this.applyOperateResult(entity, result);
+    }
+
+    /// 终端状态同步(调通道 API 回读实际状态与通道侧终端号)
+    @Transactional(rollbackFor = Exception.class)
+    public void sync(Long id) {
+        ChannelTerminal entity = channelTerminalManager.findById(id)
+                // 终端: 通道终端不存在
+                .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
+        AbsChannelTerminalStrategy strategy = PaymentStrategyFactory
+                .findOptionallyByProduct(entity.getProduct(), AbsChannelTerminalStrategy.class)
+                .orElseThrow(() -> new OperationFailException(CommonCode.FAIL_CODE,
+                        "error.device.terminal.strategyNotFound"));
+        TerminalOperateResult result = strategy.sync(entity, this.requireBoundSystemTerminalNo(entity));
+        this.applyOperateResult(entity, result);
+    }
+
+    /// 取报备锚点的系统终端号(绑定关系中的首个)
+    private String requireBoundSystemTerminalNo(ChannelTerminal entity) {
+        return terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
+                .map(TerminalChannelBind::getSystemTerminalNo)
+                .findFirst()
+                // 终端: 未绑定系统终端
+                .orElseThrow(() -> new OperationFailException(CommonCode.FAIL_CODE,
+                        "error.device.terminal.ownerMissing"));
+    }
+
+    /// 解析报备锚定的系统终端号并确保绑定就绪(入参优先, 沿用已绑定, 均无则报错)
+    ///
+    /// - 首次绑定: 校验系统终端存在性与同商户、同报送类型唯一后建立绑定;
+    /// - 更换系统终端: 已报送须先注销; 未报送则替换原绑定。
+    private String resolveAndEnsureBind(ChannelTerminal entity, String inputTerminalNo) {
+        TerminalChannelBind owner = terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
+                .findFirst()
+                .orElse(null);
+        String systemTerminalNo = StrUtil.isNotBlank(inputTerminalNo)
+                ? inputTerminalNo.trim()
+                : (owner == null ? null : owner.getSystemTerminalNo());
+        if (StrUtil.isBlank(systemTerminalNo)) {
+            // 终端: 未选择系统终端
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.terminalNotSelected");
+        }
+        // 更换系统终端: 已报送须先注销; 未报送则替换原绑定
+        if (owner != null && !Objects.equals(owner.getSystemTerminalNo(), systemTerminalNo)) {
+            if (ChannelTerminalStatusEnum.SUBMIT.getCode().equals(entity.getStatus())) {
+                // 终端: 已报送不可直接换绑
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.rebindSubmitted");
+            }
+            terminalChannelBindManager.deleteByChannelTerminalId(entity.getId());
+            owner = null;
+        }
+        if (owner == null) {
+            this.requireSystemTerminal(systemTerminalNo, entity.getMchNo());
+            if (terminalBindSupport.hasTypeConflict(systemTerminalNo, entity, entity.getId())) {
+                // 终端: 同报送类型下已有通道终端
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.typeConflict",
+                        entity.getType());
+            }
+            terminalChannelBindManager.save(terminalBindSupport.buildBind(systemTerminalNo, entity));
+        }
+        return systemTerminalNo;
+    }
+
+    /// 回写报备操作结果: 成功落状态与通道侧终端号, 失败落错误状态与原因(不清既有终端号)
+    private void applyOperateResult(ChannelTerminal entity, TerminalOperateResult result) {
+        if (result.isSuccess()) {
+            entity.setStatus(result.getStatus());
+            if (StrUtil.isNotBlank(result.getDeviceNo())) {
+                entity.setOutTerminalNo(result.getDeviceNo());
+            }
+            entity.setErrorMsg(null);
+        } else {
+            entity.setStatus(ChannelTerminalStatusEnum.ERROR.getCode());
+            entity.setErrorMsg(StrUtil.sub(result.getErrorMsg(), 0, 255));
+        }
+        channelTerminalManager.updateById(entity);
     }
 
     /// 校验系统终端(存在性/同商户), 返回系统终端实体

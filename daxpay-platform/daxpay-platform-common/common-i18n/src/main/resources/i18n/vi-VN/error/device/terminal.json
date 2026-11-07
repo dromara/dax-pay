@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "Đầu cuối chưa được gán cửa hàng, không thể đặt làm mặc định",
   "defaultCannotDelete": "Đầu cuối mặc định của cửa hàng không thể xóa, vui lòng bỏ đặt mặc định hoặc chuyển sang đầu cuối khác trước",
   "batchSystemNotFound": "Một số đầu cuối hệ thống không tồn tại, vui lòng làm mới và thử lại",
-  "batchMchMismatch": "Các đầu cuối hệ thống phải thuộc cùng một merchant"
+  "batchMchMismatch": "Các đầu cuối hệ thống phải thuộc cùng một merchant",
+  "reportDuplicate": "Đầu cuối này đã được báo bị, vui lòng hủy bỏ trước khi báo bị lại",
+  "strategyNotFound": "Kênh này không hỗ trợ báo bị tự động, hãy đăng ký số đầu cuối kênh qua điều chỉnh thủ công",
+  "terminalNotSelected": "Hãy chọn đầu cuối hệ thống trước khi báo bị",
+  "rebindSubmitted": "Đầu cuối này đã được báo bị, hãy hủy bỏ trước khi đổi đầu cuối hệ thống",
+  "ownerMissing": "Đầu cuối kênh chưa liên kết với đầu cuối hệ thống, hãy liên kết trước",
+  "cancelUnsupported": "Kênh này không hỗ trợ hủy bỏ đầu cuối",
+  "syncUnsupported": "Kênh này không hỗ trợ đồng bộ trạng thái đầu cuối"
 }

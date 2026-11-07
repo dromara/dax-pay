@@ -1,5 +1,5 @@
 -- ============================================================================
--- data-demo.sql — DaxPay 演示版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-06T14:31:54.856Z
+-- data-demo.sql — DaxPay 演示版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-07T03:23:18.596Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432（[4] 段为剧本生成，不取库内业务数据）
 -- 内容: [2] 纯净种子  [3] 菜单种子（含演示菜单）  [4] 演示数据（旁路 mock 元数据 + 剧本生成的商户/通道/流水）
 -- 用法: 先执行 table.sql，再执行本文件（与 data.sql 二选一，不要都执行）
@@ -3637,6 +3637,7 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2083000000000000007, 'trade:fund-flow:export', 'trade:fund-flow', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund-flow:export');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000002001, 'device:virtual:view', 'device:virtual', true, '虚拟设备查看权限码(与 @PermCode 注解一致, 固定ID种子)', 1, 1, 0, false, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'perm.device:virtual:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000002002, 'device:virtual:manage', 'device:virtual', true, '虚拟设备管理权限码(与 @PermCode 注解一致, 固定ID种子)', 1, 1, 0, false, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'perm.device:virtual:manage');
+INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072990657125986304, 'merchant:notify-config:view', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 3, true, '2026-07-03 10:27:41.619775+00', '2026-11-07 03:14:09.181558+00', 'perm.merchant:notify-config:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2078479091642855424, 'develop:gateway:sign', 'develop:gateway', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.379702+00', '2026-07-18 13:56:46.383702+00', 'perm.develop:gateway:sign');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2078479091684798466, 'system:log:unipay:manage', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.388212+00', '2026-07-18 13:56:46.388212+00', 'perm.system:log:unipay:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2078479091688992768, 'system:log:unipay:view', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.389213+00', '2026-07-18 13:56:46.389213+00', 'perm.system:log:unipay:view');
@@ -3715,6 +3716,8 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2070862265073209344, 'system:security-config:manage', 'system:security-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713487+00', 'perm.system:security-config:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2070862265073209345, 'system:security-config:view', 'system:security-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713992+00', 'perm.system:security-config:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072377871723388929, 'trade:fund:manage', 'trade:fund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.194097+00', '2026-07-15 03:59:23.713992+00', 'perm.trade:fund:manage');
+INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2070862265031266305, 'payment:platform:provider:manage', 'payment:platform:provider', true, '由 @PermCode 扫描同步生成', 1, 1, 1, true, '2026-06-27 13:30:13.400113+00', '2026-11-05 08:37:02.889821+00', 'perm.payment:platform:provider:manage');
+INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072990657067266048, 'merchant:notify-config:manage', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 3, true, '2026-07-03 10:27:41.608254+00', '2026-11-07 03:14:09.181558+00', 'perm.merchant:notify-config:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072377871727583232, 'trade:fund:view', 'trade:fund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.195094+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:fund:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075769305903063040, 'trade:gateway-order:manage', 'trade:gateway-order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-11 02:29:03.113055+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075769305903063041, 'trade:gateway-order:view', 'trade:gateway-order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-11 02:29:03.113565+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:view');
@@ -3775,7 +3778,6 @@ INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864264980934
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864264985128960, 1, 2070862264985128960);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864264980934656, 1, 2070862264980934656);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864264976740352, 1, 2070862264976740352);
-INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2072992657125986304, 1, 2072990657125986304);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864265022877697, 1, 2070862265022877697);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864265031266304, 1, 2070862265031266304);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864265035460608, 1, 2070862265035460608);
@@ -3818,7 +3820,6 @@ INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2075771305903063
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2075771305903063041, 1, 2075769305903063041);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2075847892346347520, 1, 2075845892346347520);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2075847892476370944, 1, 2075845892476370944);
-INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2072992657067266048, 1, 2072990657067266048);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864265073209345, 1, 2070862265073209345);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2070864265069015041, 1, 2070862265069015041);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2080584149952053248, 2, 2079866295619362816);
@@ -3880,8 +3881,6 @@ INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092882051093159
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092882051093159941, 2, 2083000000000000001);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092899374299574272, 2, 2070862265001906176);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092899374316351488, 2, 2070862264997711873);
-INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092949683545796608, 2, 2072990657125986304);
-INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092949683558379520, 2, 2072990657067266048);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092949683558379521, 2, 2080921585609494528);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2092949683558379522, 2, 2080921585542385664);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000000321, 2, 2075452238553292800);
@@ -3960,6 +3959,19 @@ INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342596546
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740864, 1, 2118263341166288896);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000003003, 2, 2079866296000002001);
 INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2079866296000003004, 2, 2079866296000002002);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740865, 2, 2079866296000000570);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740866, 2, 2118263341166288896);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740867, 2, 2118263341183066112);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740869, 3, 2079866296000000301);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740870, 3, 2089898876302675968);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740871, 3, 2079866295577419776);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740872, 3, 2079866296000000303);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740873, 3, 2072377871727583232);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740874, 3, 2075769305903063041);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740875, 3, 2079866295619362816);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740876, 3, 2072377871723388928);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740877, 3, 2072990657130180609);
+INSERT INTO public.iam_role_code (id, role_id, code_id) VALUES (2118263342600740878, 3, 2079866296000000570);
 
 --
 -- Data for Name: iam_user_expand_info; Type: TABLE DATA; Schema: public; Owner: -
@@ -4651,6 +4663,7 @@ INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, ico
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (804, 8, 'develop:gateway', 'admin', 'menu.develop.gateway', 'lucide:globe', false, false, '/payment/develop/gateway/DevelopGateway', '/develop/gateway', NULL, 2, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-07-16 16:00:00+00', '2026-07-16 16:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (901, 920, 'device:qrcode', 'admin', 'menu.device.qrcode', 'lucide:qr-code', false, false, '/payment/device/qrcode/DeviceQrCode', '/device/qrcode', NULL, 1, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-06-25 01:21:34.634639+00', '2026-11-05 00:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (905, 4040130, 'merchant:terminal', 'admin', 'menu.payment.merchant.terminal', NULL, true, false, '/payment/device/terminal/system/SystemTerminalList', '/payment/device/terminal/system', NULL, 16, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, '2026-07-17 00:00:00+00', '2026-07-22 13:50:46.597022+00', false);
+INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (908, 920, NULL, 'admin', 'menu.device.terminalRegister', 'lucide:scan-barcode', false, false, '/payment/device/terminal/channel/ChannelTerminalList', '/device/terminal-register', NULL, 3, false, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-11-07 03:18:58.455915+00', '2026-11-07 03:18:58.455915+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (917, 920, 'device:virtual', 'admin', 'menu.device.virtual', 'lucide:smartphone', false, false, '/payment/device/virtual/VirtualDeviceList', '/device/virtual', NULL, 2, false, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-11-05 00:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (920, NULL, 'device', 'admin', 'menu.device', 'lucide:hard-drive', false, false, NULL, '/device', '/device/qrcode', 4.5, false, false, 1, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-11-05 00:00:00+00', '2026-11-05 00:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (30101, 301, 'system:dict', 'admin', 'menu.system.basic.dict', 'lucide:book-open', false, false, '/system/basic/dict/DictList', '/system/basic/dict', NULL, 1, true, false, 0, 1, 2, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-06-25 02:00:30.243488+00', false);
@@ -4827,6 +4840,7 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000803, 1
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521619279875, 1, 804);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000901, 1, 901);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521610891265, 1, 905);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000908, 1, 908);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000917, 1, 917);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000920, 1, 920);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000030101, 1, 30101);
@@ -4894,7 +4908,6 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040121, 1
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040122, 1, 4040122);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040123, 1, 4040123);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521606696965, 1, 4040124);
-INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521610891264, 1, 4040126);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040130, 1, 4040130);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040131, 1, 4040131);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040132, 1, 4040132);
@@ -4939,7 +4952,6 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2080584149910110
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2080584149901721602, 2, 91411);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (920000000001, 2, 91412);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2080600725350727680, 2, 91413);
-INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2092949683495464960, 2, 91414);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2092949683508047872, 2, 91415);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098298729809514496, 2, 91416);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098298729817903104, 2, 91417);

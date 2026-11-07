@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "Terminal is not bound to a store and cannot be set as default",
   "defaultCannotDelete": "Default store terminal cannot be deleted, please clear the default flag or transfer it first",
   "batchSystemNotFound": "Some system terminals not found, please refresh and retry",
-  "batchMchMismatch": "System terminals must belong to the same merchant"
+  "batchMchMismatch": "System terminals must belong to the same merchant",
+  "reportDuplicate": "This terminal has already been reported, cancel it before reporting again",
+  "strategyNotFound": "This channel does not support auto reporting, register the channel terminal number via manual adjust",
+  "terminalNotSelected": "Select a system terminal before reporting",
+  "rebindSubmitted": "This terminal has been reported, cancel it before changing the system terminal",
+  "ownerMissing": "The channel terminal is not bound to a system terminal, bind it first",
+  "cancelUnsupported": "This channel does not support terminal cancellation",
+  "syncUnsupported": "This channel does not support terminal status sync"
 }

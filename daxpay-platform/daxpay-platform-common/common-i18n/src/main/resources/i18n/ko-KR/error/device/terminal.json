@@ -15,5 +15,12 @@
   "defaultStoreNotBound": "단말이 매장에 연결되어 있지 않아 기본값으로 설정할 수 없습니다",
   "defaultCannotDelete": "매장 기본 단말은 삭제할 수 없습니다. 먼저 기본 설정을 해제하거나 다른 단말로 이관하세요",
   "batchSystemNotFound": "일부 시스템 단말이 존재하지 않습니다. 새로고침 후 다시 시도하세요",
-  "batchMchMismatch": "시스템 단말은 동일한 가맹점에 속해야 합니다"
+  "batchMchMismatch": "시스템 단말은 동일한 가맹점에 속해야 합니다",
+  "reportDuplicate": "이 단말은 이미 등록(보비)되었습니다. 다시 등록하려면 먼저 해지하세요",
+  "strategyNotFound": "이 채널은 자동 등록을 지원하지 않습니다. 수동 조정으로 채널 측 단말 번호를 등록하세요",
+  "terminalNotSelected": "보고 전에 시스템 단말을 선택하세요",
+  "rebindSubmitted": "이 단말은 이미 등록되었습니다. 시스템 단말을 변경하려면 먼저 해지하세요",
+  "ownerMissing": "채널 단말이 시스템 단말에 바인딩되어 있지 않습니다. 먼저 바인딩하세요",
+  "cancelUnsupported": "이 채널은 단말 해지를 지원하지 않습니다",
+  "syncUnsupported": "이 채널은 단말 상태 동기화를 지원하지 않습니다"
 }
