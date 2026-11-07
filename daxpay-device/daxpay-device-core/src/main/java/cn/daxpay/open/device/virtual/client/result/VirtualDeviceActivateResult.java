@@ -32,4 +32,9 @@ public class VirtualDeviceActivateResult {
     /// MQTT 连接密码(随用户名由配置下发, 打包进发布包之外的灵活轮换通道)
     @Schema(description = "MQTT 连接密码")
     private String mqttPassword;
+
+    /// 凭据版本(账号名与密码的摘要前 12 位; 终端持久化后随心跳上报,
+    /// 与平台当前版本不一致说明凭据已轮换, 需重新激活取新值)
+    @Schema(description = "凭据版本")
+    private String credentialVersion;
 }

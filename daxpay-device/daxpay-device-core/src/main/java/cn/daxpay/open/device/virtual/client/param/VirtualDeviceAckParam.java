@@ -43,4 +43,10 @@ public class VirtualDeviceAckParam {
     /// 执行是否成功(回执时携带)
     @Schema(description = "执行是否成功")
     private Boolean ok;
+
+    /// 本地凭据版本(激活时下发并持久化; 老版本 APP 不传, 后端跳过比对保持原有行为)
+    ///
+    /// 版本为空串或 "unknown" 时视为需要刷新(存量设备升级后首次心跳走此分支)。
+    @Schema(description = "本地凭据版本(可选, 老客户端不传)")
+    private String credentialVersion;
 }

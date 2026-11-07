@@ -65,7 +65,11 @@ public class VirtualDeviceClientService {
     public static final int SECRET_LENGTH = 32;
 
     /// 激活 IP 维度限流(次/分钟)
-    private static final int ACTIVATE_IP_LIMIT = 10;
+    ///
+    /// 60 而非更低: 同一门店/办公点通常共用一个出口 IP, 凭据轮换后设备会集中重新激活,
+    /// 阈值过紧会把合法批量刷新挡在门外(终端侧另有 0-30s 抖动分散);
+    /// IP 是本接口唯一的防枚举维度(SN 维度限流对"枚举不同设备号"无效), 故不取消。
+    private static final int ACTIVATE_IP_LIMIT = 60;
 
     /// 激活 SN 维度限流(次/分钟)
     private static final int ACTIVATE_SN_LIMIT = 20;
@@ -133,7 +137,9 @@ public class VirtualDeviceClientService {
                 .setBrokerUrl(mqttConfig.getBrokerWssUrl())
                 .setTopic(VirtualDevicePushClient.topic(device.getDeviceNo()))
                 .setMqttUsername(mqttConfig.getMqttUsername())
-                .setMqttPassword(mqttConfig.getMqttPassword());
+                .setMqttPassword(mqttConfig.getMqttPassword())
+                // 凭据版本随激活下发, 终端持久化后随心跳上报; 凭据轮换时据此自动重新激活
+                .setCredentialVersion(PlatformMqttConfigService.credentialVersion(mqttConfig));
     }
 
     /// 回执/心跳(HMAC 验签 -> nonce 防重放 -> 刷新在线 -> 回写收款回执 -> 返回设备状态供终端校准)
@@ -185,13 +191,24 @@ public class VirtualDeviceClientService {
         }
         boolean bound = StrUtil.isNotBlank(device.getMchNo());
         boolean enabled = Boolean.TRUE.equals(device.getEnable());
+        // 凭据版本比对: 终端携版本时才查配置(老 APP 不传, 保持原有行为且不增加查询);
+        // 不一致只标记需重新激活, 不返回 revoked——播报密钥仍然有效, 清凭证会误伤已绑定设备
+        String credentialVersion = null;
+        boolean needReactivate = false;
+        if (StrUtil.isNotBlank(param.getCredentialVersion())) {
+            PlatformMqttConfig mqttConfig = platformMqttConfigService.getMqttConfig();
+            credentialVersion = PlatformMqttConfigService.credentialVersion(mqttConfig);
+            needReactivate = !credentialVersion.equals(param.getCredentialVersion());
+        }
         return new VirtualDeviceAckResult()
                 .setValid(true)
                 .setStatus(!bound
                         ? DeviceClientStatusEnum.UNBOUND.getCode()
                         : (enabled ? DeviceClientStatusEnum.ACTIVE.getCode() : DeviceClientStatusEnum.DISABLED.getCode()))
                 .setEnable(enabled)
-                .setBound(bound);
+                .setBound(bound)
+                .setCredentialVersion(credentialVersion)
+                .setNeedReactivate(needReactivate);
     }
 
     /// 凭证失效响应(设备不存在/未激活/验签失败统一口径, 不暴露具体差异)
