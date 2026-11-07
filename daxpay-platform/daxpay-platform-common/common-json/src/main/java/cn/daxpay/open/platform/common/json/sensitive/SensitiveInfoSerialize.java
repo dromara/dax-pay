@@ -110,19 +110,21 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
         if (front < 0 || end < 0) {
             return StrUtil.EMPTY;
         }
+        // 先去首尾空白: 粘贴的密钥常带尾换行, 压缩段会把换行带进脱敏串, 展示时会被折断
+        String text = str.strip();
         // PEM 内容优先按行结构脱敏(与注解的 front/end/compact 无关, 6/6 与 24/24 统一为可核对的密钥形态)
-        String pemMasked = this.hidePem(str);
+        String pemMasked = this.hidePem(text);
         if (pemMasked != null) {
             return pemMasked;
         }
         // 保留位数之和超过原长度时, hide 区间为空或反转可能导致明文暴露, 统一全量脱敏
-        if (front + end >= str.length()) {
+        if (front + end >= text.length()) {
             return StrUtil.repeat('*', 4);
         }
         if (compact) {
-            return str.substring(0, front) + StrUtil.repeat('*', 6) + str.substring(str.length() - end);
+            return text.substring(0, front) + StrUtil.repeat('*', 6) + text.substring(text.length() - end);
         }
-        return StrUtil.hide(str, front, str.length() - end);
+        return StrUtil.hide(text, front, text.length() - end);
     }
 
     /// PEM 内容脱敏(多行形态: 完整 BEGIN/END 行 + 正文首尾各露 [#PEM_PLAIN_LENGTH] 个明文字符 + 中间星号行)
@@ -130,12 +132,15 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
     /// 首尾各 24 字符的旧压缩策略在 PEM 上只能露出 `-----BEGIN PRIVATE KEY--` 这类固定标记, 看不到任何 base64 内容,
     /// 不同密钥的脱敏串完全相同, 无法核对是否配置错; 此处按 PEM 行结构重排, 保留完整头尾标记与正文首尾明文。
     /// 行宽固定 [#PEM_LINE_WIDTH] 字符以适配运营端抽屉内的等宽字体展示, 超出会折行。
+    /// 起止标记与正文挤在同一行的单行 PEM 也按同样行结构脱敏(见 [#hideInlinePem])。
     /// @param str 原始值
-    /// @return 脱敏串; 非 PEM(无 BEGIN/END 行, 或多行不足三行, 或 BEGIN/END 之间无正文)返回 null, 交由原 front/end 逻辑处理
+    /// @return 脱敏串; 非 PEM(无 BEGIN/END 标记, 或 BEGIN/END 之间无正文)返回 null, 交由原 front/end 逻辑处理
     private String hidePem(String str) {
-        String[] lines = str.strip().split("\\R");
+        String text = str.strip();
+        String[] lines = text.split("\\R");
         if (lines.length < 3) {
-            return null;
+            // 起止标记与正文挤在同一行(后台控制台复制的常见形态), 拆出标记后按行结构脱敏
+            return this.hideInlinePem(text);
         }
         String beginLine = lines[0].trim();
         String endLine = lines[lines.length - 1].trim();
@@ -162,6 +167,36 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
         if (bodyHead == null || bodyTail == null) {
             return null;
         }
+        return this.buildMaskedPem(beginLine, bodyHead, bodyTail, endLine);
+    }
+
+    /// 单行 PEM 拆分脱敏(BEGIN 标记 + 正文 + END 标记同行)
+    /// @param text 已 strip 的原始值
+    /// @return 脱敏串; 不是单行 PEM 或正文为空返回 null, 交由原 front/end 逻辑处理
+    private String hideInlinePem(String text) {
+        int beginIdx = text.indexOf(PEM_BEGIN);
+        int endIdx = text.lastIndexOf(PEM_END);
+        if (beginIdx < 0 || endIdx <= beginIdx) {
+            return null;
+        }
+        // BEGIN 头: 从标记起到其后第一个 "-----" 结束
+        int headerClose = text.indexOf("-----", beginIdx + PEM_BEGIN.length());
+        if (headerClose < 0 || headerClose >= endIdx) {
+            return null;
+        }
+        int footerClose = text.indexOf("-----", endIdx + PEM_END.length());
+        String beginLine = text.substring(beginIdx, headerClose + 5);
+        String endLine = footerClose < 0 ? text.substring(endIdx) : text.substring(endIdx, footerClose + 5);
+        // 正文可能夹杂空格, 归一后取首尾明文
+        String body = StrUtil.cleanBlank(text.substring(headerClose + 5, endIdx));
+        if (StrUtil.isBlank(body)) {
+            return null;
+        }
+        return this.buildMaskedPem(beginLine, body, body, endLine);
+    }
+
+    /// 组装 PEM 脱敏串: BEGIN 行 + 正文首段明文行 + 星号行 + 正文尾段明文行 + END 行
+    private String buildMaskedPem(String beginLine, String bodyHead, String bodyTail, String endLine) {
         String starLine = StrUtil.repeat('*', PEM_LINE_WIDTH);
         StringBuilder masked = new StringBuilder(beginLine).append('\n');
         masked.append(this.pemBodyLine(StrUtil.subPre(bodyHead, PEM_PLAIN_LENGTH), true)).append('\n');

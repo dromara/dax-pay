@@ -140,6 +140,35 @@ class SensitiveInfoSerializeTest {
         assertTrue(!masked.contains("\n"));
     }
 
+    @Test
+    @DisplayName("单行 PEM(BEGIN/正文/END 挤在同一行): 还原为六行结构脱敏")
+    void inlinePem_shouldMaskAsSixLines() {
+        String body = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7VJTUt9Us8cKjMzEfYyjiWA4R4";
+        String raw = "-----BEGIN PRIVATE KEY-----" + body + "-----END PRIVATE KEY-----";
+        String masked = this.maskCompact24(raw);
+        String[] lines = masked.split("\\R");
+
+        assertEquals(6, lines.length);
+        assertEquals("-----BEGIN PRIVATE KEY-----", lines[0]);
+        assertEquals("-----END PRIVATE KEY-----", lines[5]);
+        assertTrue(lines[1].startsWith(body.substring(0, 32)));
+        assertEquals(48, lines[1].length());
+        assertTrue(lines[2].matches("\\*{48}"));
+        assertTrue(lines[4].endsWith(body.substring(body.length() - 32)));
+        assertEquals(48, lines[4].length());
+    }
+
+    @Test
+    @DisplayName("纯 Base64 带尾换行: 压缩串不把换行带出")
+    void plainBase64WithTrailingNewline_shouldNotContainNewline() {
+        String raw = "MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC7VJTUt9Us8cKj\n";
+        String stripped = raw.strip();
+        String masked = this.maskCompact24(raw);
+
+        assertTrue(!masked.contains("\n"));
+        assertEquals(stripped.substring(0, 24) + "******" + stripped.substring(stripped.length() - 24), masked);
+    }
+
     /// 以 24/24 压缩注解序列化再反序列化, 取出脱敏后的字段值
     private String maskCompact24(String value) {
         CompactHolder holder = new CompactHolder();
