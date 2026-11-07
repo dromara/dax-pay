@@ -2,6 +2,7 @@ package cn.daxpay.open.demo.excel.controller;
 
 import cn.daxpay.open.demo.excel.result.ExcelDemoResult;
 import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -28,8 +29,9 @@ import java.util.List;
 ///
 /// 数据均为内存 Mock, 不依赖数据库。
 ///
-/// 鉴权：URL 前缀 `/demo/**` 在 dev 环境已加入白名单; 生产环境不白名单, 需正常登录鉴权
+/// 鉴权：URL 前缀 `/demo/**` 在 dev 环境已加入白名单; 生产环境不白名单, 需登录后访问
 /// (导出为较重的服务端运算, 不作为匿名开放接口)。
+@IgnoreAuth(login = true)
 @Tag(name = "Excel 导出演示")
 @RestController
 @RequestMapping("/demo/excel")

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 
 import java.util.Comparator;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 /// - 全部未命中:
 ///   - 未登录 → SecurityUtil.getUserId() 抛 NotLoginException
 ///   - 已登录 → 记 WARN 并抛 RouterCheckException(403 无权限)
+/// - 非 [HandlerMethod] 的处理器(静态资源、未映射路径)直接放行, 交由 MVC 返回 404, 不参与鉴权。
 ///
 /// SaRouter.stop() 只结束 Sa-Token 鉴权阶段, 不终止整个过滤器链。
 ///
@@ -50,6 +52,11 @@ public class SaRouteHandler implements InitializingBean {
     /// @param handler Sa-Token 传入的路由处理上下文
     public SaFunction check(Object handler) {
         return () -> {
+            // 非控制器处理器(静态资源/未映射路径由 ResourceHttpRequestHandler 兜底)不参与注解鉴权,
+            // 否则任何不存在的路径都会被判成"已登录无权限"(403), 掩盖真实的 404
+            if (!(handler instanceof HandlerMethod)) {
+                return;
+            }
             String path = WebServletUtil.getPath();
             // 已登录用户: 先执行访问策略(如密码过期强制改密), 不通过则抛异常阻断
             SecurityUtil.getCurrentUser().ifPresent(user -> {
