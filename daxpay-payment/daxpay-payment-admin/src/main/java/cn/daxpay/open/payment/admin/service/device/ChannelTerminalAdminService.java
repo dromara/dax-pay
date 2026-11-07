@@ -15,6 +15,7 @@ import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
+import cn.daxpay.open.payment.device.terminal.service.ChannelTerminalQuerySupport;
 import cn.daxpay.open.payment.device.terminal.service.TerminalBindSupport;
 import cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
@@ -23,7 +24,6 @@ import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
 import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
-import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
@@ -39,7 +39,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -63,6 +62,7 @@ public class ChannelTerminalAdminService {
     private final MerchantInfoManager merchantInfoManager;
     private final TransService transService;
     private final TerminalBindSupport terminalBindSupport;
+    private final ChannelTerminalQuerySupport channelTerminalQuerySupport;
 
     /// 新增通道终端台账(建档即绑定系统终端)
     @Transactional(rollbackFor = Exception.class)
@@ -138,21 +138,12 @@ public class ChannelTerminalAdminService {
 
     /// 分页
     public PageResult<ChannelTerminalResult> page(PageParam pageParam, ChannelTerminalQuery query) {
-        PageResult<ChannelTerminalResult> pageResult = MpUtil.toPageResult(channelTerminalManager.page(pageParam, query));
-        fillSystemTerminals(pageResult.getRecords());
-        transService.translate(pageResult);
-        return pageResult;
+        return channelTerminalQuerySupport.page(pageParam, query);
     }
 
     /// 详情
     public ChannelTerminalResult findById(Long id) {
-        ChannelTerminalResult result = channelTerminalManager.findById(id)
-                .map(ChannelTerminal::toResult)
-                // 终端: 通道终端不存在
-                .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
-        fillSystemTerminals(List.of(result));
-        transService.translate(result);
-        return result;
+        return channelTerminalQuerySupport.findById(id);
     }
 
     /// 商户下通道终端列表(绑定下拉用)
@@ -382,49 +373,5 @@ public class ChannelTerminalAdminService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
         }
         return systemTerminal;
-    }
-
-    /// 批量填充通道终端已绑定的系统终端列表
-    private void fillSystemTerminals(List<ChannelTerminalResult> results) {
-        if (results.isEmpty()) {
-            return;
-        }
-        List<Long> ids = results.stream()
-                .map(ChannelTerminalResult::getId)
-                .filter(Objects::nonNull)
-                .toList();
-        if (ids.isEmpty()) {
-            return;
-        }
-        // 按通道终端分组绑定关系
-        Map<Long, List<TerminalChannelBind>> bindGroup = terminalChannelBindManager.findByChannelTerminalIds(ids).stream()
-                .collect(Collectors.groupingBy(TerminalChannelBind::getChannelTerminalId));
-        if (bindGroup.isEmpty()) {
-            return;
-        }
-        // 批量查系统终端并按编码索引
-        List<String> terminalNos = bindGroup.values().stream()
-                .flatMap(List::stream)
-                .map(TerminalChannelBind::getSystemTerminalNo)
-                .distinct()
-                .toList();
-        Map<String, TerminalDeviceResult> deviceMap = terminalDeviceManager.lambdaQuery()
-                .in(TerminalDevice::getTerminalNo, terminalNos)
-                .list()
-                .stream()
-                .map(TerminalDevice::toResult)
-                .collect(Collectors.toMap(TerminalDeviceResult::getTerminalNo, r -> r, (a, b) -> a));
-        for (ChannelTerminalResult result : results) {
-            List<TerminalChannelBind> binds = bindGroup.get(result.getId());
-            if (Objects.isNull(binds)) {
-                continue;
-            }
-            List<TerminalDeviceResult> systemTerminals = binds.stream()
-                    .map(TerminalChannelBind::getSystemTerminalNo)
-                    .map(deviceMap::get)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-            result.setSystemTerminals(systemTerminals);
-        }
     }
 }
