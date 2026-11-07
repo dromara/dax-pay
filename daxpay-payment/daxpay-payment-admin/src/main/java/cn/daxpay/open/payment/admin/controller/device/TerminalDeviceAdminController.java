@@ -63,6 +63,13 @@ public class TerminalDeviceAdminController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "商户终端总览分页(只读, 含关联通道终端)")
+    @GetMapping("/overview-page")
+    public Result<PageResult<TerminalDeviceResult>> overviewPage(PageParam pageParam, TerminalDeviceQuery query) {
+        return Res.ok(terminalDeviceAdminService.overviewPage(pageParam, query));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "系统终端详情")
     @GetMapping("/get")
     public Result<TerminalDeviceResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {

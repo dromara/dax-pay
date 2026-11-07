@@ -12,6 +12,7 @@ import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
+import cn.daxpay.open.payment.device.terminal.service.TerminalChannelFillSupport;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
@@ -49,6 +50,7 @@ public class TerminalDeviceAdminService {
     private final ChannelTerminalManager channelTerminalManager;
     private final MerchantInfoManager merchantInfoManager;
     private final MchStoreInfoManager mchStoreInfoManager;
+    private final TerminalChannelFillSupport terminalChannelFillSupport;
     private final TransService transService;
 
     /// 新增系统终端
@@ -93,6 +95,17 @@ public class TerminalDeviceAdminService {
     /// 分页
     public PageResult<TerminalDeviceResult> page(PageParam pageParam, TerminalDeviceQuery query) {
         PageResult<TerminalDeviceResult> pageResult = MpUtil.toPageResult(terminalDeviceManager.page(pageParam, query));
+        transService.translate(pageResult);
+        return pageResult;
+    }
+
+    /// 商户终端总览分页(运营端「设备管理 → 商户终端」只读视图)
+    ///
+    /// 与商户管理下的商户终端页语义隔离: 不分商户维度收口, 批量带出每个终端关联的通道终端,
+    /// 不改动 [#page] 的既有出参。
+    public PageResult<TerminalDeviceResult> overviewPage(PageParam pageParam, TerminalDeviceQuery query) {
+        PageResult<TerminalDeviceResult> pageResult = MpUtil.toPageResult(terminalDeviceManager.page(pageParam, query));
+        terminalChannelFillSupport.fill(pageResult.getRecords());
         transService.translate(pageResult);
         return pageResult;
     }

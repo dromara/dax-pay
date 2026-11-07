@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.device.terminal.dao;
 
 import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -35,6 +36,16 @@ public class TerminalChannelBindManager extends BaseManager<TerminalChannelBindM
     public List<TerminalChannelBind> findBySystemTerminalNo(String systemTerminalNo) {
         return lambdaQuery()
                 .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .list();
+    }
+
+    /// 按多个系统终端号批量查询绑定关系(总览批量回填用, 避免 N+1)
+    public List<TerminalChannelBind> findBySystemTerminalNos(List<String> systemTerminalNos) {
+        if (CollUtil.isEmpty(systemTerminalNos)) {
+            return List.of();
+        }
+        return lambdaQuery()
+                .in(TerminalChannelBind::getSystemTerminalNo, systemTerminalNos)
                 .list();
     }
 

@@ -9,6 +9,8 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
+import java.util.List;
+
 /// # 系统终端
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -42,4 +44,8 @@ public class TerminalDeviceResult extends MchBaseResult {
 
     @Schema(description = "备注")
     private String remark;
+
+    /// 关联的通道终端(只读聚合, 总览/商户端分页时批量填充, 不落库)
+    @Schema(description = "关联的通道终端")
+    private List<ChannelTerminalResult> channelTerminals;
 }

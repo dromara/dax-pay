@@ -11,6 +11,7 @@ import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
+import cn.daxpay.open.payment.device.terminal.service.TerminalChannelFillSupport;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
 import cn.daxpay.open.payment.merchant.param.device.TerminalDeviceParam;
@@ -47,6 +48,7 @@ public class MchTerminalDeviceService {
     private final TerminalChannelBindManager terminalChannelBindManager;
     private final ChannelTerminalManager channelTerminalManager;
     private final MchStoreInfoManager mchStoreInfoManager;
+    private final TerminalChannelFillSupport terminalChannelFillSupport;
     private final TransService transService;
     private final PaymentContext paymentContext;
 
@@ -108,6 +110,8 @@ public class MchTerminalDeviceService {
     public PageResult<TerminalDeviceResult> page(PageParam pageParam, TerminalDeviceQuery query) {
         query.setMchNo(requireMchNo());
         PageResult<TerminalDeviceResult> pageResult = MpUtil.toPageResult(terminalDeviceManager.page(pageParam, query));
+        // 批量回填关联通道终端(一次查绑定、一次查通道终端, 避免 N+1)
+        terminalChannelFillSupport.fill(pageResult.getRecords());
         transService.translate(pageResult);
         return pageResult;
     }

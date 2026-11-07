@@ -31,7 +31,7 @@ import java.util.List;
 
 /// # 通道终端台账管理(运营端)
 ///
-/// 挂在通道商户下维护, 权限复用 [PermCodes.Channel.Merchant]。
+/// 挂在通道商户下维护(通道商户工作台终端磁贴), 权限归通道商户管理 [PermCodes.Channel.Merchant]。
 @PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
 @Tag(name = "通道终端台账管理")

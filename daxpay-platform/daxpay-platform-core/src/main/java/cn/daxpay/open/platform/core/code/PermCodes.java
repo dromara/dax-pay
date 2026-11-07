@@ -144,7 +144,7 @@ public interface PermCodes {
             String MENU = "merchant:store";
         }
 
-        /// 系统终端 menuCode=merchant:terminal（通道终端归通道商户, 复用 channel:merchant）
+        /// 系统终端 menuCode=merchant:terminal
         interface Terminal {
             /// 菜单编码
             String MENU = "merchant:terminal";
