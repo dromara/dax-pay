@@ -10039,7 +10039,8 @@ CREATE TABLE public.pay_channel_terminal (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    extra text
 );
 
 --
@@ -10149,6 +10150,12 @@ COMMENT ON COLUMN public.pay_channel_terminal.version IS '乐观锁版本号';
 --
 
 COMMENT ON COLUMN public.pay_channel_terminal.deleted IS '删除标志';
+
+--
+-- Name: COLUMN pay_channel_terminal.extra; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_channel_terminal.extra IS '通道报备参数';
 
 --
 -- Name: pay_close_record; Type: TABLE; Schema: public; Owner: -

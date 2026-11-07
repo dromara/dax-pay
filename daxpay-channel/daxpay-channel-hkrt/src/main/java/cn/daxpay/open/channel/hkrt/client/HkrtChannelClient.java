@@ -6,12 +6,14 @@ import cn.daxpay.open.channel.hkrt.client.req.HkrtPayReq;
 import cn.daxpay.open.channel.hkrt.client.req.HkrtRefundReq;
 import cn.daxpay.open.channel.hkrt.client.req.HkrtRefundSyncReq;
 import cn.daxpay.open.channel.hkrt.client.req.HkrtSyncReq;
+import cn.daxpay.open.channel.hkrt.client.req.HkrtTerminalOperateReq;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtCallbackParseResp;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtCloseResp;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtPayResp;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtRefundResp;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtRefundSyncResp;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtSyncResp;
+import cn.daxpay.open.channel.hkrt.client.resp.HkrtTerminalOperateResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,4 +55,16 @@ public interface HkrtChannelClient {
     /// 退款回调验签解析(转发子应用)
     @PostExchange("/channel/hkrt/callback/parse-refund")
     DaxResult<HkrtCallbackParseResp> parseRefundCallback(@RequestBody HkrtCallbackParseReq req);
+
+    /// 终端绑定(报备, 转发子应用)
+    @PostExchange("/channel/hkrt/terminal/register")
+    DaxResult<HkrtTerminalOperateResp> terminalRegister(@RequestBody HkrtTerminalOperateReq req);
+
+    /// 终端解绑(注销, 转发子应用)
+    @PostExchange("/channel/hkrt/terminal/cancel")
+    DaxResult<Void> terminalCancel(@RequestBody HkrtTerminalOperateReq req);
+
+    /// 终端绑定查询(同步, 转发子应用)
+    @PostExchange("/channel/hkrt/terminal/sync")
+    DaxResult<HkrtTerminalOperateResp> terminalSync(@RequestBody HkrtTerminalOperateReq req);
 }

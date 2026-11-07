@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.device.terminal.strategy;
 
+import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
 import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
 import cn.daxpay.open.payment.strategy.PaymentStrategy;
@@ -22,6 +23,11 @@ public abstract class AbsChannelTerminalStrategy implements PaymentStrategy {
     /// @see cn.daxpay.open.payment.device.enums.TerminalTypeEnum
     public List<String> getTerminalTypes() {
         return List.of("common");
+    }
+
+    /// 通道差异化报备参数字段定义(默认无, 运营端按此渲染结构化表单并存入通道终端 extra)
+    public List<TerminalExtraField> getExtraFields() {
+        return List.of();
     }
 
     /// 报备(调通道 API, 成功回执带通道侧终端号)

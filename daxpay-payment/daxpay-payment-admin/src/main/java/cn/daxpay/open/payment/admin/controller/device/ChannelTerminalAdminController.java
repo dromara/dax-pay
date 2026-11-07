@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.admin.param.device.ChannelTerminalRegisterParam;
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalReportParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.admin.service.device.ChannelTerminalAdminService;
+import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
@@ -125,6 +126,14 @@ public class ChannelTerminalAdminController {
     @GetMapping("/terminal-types")
     public Result<List<String>> terminalTypes(@NotBlank(message = "{validation.field.product.notBlank}") String product) {
         return Res.ok(channelTerminalAdminService.terminalTypes(product));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "通道差异化报备参数字段定义")
+    @GetMapping("/extra-fields")
+    public Result<List<TerminalExtraField>> extraFields(
+            @NotBlank(message = "{validation.field.product.notBlank}") String product) {
+        return Res.ok(channelTerminalAdminService.extraFields(product));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

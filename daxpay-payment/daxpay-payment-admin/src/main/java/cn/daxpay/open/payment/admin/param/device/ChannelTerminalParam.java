@@ -48,6 +48,9 @@ public class ChannelTerminalParam {
     @SensitiveWord
     private String name;
 
+    @Schema(description = "通道差异化报备参数(JSON)")
+    private String extra;
+
     @Schema(description = "备注")
     @Size(max = 255, message = "{validation.field.remark.size}")
     private String remark;

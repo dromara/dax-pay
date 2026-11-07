@@ -61,6 +61,10 @@ public class ChannelTerminal extends MchBaseEntity implements ToResult<ChannelTe
     /// 备注
     private String remark;
 
+    /// 通道差异化报备参数(JSON, 键=通道协议参数名, 由各通道报备策略解析上送)
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String extra;
+
     @Override
     public ChannelTerminalResult toResult() {
         return ChannelTerminalConvert.CONVERT.toResult(this);

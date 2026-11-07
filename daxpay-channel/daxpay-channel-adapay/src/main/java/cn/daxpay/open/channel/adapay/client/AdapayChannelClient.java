@@ -6,12 +6,14 @@ import cn.daxpay.open.channel.adapay.client.req.AdapayPayReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapayRefundReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapayRefundSyncReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapaySyncReq;
+import cn.daxpay.open.channel.adapay.client.req.AdapayTerminalOperateReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCallbackParseResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCloseResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayPayResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayRefundResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayRefundSyncResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapaySyncResp;
+import cn.daxpay.open.channel.adapay.client.resp.AdapayTerminalOperateResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,4 +54,12 @@ public interface AdapayChannelClient {
     /// 退款回调验签解析(转发子应用)
     @PostExchange("/channel/adapay/callback/parse-refund")
     DaxResult<AdapayCallbackParseResp> parseRefundCallback(@RequestBody AdapayCallbackParseReq req);
+
+    /// 终端报备(设备注册 device.add, 转发子应用)
+    @PostExchange("/channel/adapay/terminal/register")
+    DaxResult<AdapayTerminalOperateResp> terminalRegister(@RequestBody AdapayTerminalOperateReq req);
+
+    /// 终端注销(设备注销 device.cancel, 转发子应用)
+    @PostExchange("/channel/adapay/terminal/cancel")
+    DaxResult<Void> terminalCancel(@RequestBody AdapayTerminalOperateReq req);
 }

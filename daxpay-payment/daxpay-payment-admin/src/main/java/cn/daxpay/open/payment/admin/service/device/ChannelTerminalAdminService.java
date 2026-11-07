@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.admin.param.device.ChannelTerminalRegisterParam;
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalReportParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.device.enums.TerminalTypeEnum;
+import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
@@ -95,6 +96,7 @@ public class ChannelTerminalAdminService {
         entity.setName(param.getName());
         // 建档即初始状态; 通道侧终端号/状态由手动登记动作回写
         entity.setStatus(ChannelTerminalStatusEnum.INIT.getCode());
+        entity.setExtra(param.getExtra());
         entity.setRemark(param.getRemark());
         channelTerminalManager.save(entity);
 
@@ -113,6 +115,7 @@ public class ChannelTerminalAdminService {
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         entity.setName(param.getName());
+        entity.setExtra(param.getExtra());
         entity.setRemark(param.getRemark());
         channelTerminalManager.updateById(entity);
     }
@@ -228,6 +231,13 @@ public class ChannelTerminalAdminService {
     public List<String> terminalTypes(String product) {
         return PaymentStrategyFactory.findOptionallyByProduct(product, AbsChannelTerminalStrategy.class)
                 .map(AbsChannelTerminalStrategy::getTerminalTypes)
+                .orElse(List.of());
+    }
+
+    /// 查询通道差异化报备参数字段定义(运营端结构化表单用; 无策略或未定义返回空)
+    public List<TerminalExtraField> extraFields(String product) {
+        return PaymentStrategyFactory.findOptionallyByProduct(product, AbsChannelTerminalStrategy.class)
+                .map(AbsChannelTerminalStrategy::getExtraFields)
                 .orElse(List.of());
     }
 
