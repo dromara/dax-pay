@@ -24,6 +24,9 @@ public abstract class AbsProductStrategy implements PaymentStrategy {
     /// 是否支持沙箱环境
     public boolean isSandbox() { return false; }
 
+    /// 是否仅支持沙箱环境(模拟通道等): 生效环境恒为 sandbox, 不允许切换到生产
+    public boolean isSandboxOnly() { return false; }
+
     /// API调用模式
     public ChannelApiCallMode getApiCallMode() { return ChannelApiCallMode.MCH; }
 

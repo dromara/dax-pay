@@ -70,6 +70,11 @@ public class PayProductConfigService {
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = "payment:product-sandbox", key = "#product")
     public void switchEnv(String product, boolean sandbox) {
+        // 仅沙箱产品(模拟通道)恒为 sandbox, 不允许切到生产
+        if (!sandbox && isSandboxOnly(product)) {
+            // 产品: 该产品仅支持沙箱环境
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.env.sandboxOnly");
+        }
         // 全局沙箱开关校验
         if (sandbox && !platformConfigProperties.isSandboxEnabled()) {
             // 产品: 沙箱环境未开启
@@ -104,11 +109,16 @@ public class PayProductConfigService {
         }
 
         PayProductConfig config = payProductConfigManager.findByProduct(param.getProduct())
-                .orElseGet(PayProductConfig::new);
+                .orElseGet(() -> createDefaultConfig(param.getProduct()));
 
         config.setProduct(param.getProduct());
         config.setChannel(param.getChannel());
-        config.setActiveEnv(Objects.nonNull(param.getActiveEnv()) ? param.getActiveEnv() : PayEnvEnum.PROD.getCode());
+        // 仅沙箱产品强制 sandbox, 忽略调用方传入的生产环境
+        if (isSandboxOnly(param.getProduct())) {
+            config.setActiveEnv(PayEnvEnum.SANDBOX.getCode());
+        } else {
+            config.setActiveEnv(Objects.nonNull(param.getActiveEnv()) ? param.getActiveEnv() : PayEnvEnum.PROD.getCode());
+        }
         config.setRemark(param.getRemark());
         payProductConfigManager.saveOrUpdate(config);
     }
@@ -129,7 +139,11 @@ public class PayProductConfigService {
         }
         List<PayProductConfig> sandboxConfigs = payProductConfigManager.lambdaQuery()
                 .eq(PayProductConfig::getActiveEnv, PayEnvEnum.SANDBOX.getCode())
-                .list();
+                .list()
+                .stream()
+                // 仅沙箱产品(模拟通道)不参与重置: 恒沙箱是产品语义, 生产部署下该产品不装配、无实际支付能力
+                .filter(config -> !isSandboxOnly(config.getProduct()))
+                .toList();
         for (PayProductConfig config : sandboxConfigs) {
             config.setActiveEnv(PayEnvEnum.PROD.getCode());
             payProductConfigManager.updateById(config);
@@ -156,6 +170,7 @@ public class PayProductConfigService {
         result.setOnline(strategy != null && !RESERVED_PRODUCTS.contains(payProduct.getCode()));
         if (Objects.nonNull(strategy)) {
             result.setSandboxSupport(strategy.isSandbox());
+            result.setSandboxOnly(strategy.isSandboxOnly());
             result.setIsv(strategy.isIsv());
         }
 
@@ -177,9 +192,16 @@ public class PayProductConfigService {
         PayProductConfig config = new PayProductConfig();
         config.setProduct(product);
         config.setChannel(productEnum.getChannel());
-        config.setActiveEnv(PayEnvEnum.PROD.getCode());
+        // 仅沙箱产品默认落 sandbox, 其余默认生产
+        config.setActiveEnv(isSandboxOnly(product) ? PayEnvEnum.SANDBOX.getCode() : PayEnvEnum.PROD.getCode());
         payProductConfigManager.save(config);
         return config;
+    }
+
+    /// 是否为仅沙箱产品(模拟通道等): 生效环境恒为 sandbox, 不允许切换到生产
+    private boolean isSandboxOnly(String product) {
+        AbsProductStrategy strategy = resolveStrategy(product);
+        return Objects.nonNull(strategy) && strategy.isSandboxOnly();
     }
 
     private AbsProductStrategy resolveStrategy(String productCode) {

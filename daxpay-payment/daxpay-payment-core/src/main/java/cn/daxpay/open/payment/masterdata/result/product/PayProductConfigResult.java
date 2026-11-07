@@ -29,6 +29,9 @@ public class PayProductConfigResult extends BaseResult {
     @Schema(description = "是否支持沙箱环境")
     private boolean sandboxSupport;
 
+    /// 是否仅支持沙箱环境(模拟通道等): 生效环境恒为 sandbox, 不允许切换到生产
+    private boolean sandboxOnly;
+
     @Schema(description = "生效环境: prod/sandbox")
     private String activeEnv;
 

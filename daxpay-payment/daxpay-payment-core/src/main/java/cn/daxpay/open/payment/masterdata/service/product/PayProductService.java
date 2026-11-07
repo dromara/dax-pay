@@ -216,6 +216,7 @@ public class PayProductService {
         target.setIsv(strategy.isIsv())
                 .setTerminal(strategy.isTerminal())
                 .setSandbox(strategy.isSandbox())
+                .setSandboxOnly(strategy.isSandboxOnly())
                 .setApiCallMode(strategy.getApiCallMode().getCode())
                 .setPayIdType(strategy.getPayIdType().getCode());
     }
