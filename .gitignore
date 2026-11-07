@@ -5,6 +5,7 @@
 .factorypath
 .settings/
 .idea/
+.openidea/
 .run/
 .svn/
 *.iml
