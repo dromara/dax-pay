@@ -38,8 +38,9 @@ const sqlDir = resolve(here, '..')                    // _config/sql
 const repoDir = resolve(sqlDir, '..', '..')           // dax-pay-open 仓根
 const devYml = join(repoDir, 'daxpay-start', 'src', 'main', 'resources', 'application-dev.yml')
 
-// 阶段 A 的硬口径（dev 库 2026-11-02 实测 170 张表 / 2506 条列注释）
-const EXPECT_TABLE_COUNT = 170
+// 阶段 A 的硬口径（dev 库 2026-11-02 实测 170 张表 / 2506 条列注释;
+// 2026-11-06 异步通知配置下线删 mch_app_notify_config 后为 169 张）
+const EXPECT_TABLE_COUNT = 169
 const MIN_COLUMN_COMMENTS = 2400
 
 // 演示菜单 id（Demos 6 条 {2,202,204,205,206,208} + mock 工作台 2 条 {4040133,4040134}）：

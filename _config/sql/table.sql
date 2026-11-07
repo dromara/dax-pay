@@ -1,14 +1,14 @@
 -- ============================================================================
--- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-03T10:15:14.227Z
+-- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-07T03:23:18.596Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432
--- 内容: [1] 表结构 170 张表（建表 / 主键 / 索引 / 注释）
+-- 内容: [1] 表结构 169 张表（建表 / 主键 / 索引 / 注释）
 -- 用法: 空库先执行本文件，再执行 data.sql（纯净版）或 data-demo.sql（演示版，阶段 B）
 -- 说明: 只建表不插数据；执行前库须为空，重复执行会主键冲突
 -- 警告: 构建产物，禁止手编；改表结构改 dev 库后重跑脚本
 -- ============================================================================
 
 -- ============================================================================
--- [1] 表结构（170 张表：建表 / 主键 / 索引 / 注释）
+-- [1] 表结构（169 张表：建表 / 主键 / 索引 / 注释）
 -- ============================================================================
 
 --
@@ -12611,9 +12611,7 @@ CREATE TABLE public.pay_normal_order (
     goods_detail jsonb,
     client_ip character varying(64),
     terminal_no character varying(128),
-    out_terminal_no character varying(64),
     store_no character varying(32),
-    qr_code character varying(64),
     error_msg character varying(500),
     mch_no character varying(64) NOT NULL,
     creator bigint,
@@ -12622,7 +12620,9 @@ CREATE TABLE public.pay_normal_order (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    allocation boolean DEFAULT false
+    allocation boolean DEFAULT false,
+    out_terminal_no character varying(64),
+    qr_code character varying(64)
 );
 
 --
@@ -12866,22 +12866,10 @@ COMMENT ON COLUMN public.pay_normal_order.client_ip IS '下单客户端 IP';
 COMMENT ON COLUMN public.pay_normal_order.terminal_no IS '终端设备编码';
 
 --
--- Name: COLUMN pay_normal_order.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_normal_order.out_terminal_no IS '通道侧终端号';
-
---
 -- Name: COLUMN pay_normal_order.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
 COMMENT ON COLUMN public.pay_normal_order.store_no IS '门店号';
-
---
--- Name: COLUMN pay_normal_order.qr_code; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_normal_order.qr_code IS '码牌编码';
 
 --
 -- Name: COLUMN pay_normal_order.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -12936,6 +12924,18 @@ COMMENT ON COLUMN public.pay_normal_order.deleted IS '逻辑删除';
 --
 
 COMMENT ON COLUMN public.pay_normal_order.allocation IS '是否分账订单';
+
+--
+-- Name: COLUMN pay_normal_order.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_normal_order.out_terminal_no IS '通道侧终端号';
+
+--
+-- Name: COLUMN pay_normal_order.qr_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_normal_order.qr_code IS '码牌编码';
 
 --
 -- Name: pay_platform_mobile_app; Type: TABLE; Schema: public; Owner: -
@@ -13918,16 +13918,16 @@ CREATE TABLE public.pay_terminal_channel_bind (
     id bigint NOT NULL,
     system_terminal_no character varying(32) NOT NULL,
     channel_terminal_id bigint NOT NULL,
-    channel_mch_no character varying(64),
-    channel character varying(32),
-    type character varying(32),
     mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    channel_mch_no character varying(64),
+    channel character varying(32),
+    type character varying(32)
 );
 
 --
@@ -13953,24 +13953,6 @@ COMMENT ON COLUMN public.pay_terminal_channel_bind.system_terminal_no IS '系统
 --
 
 COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_terminal_id IS '通道终端主键';
-
---
--- Name: COLUMN pay_terminal_channel_bind.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_mch_no IS '通道商户号';
-
---
--- Name: COLUMN pay_terminal_channel_bind.channel; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel IS '通道编码';
-
---
--- Name: COLUMN pay_terminal_channel_bind.type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.type IS '报送类型';
 
 --
 -- Name: COLUMN pay_terminal_channel_bind.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -14015,6 +13997,24 @@ COMMENT ON COLUMN public.pay_terminal_channel_bind.version IS '乐观锁版本�
 COMMENT ON COLUMN public.pay_terminal_channel_bind.deleted IS '删除标志';
 
 --
+-- Name: COLUMN pay_terminal_channel_bind.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_mch_no IS '通道商户号';
+
+--
+-- Name: COLUMN pay_terminal_channel_bind.channel; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_channel_bind.channel IS '通道编码';
+
+--
+-- Name: COLUMN pay_terminal_channel_bind.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_channel_bind.type IS '报送类型';
+
+--
 -- Name: pay_terminal_device; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -14024,7 +14024,6 @@ CREATE TABLE public.pay_terminal_device (
     name character varying(100) NOT NULL,
     store_no character varying(64),
     enable boolean DEFAULT true NOT NULL,
-    default_terminal boolean DEFAULT false NOT NULL,
     remark character varying(255),
     mch_no character varying(64) NOT NULL,
     creator bigint,
@@ -14032,7 +14031,8 @@ CREATE TABLE public.pay_terminal_device (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    default_terminal boolean DEFAULT false NOT NULL
 );
 
 --
@@ -14070,12 +14070,6 @@ COMMENT ON COLUMN public.pay_terminal_device.store_no IS '绑定门店号';
 --
 
 COMMENT ON COLUMN public.pay_terminal_device.enable IS '是否启用';
-
---
--- Name: COLUMN pay_terminal_device.default_terminal; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.default_terminal IS '是否门店默认终端';
 
 --
 -- Name: COLUMN pay_terminal_device.remark; Type: COMMENT; Schema: public; Owner: -
@@ -14124,6 +14118,12 @@ COMMENT ON COLUMN public.pay_terminal_device.version IS '乐观锁版本号';
 --
 
 COMMENT ON COLUMN public.pay_terminal_device.deleted IS '删除标志';
+
+--
+-- Name: COLUMN pay_terminal_device.default_terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_device.default_terminal IS '是否门店默认终端';
 
 --
 -- Name: pay_trade; Type: TABLE; Schema: public; Owner: -
@@ -15825,7 +15825,6 @@ CREATE TABLE public.starter_audit_login_log (
     account character varying(200),
     login boolean DEFAULT false,
     client character varying(100),
-    terminal character varying(16),
     login_type character varying(100),
     ip character varying(100),
     login_location character varying(200),
@@ -15838,7 +15837,8 @@ CREATE TABLE public.starter_audit_login_log (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
     deleted boolean DEFAULT false NOT NULL,
-    login_time timestamp with time zone
+    login_time timestamp with time zone,
+    terminal character varying(16)
 );
 
 --
@@ -15876,12 +15876,6 @@ COMMENT ON COLUMN public.starter_audit_login_log.login IS '登录成功状态';
 --
 
 COMMENT ON COLUMN public.starter_audit_login_log.client IS '登录终端';
-
---
--- Name: COLUMN starter_audit_login_log.terminal; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.starter_audit_login_log.terminal IS '登录终端类型';
 
 --
 -- Name: COLUMN starter_audit_login_log.login_type; Type: COMMENT; Schema: public; Owner: -
@@ -15960,6 +15954,12 @@ COMMENT ON COLUMN public.starter_audit_login_log.deleted IS '删除标志';
 --
 
 COMMENT ON COLUMN public.starter_audit_login_log.login_time IS '访问时间';
+
+--
+-- Name: COLUMN starter_audit_login_log.terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.starter_audit_login_log.terminal IS '登录终端类型';
 
 --
 -- Name: starter_audit_operate_log; Type: TABLE; Schema: public; Owner: -
@@ -23640,18 +23640,6 @@ CREATE UNIQUE INDEX uk_pay_terminal_channel_bind ON public.pay_terminal_channel_
 COMMENT ON INDEX public.uk_pay_terminal_channel_bind IS '系统终端+通道终端绑定唯一';
 
 --
--- Name: uk_pay_terminal_device_terminal_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_pay_terminal_device_terminal_no ON public.pay_terminal_device USING btree (terminal_no) WHERE (deleted = false);
-
---
--- Name: INDEX uk_pay_terminal_device_terminal_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_pay_terminal_device_terminal_no IS '终端号唯一';
-
---
 -- Name: uk_pay_terminal_device_store_default; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23662,6 +23650,18 @@ CREATE UNIQUE INDEX uk_pay_terminal_device_store_default ON public.pay_terminal_
 --
 
 COMMENT ON INDEX public.uk_pay_terminal_device_store_default IS '同一门店至多一个默认终端';
+
+--
+-- Name: uk_pay_terminal_device_terminal_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_terminal_device_terminal_no ON public.pay_terminal_device USING btree (terminal_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_pay_terminal_device_terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_terminal_device_terminal_no IS '终端号唯一';
 
 --
 -- Name: uk_pay_trade_trade_no; Type: INDEX; Schema: public; Owner: -
