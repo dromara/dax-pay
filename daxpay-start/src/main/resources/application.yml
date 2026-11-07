@@ -47,3 +47,8 @@ sa-token:
   timeout: 259200
   is-log: false
   is-print: false
+  # 会话 Cookie 属性: SSE(EventSource)无法自定义请求头, 只能靠同源 Cookie 透传会话;
+  # 前端不读取该 Cookie, 统一 HttpOnly 收敛 XSS 暴露面, SameSite=Lax 防跨站携带
+  cookie:
+    http-only: true
+    same-site: Lax

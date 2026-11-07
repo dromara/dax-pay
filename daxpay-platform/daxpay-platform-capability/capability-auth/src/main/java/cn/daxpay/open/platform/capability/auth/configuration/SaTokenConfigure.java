@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.capability.auth.configuration;
 
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
+import cn.daxpay.open.platform.capability.auth.cookie.TokenCookieRefreshInterceptor;
 import cn.daxpay.open.platform.capability.auth.handler.SaRouteHandler;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
@@ -42,6 +43,8 @@ public class SaTokenConfigure implements WebMvcConfigurer {
 
     private final SaRouteHandler saRouteHandler;
 
+    private final TokenCookieRefreshInterceptor tokenCookieRefreshInterceptor;
+
     /// 注册拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -68,5 +71,10 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 return saInterceptor.preHandle(request, response, handler);
             }
         }).addPathPatterns("/**");
+
+        // 登录态 Cookie 自愈: 同一 registry 内按注册顺序执行, 必须排在鉴权拦截器之后.
+        // SSE(EventSource)无法自定义请求头, 只能靠同源 Cookie 透传会话, 而该 Cookie 只在登录时写一次;
+        // 本拦截器让任意一次普通接口调用把缺失/过期/被同 host 其它端覆盖的 Cookie 按当前 token 重写.
+        registry.addInterceptor(tokenCookieRefreshInterceptor).addPathPatterns("/**");
     }
 }
