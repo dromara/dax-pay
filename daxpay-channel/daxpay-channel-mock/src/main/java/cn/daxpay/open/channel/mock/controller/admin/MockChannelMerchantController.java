@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # Mock 模拟通道商户管理
 ///
-/// 提供模拟通道商户创建(纯本地登记: 商户档案在模拟网关控制台创建, 此处登记其通道商户号或自动生成),
-/// 不调 mock 子应用; 直连商户级接入密钥由密钥端点后置维护。
+/// 提供模拟通道商户创建(纯本地登记: 商户档案在模拟通道控制台创建, 此处登记其通道商户号),
+/// 不调 mock 子应用(独立通道, 无对接接口); 直连商户级接入密钥由密钥端点后置维护。
 /// 列表/详情统一走通用通道商户链路(全局列表 + 详情工作台), 模块内不再单独提供分页查询。
 /// 复用通道商户通用权限码(菜单 channel:merchant + 动作 manage)。
 /// 随 [cn.daxpay.open.channel.mock.MockChannelApp] 仅 DEV 装配, PROD 下端点不存在。

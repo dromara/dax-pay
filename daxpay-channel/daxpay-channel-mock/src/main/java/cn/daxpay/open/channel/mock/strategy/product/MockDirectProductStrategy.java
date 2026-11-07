@@ -41,6 +41,12 @@ public class MockDirectProductStrategy extends AbsProductStrategy {
         return true;
     }
 
+    /// 仅沙箱: 生效环境固定 sandbox, 不允许切换到生产
+    @Override
+    public boolean isSandboxOnly() {
+        return true;
+    }
+
     /// 直连模式: 按通道商户维度调用子应用
     @Override
     public ChannelApiCallMode getApiCallMode() {

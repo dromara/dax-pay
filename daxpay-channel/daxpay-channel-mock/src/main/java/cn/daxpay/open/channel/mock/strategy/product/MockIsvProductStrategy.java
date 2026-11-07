@@ -43,6 +43,12 @@ public class MockIsvProductStrategy extends AbsProductStrategy {
         return true;
     }
 
+    /// 仅沙箱: 生效环境固定 sandbox, 不允许切换到生产
+    @Override
+    public boolean isSandboxOnly() {
+        return true;
+    }
+
     /// API 调用模式: 服务商
     @Override
     public ChannelApiCallMode getApiCallMode() {
