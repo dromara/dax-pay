@@ -14,7 +14,6 @@ import cn.daxpay.open.payment.trade.report.result.RefundTrendItemResult;
 import cn.daxpay.open.payment.trade.report.result.TradeOverviewResult;
 import cn.daxpay.open.payment.trade.report.result.TradeTrendItemResult;
 import cn.daxpay.open.payment.trade.report.support.TradeReportSupport;
-import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import lombok.RequiredArgsConstructor;
@@ -40,13 +39,13 @@ public class AdminDashboardTradeService {
 
     // ===== 头部计数 =====
 
-    /// 工作台头部: 商户 / 通道商户 / 运营用户 全量计数
+    /// 工作台头部: 商户 / 通道商户 / 用户总数(全终端) 全量计数
     public AdminDashboardHeaderCountResult headerCounts() {
         long merchantCount = merchantInfoManager.lambdaQuery().count();
         long channelMerchantCount = channelMerchantManager.lambdaQuery().count();
-        // 运营端用户: 仅 admin 终端, 排除内置超管(与 UserAdminService 列表口径一致)
+        // 用户总数: 全终端(admin/merchant)普通用户, 排除内置超管
+        // (与 UserAdminService 列表默认口径一致: 列表默认跨端查全部用户, 超管仅在 enableAdmin+adminInList+按运营端筛选三条件齐备时可见)
         long userCount = userInfoManager.lambdaQuery()
-                .eq(UserInfo::getClientCode, ClientEnum.ADMIN.getCode())
                 .eq(UserInfo::isAdministrator, false)
                 .count();
         return new AdminDashboardHeaderCountResult()
