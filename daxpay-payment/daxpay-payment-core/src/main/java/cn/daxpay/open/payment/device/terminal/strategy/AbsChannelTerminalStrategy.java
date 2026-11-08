@@ -44,4 +44,18 @@ public abstract class AbsChannelTerminalStrategy implements PaymentStrategy {
     public TerminalOperateResult sync(ChannelTerminal terminal, String systemTerminalNo) {
         throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.syncUnsupported");
     }
+
+    /// 是否支持注销(默认不支持, 由实现了通道注销 API 的策略覆盖)
+    ///
+    /// 供端侧按通道能力置灰注销按钮, 避免用户点击后才拿到"不支持"的失败回执。
+    public boolean supportsCancel() {
+        return false;
+    }
+
+    /// 是否支持状态同步(默认不支持, 由实现了通道状态回读的策略覆盖)
+    ///
+    /// 供端侧按通道能力置灰同步按钮, 避免用户点击后才拿到"不支持"的失败回执。
+    public boolean supportsSync() {
+        return false;
+    }
 }

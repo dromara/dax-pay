@@ -79,6 +79,12 @@ public class AdapayTerminalStrategy extends AbsChannelTerminalStrategy {
         return TerminalOperateResult.success(ChannelTerminalStatusEnum.LOGGED.getCode(), null);
     }
 
+    /// 汇付实现了设备注销(device.cancel), 支持注销
+    @Override
+    public boolean supportsCancel() {
+        return true;
+    }
+
     /// 组装转发请求: 直连凭证 + 报送类型(pay_way 映射) + extra 业务字段
     private AdapayTerminalOperateReq buildReq(ChannelTerminal terminal) {
         return new AdapayTerminalOperateReq()

@@ -49,4 +49,16 @@ public abstract class MockTerminalStrategySupport extends AbsChannelTerminalStra
     public TerminalOperateResult sync(ChannelTerminal terminal, String systemTerminalNo) {
         return mockTerminalService.sync(terminal, systemTerminalNo);
     }
+
+    /// mock 子应用实现了终端注销, 支持注销
+    @Override
+    public boolean supportsCancel() {
+        return true;
+    }
+
+    /// mock 子应用实现了终端状态回读, 支持同步
+    @Override
+    public boolean supportsSync() {
+        return true;
+    }
 }

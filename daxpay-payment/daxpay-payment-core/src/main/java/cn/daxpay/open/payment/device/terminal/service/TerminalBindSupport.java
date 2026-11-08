@@ -30,6 +30,17 @@ public class TerminalBindSupport {
                 .anyMatch(bind -> !Objects.equals(bind.getSystemTerminalNo(), systemTerminalNo));
     }
 
+    /// 取通道终端当前绑定的系统终端号(一条通道终端只归属一个系统终端, 遗留脏数据取首个)
+    ///
+    /// @param channelTerminalId 通道终端主键
+    /// @return 绑定的系统终端号; 未绑定时返回 null
+    public String findOwner(Long channelTerminalId) {
+        return terminalChannelBindManager.findByChannelTerminalId(channelTerminalId).stream()
+                .map(TerminalChannelBind::getSystemTerminalNo)
+                .findFirst()
+                .orElse(null);
+    }
+
     /// 同一系统终端在同一通道商户、同一报送类型下是否已有其它通道终端
     ///
     /// @param excludeChannelTerminalId 排除的通道终端主键(校验自身时排除)

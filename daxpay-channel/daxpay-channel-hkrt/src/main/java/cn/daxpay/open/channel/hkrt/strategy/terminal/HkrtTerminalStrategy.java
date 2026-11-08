@@ -78,6 +78,18 @@ public class HkrtTerminalStrategy extends AbsChannelTerminalStrategy {
                 ChannelTerminalStatusEnum.SUBMIT.getCode(), result.getData().getDeviceNo());
     }
 
+    /// 海科实现了终端解绑(new-unbound), 支持注销
+    @Override
+    public boolean supportsCancel() {
+        return true;
+    }
+
+    /// 海科实现了终端绑定查询(new-query), 支持同步
+    @Override
+    public boolean supportsSync() {
+        return true;
+    }
+
     /// 组装转发请求: 服务商凭证 + 系统终端号(SN) + extra 差异参数
     private HkrtTerminalOperateReq buildReq(ChannelTerminal terminal, String systemTerminalNo) {
         return new HkrtTerminalOperateReq()
