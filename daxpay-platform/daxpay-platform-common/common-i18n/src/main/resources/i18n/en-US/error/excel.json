@@ -2,6 +2,8 @@
   "exportBusy": "Too many export tasks in progress. Please try again later.",
   "exportFailed": "Excel export failed",
   "exportRowLimitExceed": "A single export supports up to {0} rows. Please narrow the time range and retry.",
+  "exportSelectedInvalid": "The primary keys of the selected export are malformed",
+  "exportSelectedLimitExceed": "A single export supports up to {0} selected records. Please narrow the filters or export in batches.",
   "exportTimeRangeExceed": "Export time range cannot exceed 90 days",
   "exportTimeRangeInvalid": "Start time cannot be later than end time",
   "exportTimeRangeRequired": "Export time range is required"

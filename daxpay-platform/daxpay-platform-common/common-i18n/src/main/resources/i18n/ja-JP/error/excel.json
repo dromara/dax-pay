@@ -2,6 +2,8 @@
   "exportBusy": "エクスポート処理が混み合っています。しばらくしてから再試行してください",
   "exportFailed": "Excel エクスポートに失敗しました",
   "exportRowLimitExceed": "1 回のエクスポートは最大 {0} 行です。期間を絞って再試行してください",
+  "exportSelectedInvalid": "選択したエクスポートの主キー形式が正しくありません",
+  "exportSelectedLimitExceed": "1 回のエクスポートは選択した最大 {0} 件までです。絞り込むか分割してエクスポートしてください",
   "exportTimeRangeExceed": "エクスポート期間は90日以内にしてください",
   "exportTimeRangeInvalid": "開始時間は終了時間より後にできません",
   "exportTimeRangeRequired": "エクスポート期間を指定してください"

@@ -2,6 +2,8 @@
   "exportBusy": "Có quá nhiều tác vụ xuất. Vui lòng thử lại sau.",
   "exportFailed": "Xuất Excel thất bại",
   "exportRowLimitExceed": "Mỗi lần xuất tối đa {0} dòng. Vui lòng thu hẹp khoảng thời gian và thử lại.",
+  "exportSelectedInvalid": "Định dạng khóa chính của dữ liệu đã chọn không hợp lệ",
+  "exportSelectedLimitExceed": "Mỗi lần xuất tối đa {0} bản ghi đã chọn. Vui lòng thu hẹp bộ lọc hoặc xuất theo từng đợt.",
   "exportTimeRangeExceed": "Khoảng thời gian xuất không được vượt quá 90 ngày",
   "exportTimeRangeInvalid": "Thời gian bắt đầu không được muộn hơn thời gian kết thúc",
   "exportTimeRangeRequired": "Vui lòng chọn khoảng thời gian xuất"

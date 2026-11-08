@@ -48,6 +48,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,6 +64,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class MchVirtualDeviceService {
+
+    /// 勾选导出的单次主键上限(总量上限另由 ExcelUtils 的 [ExcelUtils#EXPORT_MAX_ROWS] 护栏兜底)
+    private static final int EXPORT_SELECTED_MAX = 5000;
 
     private final VirtualDeviceManager virtualDeviceManager;
     private final MchStoreInfoManager mchStoreInfoManager;
@@ -100,12 +104,59 @@ public class MchVirtualDeviceService {
 
     /// 导出(服务端生成 xlsx, 查询条件与分页同参, 无时间范围必填要求)
     ///
+    /// 勾选优先: ids 非空时只导勾选行, 忽略其余筛选条件; ids 为空沿用查询条件全量导出。
     /// 复用 [page] 的取数口径: 分页已强制当前商户, 应用/门店名称由翻译服务回填, 运行态由 Redis 组装;
     /// 行转换只做布尔状态词条文本与时间格式化, 不携带任何激活凭证字段。
-    public void export(VirtualDeviceQuery query, HttpServletResponse response) {
+    public void export(VirtualDeviceQuery query, String ids, HttpServletResponse response) {
         ExcelUtils.exportPaged(MchAudioDeviceExportResult.class, "export.audio_device.fileName", response,
-                (pageNo, size) -> page(new PageParam(pageNo, size), query),
+                (pageNo, size) -> pageForExport(new PageParam(pageNo, size), query, ids),
                 this::toExportRows);
+    }
+
+    /// 导出分页(勾选优先: ids 非空时只导勾选行, 忽略其余筛选条件)
+    ///
+    /// ids 为空直接复用 [page](商户隔离与名称翻译口径与列表完全一致); ids 非空按主键分页取数,
+    /// 商户条件在 SQL 层强制叠加——不属于当前商户的勾选行静默过滤(不报错、不泄露存在性)。
+    /// 分页须逐页返回当前页数据、总数用真实 count
+    /// ([ExcelUtils#exportPaged] 依赖首页总数判超限、尾页判结束)。
+    public PageResult<VirtualDeviceResult> pageForExport(PageParam pageParam, VirtualDeviceQuery query, String ids) {
+        if (StrUtil.isBlank(ids)) {
+            return this.page(pageParam, query);
+        }
+        List<Long> idList = this.parseExportIds(ids);
+        if (idList.isEmpty()) {
+            // ids 全是空串等无效内容时按未勾选口径导全量, 避免空导出
+            return this.page(pageParam, query);
+        }
+        Page<VirtualDevice> mpPage = virtualDeviceManager.pageByIds(pageParam, idList, requireMchNo());
+        PageResult<VirtualDeviceResult> pageResult = MpUtil.toPageResult(mpPage);
+        fillRuntime(mpPage.getRecords(), pageResult.getRecords());
+        transService.translate(pageResult);
+        return pageResult;
+    }
+
+    /// 解析导出选中的设备主键(逗号分隔, 去重; 单次上限 [#EXPORT_SELECTED_MAX] 条)
+    private List<Long> parseExportIds(String ids) {
+        List<Long> idList = new ArrayList<>();
+        for (String token : StrUtil.split(ids, ',')) {
+            String trimmed = StrUtil.trim(token);
+            if (StrUtil.isBlank(trimmed)) {
+                continue;
+            }
+            try {
+                idList.add(Long.valueOf(trimmed));
+            } catch (NumberFormatException e) {
+                // 导出: 导出选中的主键格式不正确
+                throw new BizInfoException(CommonCode.FAIL_CODE, "error.excel.exportSelectedInvalid");
+            }
+        }
+        List<Long> distinctIds = idList.stream().distinct().toList();
+        if (distinctIds.size() > EXPORT_SELECTED_MAX) {
+            // 导出: 单次最多导出 5000 条
+            throw new BizInfoException(CommonCode.FAIL_CODE,
+                    "error.excel.exportSelectedLimitExceed", EXPORT_SELECTED_MAX);
+        }
+        return distinctIds;
     }
 
     /// 分页结果 → 导出行

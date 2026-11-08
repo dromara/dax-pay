@@ -7,6 +7,8 @@ import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,19 @@ public class VirtualDeviceManager extends BaseManager<VirtualDeviceMapper, Virtu
     public Page<VirtualDevice> page(PageParam pageParam, VirtualDeviceQuery query) {
         Page<VirtualDevice> mpPage = MpUtil.getMpPage(pageParam);
         return this.page(mpPage, QueryGenerator.generator(query));
+    }
+
+    /// 按主键集合分页(导出选中行专用: 与列表同数据源, 忽略筛选条件)
+    ///
+    /// mchNo 为空时不叠加商户条件(运营端); 非空时只返回该商户名下设备,
+    /// 非本商户的勾选行在 SQL 层静默过滤(不报错、不泄露存在性)。
+    public Page<VirtualDevice> pageByIds(PageParam pageParam, Collection<Long> ids, String mchNo) {
+        Page<VirtualDevice> mpPage = MpUtil.getMpPage(pageParam);
+        LambdaQueryWrapper<VirtualDevice> wrapper = Wrappers.<VirtualDevice>lambdaQuery()
+                .in(VirtualDevice::getId, ids)
+                .eq(StrUtil.isNotBlank(mchNo), VirtualDevice::getMchNo, mchNo)
+                .orderByDesc(VirtualDevice::getId);
+        return this.page(mpPage, wrapper);
     }
 
     /// 批次号是否已存在

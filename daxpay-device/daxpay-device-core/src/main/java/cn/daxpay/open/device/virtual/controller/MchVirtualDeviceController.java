@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 虚拟设备管理(商户端)
@@ -58,8 +59,9 @@ public class MchVirtualDeviceController {
     @Operation(summary = "导出虚拟设备")
     @OperateLog(title = "导出虚拟设备", businessType = OperateLogType.EXPORT, saveParam = false)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, VirtualDeviceQuery query) {
-        mchAudioDeviceService.export(query, response);
+    public void export(HttpServletResponse response, VirtualDeviceQuery query,
+                       @RequestParam(required = false) String ids) {
+        mchAudioDeviceService.export(query, ids, response);
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
