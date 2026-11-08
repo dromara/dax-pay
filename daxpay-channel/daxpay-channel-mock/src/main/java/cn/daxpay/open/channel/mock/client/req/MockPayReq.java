@@ -50,6 +50,14 @@ public class MockPayReq {
     /// 通道应用 AppId(优先请求显式指定的 channelAppId, 空则回落容器应用号快照, 可空)
     private String appId;
 
+    /// 服务商应用 sp_appid(仅 MOCK_ISV 微信 JSAPI/小程序方式下传, 经
+    /// [cn.daxpay.open.payment.wx.facade.WxAppFacade#resolveIsvPair] 解析; 直连不传)。
+    /// 对齐商业版契约; one 侧镜像类与模拟网关支付契约暂无该字段(未知字段忽略), 承接前不影响现有链路
+    private String spAppId;
+
+    /// 子商户应用 sub_appid(同 sp_appid 场景下传, 未绑定商户档应用时不传)
+    private String subAppId;
+
     /// 买家 openid(微信 JSAPI/小程序方式必填, 子应用校验链按 appId+openId 双维反查档案; 其余方式可空)
     private String openId;
 

@@ -13,8 +13,6 @@ import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,8 +25,9 @@ import org.springframework.transaction.annotation.Transactional;
 /// 通道侧无对应档案(或归属不一致)的商户号支付时将被拒单(真实通道同构形态)。
 /// 双表写入(通用主表 mch_channel_merchant + 私有绑定表 mock_isv_channel_merchant)。
 ///
-/// open 版通用主表无 isv_no 列, 服务商归属只落私有绑定表, 由
-/// [MockIsvConfigAssembler] 按通道商户号反解; 运营端建档必须逐行显式 setMchNo。
+/// 服务商归属双落: 通用主表 isv_no 建档时固化服务商编号(列表筛选/详情直读),
+/// 私有绑定表 isv_id 供 [MockIsvConfigAssembler] 按通道商户号反解装配;
+/// 运营端建档必须逐行显式 setMchNo。
 ///
 /// 通道商户删除时的私有表清理由
 /// [cn.daxpay.open.channel.mock.strategy.MockIsvChannelMerchantCleanupStrategy] 挂通用删除链承担。
@@ -43,9 +42,8 @@ public class MockIsvChannelMerchantService {
 
     /// 创建 Mock 服务商通道商户(纯本地登记, 双表建档)
     ///
-    /// 流程: 校验归属服务商 → 子商户号(空白按 MOCK 前缀自动生成) → 通道商户号本地查重
-    /// → 同事务双写通用主表与私有绑定表。
-    /// 通用主表: product=mock_isv / channelMchNo=登记值或生成值 / sandbox=true / source=MANUAL;
+    /// 流程: 校验归属服务商 → 通道商户号(必填登记值)全局查重 → 同事务双写通用主表与私有绑定表。
+    /// 通用主表: product=mock_isv / channelMchNo=登记值 / isvNo 固化 / sandbox=true / source=MANUAL;
     /// 私有绑定表: mchNo(显式)/product/isvId。
     /// 不调用 mock 子应用: 通道侧无对应档案的商户号支付时将被拒单(真实通道同构形态)。
     @Transactional(rollbackFor = Exception.class)
@@ -60,11 +58,9 @@ public class MockIsvChannelMerchantService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.mock.isvDisabled");
         }
-        // 子商户号: 显式登记优先, 空白按 MOCK 前缀 + 雪花ID 生成(与直连建档一致)
-        String channelMchNo = StrUtil.isNotBlank(param.getChannelMchNo())
-                ? param.getChannelMchNo()
-                : ChannelMchNoGenerateUtil.generate("MOCK");
-        // 通道商户号查重(登记值需唯一, 重复登记给出明确提示)
+        // 子商户号: 必填登记值(参数层 @NotBlank 校验, 与直连建档口径一致, 不再自动生成)
+        String channelMchNo = param.getChannelMchNo();
+        // 通道商户号全局查重(登记值需唯一, 重复登记给出明确提示)
         boolean channelMchNoExists = channelMerchantManager.lambdaQuery()
                 .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
                 .exists();
@@ -73,8 +69,8 @@ public class MockIsvChannelMerchantService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.mock.channelMchNoExists", channelMchNo);
         }
-        // 双表建档(通道商户号为登记值或生成值)
-        this.saveChannelMerchant(param, channelMchNo);
+        // 双表建档(通道商户号为登记值)
+        this.saveChannelMerchant(param, isv, channelMchNo);
         this.saveBinding(isv, channelMchNo, param.getMchNo());
     }
 
@@ -95,8 +91,9 @@ public class MockIsvChannelMerchantService {
 
     /// 写通用通道商户主表
     ///
-    /// 运营端创建, 商户号显式携带不依赖商户上下文装载(setMchNo 链式返回父类, 单独调用)。
-    private void saveChannelMerchant(MockIsvChannelMerchantCreateParam param, String channelMchNo) {
+    /// 运营端创建, 商户号显式携带不依赖商户上下文装载(setMchNo 链式返回父类, 单独调用);
+    /// 归属服务商编号固化到主表 isvNo(与绑定表 isvId 同源)。
+    private void saveChannelMerchant(MockIsvChannelMerchantCreateParam param, MockIsvInfo isv, String channelMchNo) {
         ChannelMerchant channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());
         channelMerchant.setChannelMchNo(channelMchNo);
@@ -106,6 +103,8 @@ public class MockIsvChannelMerchantService {
         channelMerchant.setEnable(true);
         // 模拟通道天然属沙箱语义, 创建时固定为沙箱商户
         channelMerchant.setSandbox(true);
+        // 固化归属服务商编号(建档时写入, 供归属锁定与列表筛选)
+        channelMerchant.setIsvNo(isv.getIsvNo());
         channelMerchantManager.save(channelMerchant);
     }
 

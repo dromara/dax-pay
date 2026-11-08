@@ -10,6 +10,7 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.wx.facade.WxIsvAppPair;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -49,13 +50,25 @@ public class MockPayService {
     private final PlatformUrlConfigService platformUrlConfigService;
     private final MockCredentialSupport mockCredentialSupport;
 
-    /// 执行模拟支付
+    /// 执行模拟支付(无服务商双应用下传: 直连产品及其余方式)
     ///
     /// @param order       支付订单(tradeNo 作为商户订单号透传)
     /// @param payParam    支付参数
     /// @param normalOrder 普通支付业务容器(doPay 前已填充, appId 回落取值用)
     /// @return 支付结果
     public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, NormalPayOrder normalOrder) {
+        return this.pay(order, payParam, normalOrder, null);
+    }
+
+    /// 执行模拟支付
+    ///
+    /// @param order       支付订单(tradeNo 作为商户订单号透传)
+    /// @param payParam    支付参数
+    /// @param normalOrder 普通支付业务容器(doPay 前已填充, appId 回落取值用)
+    /// @param isvPair     服务商双应用解析结果(MOCK_ISV + 微信 JSAPI/小程序族时由策略层传入; 其余为空)
+    /// @return 支付结果
+    public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, NormalPayOrder normalOrder,
+            WxIsvAppPair isvPair) {
         // 通道商户号: 支付路由回填值优先, 空则回落支付单快照(建单时已固化, 勿假设 param 恒有值)
         String channelMchNo = StrUtil.blankToDefault(payParam.getChannelMchNo(), order.getChannelMchNo());
         // 构建请求(凭证按通道商户号取商户级两件套, 支付单无 product 走通道商户号反查)
@@ -77,6 +90,15 @@ public class MockPayService {
         req.setAppId(StrUtil.isNotBlank(payParam.getChannelAppId())
                 ? payParam.getChannelAppId()
                 : (normalOrder == null ? null : normalOrder.getAppId()));
+        // 服务商双应用下传(MOCK_ISV + 微信 JSAPI/小程序族): 由策略层 doBeforePay 解析后显式传入,
+        // 不用回填后的 channelAppId 二次解析(回填值可能是 sub_appid, 二次解析会命中错误档位)
+        if (isvPair != null && isWxJsapiFamily(payParam.getMethod())) {
+            req.setSpAppId(isvPair.platform().wxAppId());
+            if (isvPair.merchant() != null) {
+                // sub 应用可空: 子应用按 appId(=subAppId 优先, 空则 spAppId)语义兜底
+                req.setSubAppId(isvPair.merchant().wxAppId());
+            }
+        }
         // 过期时间格式化为 yyyy-MM-dd HH:mm:ss 字符串(对外报文固定东八区), null 不格式化直接传 null
         req.setExpireTime(formatExpireTime(payParam.getExpiredTime()));
         // 平台支付方式(PayMethodEnum code)映射为 mock 子应用 way:

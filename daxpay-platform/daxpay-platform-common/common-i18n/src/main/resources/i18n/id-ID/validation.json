@@ -59,7 +59,7 @@
       "notNull": "ID Aplikasi tidak boleh nol"
     },
     "channelMchNo": {
-      "size": "Jumlah pedagang saluran tidak boleh melebihi 32 karakter",
+      "size": "Nomor pedagang saluran melebihi batas panjang",
       "notBlank": "Nomor pedagang saluran tidak boleh kosong"
     },
     "level": {

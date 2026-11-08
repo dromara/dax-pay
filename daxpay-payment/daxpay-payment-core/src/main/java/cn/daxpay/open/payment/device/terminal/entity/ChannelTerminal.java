@@ -16,8 +16,9 @@ import lombok.experimental.FieldNameConstants;
 
 /// # 通道终端台账
 ///
-/// 挂在通道商户 [channelMchNo] 下, 人工登记通道侧终端号与状态。
-/// 不调用通道报备 API; 状态由运营人工维护。
+/// 挂在通道商户 [channelMchNo] 下, 登记通道侧终端号与状态。
+/// 已实现报备策略([cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy])的产品
+/// 经通道报备 API 报备/注销/同步并回写终端号与状态; 无实现的产品由运营人工登记维护。
 /// 与系统终端通过 [TerminalChannelBind] 多对多绑定。
 @EqualsAndHashCode(callSuper = true)
 @Data

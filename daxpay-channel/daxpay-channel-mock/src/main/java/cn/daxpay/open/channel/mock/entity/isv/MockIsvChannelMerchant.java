@@ -17,7 +17,8 @@ import lombok.experimental.Accessors;
 /// 归属在创建时选定、锁死不可改; 支付/回调/分账按本行 isv_id 反解服务商凭证。
 /// channel_mch_no 唯一(未删除行部分唯一索引兜底)。
 ///
-/// open 版通用主表无 isv_no 列, 本表是服务商归属的唯一事实源; 运营端建档必须逐行显式
+/// 本表是支付/回调/分账装配反解服务商的事实源(通用主表 isv_no 为建档时固化的同源冗余,
+/// 供列表筛选/详情直读); 运营端建档必须逐行显式
 /// [setMchNo](admin 不装载商户上下文, 依赖 Fill 会抛上下文缺失异常)。
 @EqualsAndHashCode(callSuper = true)
 @Data

@@ -7260,7 +7260,8 @@ CREATE TABLE public.mch_channel_merchant (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
     deleted boolean DEFAULT false NOT NULL,
-    sandbox boolean DEFAULT false
+    sandbox boolean DEFAULT false,
+    isv_no character varying(32)
 );
 
 --
@@ -7358,6 +7359,12 @@ COMMENT ON COLUMN public.mch_channel_merchant.deleted IS '删除标志';
 --
 
 COMMENT ON COLUMN public.mch_channel_merchant.sandbox IS '是否沙箱环境商户';
+
+--
+-- Name: COLUMN mch_channel_merchant.isv_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mch_channel_merchant.isv_no IS '归属服务商编号';
 
 --
 -- Name: mch_credential; Type: TABLE; Schema: public; Owner: -
@@ -23243,6 +23250,18 @@ CREATE UNIQUE INDEX uk_mch_app_info_default ON public.mch_app_info USING btree (
 --
 
 COMMENT ON INDEX public.uk_mch_app_info_default IS '每商户仅一个默认应用';
+
+--
+-- Name: uk_mch_channel_merchant_channel_mch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mch_channel_merchant_channel_mch ON public.mch_channel_merchant USING btree (channel_mch_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_mch_channel_merchant_channel_mch; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mch_channel_merchant_channel_mch IS '通道商户号全局唯一';
 
 --
 -- Name: uk_mch_channel_merchant_mch_channel; Type: INDEX; Schema: public; Owner: -

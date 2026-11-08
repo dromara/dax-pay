@@ -4988,7 +4988,7 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091204, 3, 9
 
 
 -- ---------------------------------------------------------------------------
--- [4.1] 演示菜单（旁路导出 16 条；纯净版排除的正是这一批）
+-- [4.1] 演示菜单（旁路导出 18 条；纯净版排除的正是这一批）
 -- ---------------------------------------------------------------------------
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (202, 2, NULL, 'admin', 'menu.demos.fileUpload', 'lucide:upload', false, false, '/demos/file-upload/FileUploadDemo', '/demos/file-upload', NULL, 2, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-04-09 16:00:00+00', '2026-04-09 16:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (2, NULL, NULL, 'admin', 'menu.demos', 'lucide:blocks', false, false, NULL, '/demos', NULL, 1000, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-06-25 02:00:30.27727+00', false);
@@ -4998,6 +4998,7 @@ INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, ico
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (4040133, 40508, 'channel:merchant', 'admin', 'menu.payment.mock.isv', NULL, true, false, '/payment/channel/mock/MockIsvManage', '/payment/mock/isv', NULL, 6, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, '2026-10-31 00:00:00+00', '2026-10-31 00:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (205, 2, 'demos:ip-region', 'admin', 'menu.demos.ipRegion', 'lucide:locate-fixed', false, false, '/demos/ip-region/IpRegionDemo', '/demos/ip-region', NULL, 5, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-07-27 16:00:00+00', '2026-07-27 16:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (206, 2, 'demos:callback', 'admin', 'menu.demos.callback', 'lucide:webhook', false, false, '/demos/callback/CallbackDemo', '/demos/callback', NULL, 5, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-08-01 16:00:00+00', '2026-08-01 16:00:00+00', false);
+INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (4040135, 40508, 'channel:merchant', 'admin', 'menu.payment.mock.directWorkbench', NULL, true, false, '/payment/channel/mock/direct/MockDirectWorkbench', '/payment/mock/direct-workbench', NULL, 8, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, '2026-11-08 00:00:00+00', '2026-11-08 00:00:00+00', false);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000202, 1, 202);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000002, 1, 2);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000000204, 1, 204);
@@ -5006,6 +5007,7 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521623474
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521627668480, 1, 206);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040133, 1, 4040133);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040134, 1, 4040134);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000004040135, 1, 4040135);
 
 -- ---------------------------------------------------------------------------
 -- [4.2] mock 支付元数据（旁路导出 45 条，带列名）
@@ -5095,7 +5097,7 @@ INSERT INTO public.pay_route_basic_config (id, creator, create_time, last_modifi
 INSERT INTO public.pay_route_basic_config (id, creator, create_time, last_modifier, last_modified_time, version, deleted, strategy_id, provider, channel_mch_no) VALUES (1800000000000000826, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, 1800000000000000821, 'douyin', 'MOCKM99999');
 
 -- ---------------------------------------------------------------------------
--- [4.4] 通道配置（mock 全局/直连凭证 + 微信应用 + mock 产品沙箱生效环境）
+-- [4.4] 通道配置（mock 全局/直连凭证 + 模拟服务商 + 微信应用 + mock 产品沙箱生效环境）
 -- ---------------------------------------------------------------------------
 INSERT INTO public.pay_md_product_config (id, creator, create_time, last_modifier, last_modified_time, version, deleted, product, channel, active_env, remark) VALUES (1800000000000000827, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, 'mock_pay', 'mock', 'sandbox', '演示环境：mock 产品固定沙箱生效，与演示通道商户 sandbox=true 匹配');
 INSERT INTO public.wx_mch_app (id, creator, create_time, last_modifier, last_modified_time, version, deleted, mch_no, app_name, app_type, wx_app_id, app_secret) VALUES (1800000000000000828, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, 'M1999999999999', '演示商户微信应用（mock 直连）', 'official_account', 'wx9999999999999999', '99999999999999999999999999999999');
@@ -5177,6 +5179,7 @@ LCpDi2GQKIGD6QsgfknJZVC4TCHdG2VVv2i/uuJn95LrUdiSagzo8VAoHNHcyqVU
 LQIDAQAB
 -----END PUBLIC KEY-----
 ', NULL);
+INSERT INTO public.mock_isv_info (id, creator, create_time, last_modifier, last_modified_time, version, deleted, isv_no, isv_name, enable, pay_enable) VALUES (1800000000000000834, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, 'MISV1000000000001', '演示模拟服务商', true, true);
 
 -- ---------------------------------------------------------------------------
 -- [4.5] 交易流水（剧本生成：168 单 / 168 交易 / 15 退款 / 

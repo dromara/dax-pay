@@ -25,6 +25,14 @@ public class MockIsvCredentialManager extends BaseManager<MockIsvCredentialMappe
         return findByField(MockIsvCredential::getIsvNo, isvNo).orElse(null);
     }
 
+    /// 根据服务商编号删除接入密钥(删除服务商时级联清理; 空白直接跳过, 防条件失效误删任意行)
+    public void deleteByIsvNo(String isvNo) {
+        if (StrUtil.isBlank(isvNo)) {
+            return;
+        }
+        deleteByField(MockIsvCredential::getIsvNo, isvNo);
+    }
+
     /// 批量查询已配置接入密钥(商户私钥+平台公钥均非空)的服务商编号集合
     /// (服务商列表页 credentialConfigured 标记用, 一次 IN 查询避免 N+1)
     public Set<String> findConfiguredIsvNos(Collection<String> isvNos) {

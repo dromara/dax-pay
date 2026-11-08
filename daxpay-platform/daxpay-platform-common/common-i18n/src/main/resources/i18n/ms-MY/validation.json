@@ -59,7 +59,7 @@
       "notNull": "ID permohonan tidak boleh batal"
     },
     "channelMchNo": {
-      "size": "No pedagang saluran tidak boleh melebihi 32 aksara",
+      "size": "No pedagang saluran melebihi had panjang",
       "notBlank": "No pedagang saluran tidak boleh kosong"
     },
     "level": {

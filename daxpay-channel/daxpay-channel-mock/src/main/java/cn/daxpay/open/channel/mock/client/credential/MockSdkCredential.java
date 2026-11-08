@@ -21,7 +21,7 @@ public class MockSdkCredential {
     /// 是否沙箱环境(业务标记, mock 恒为 true 语义)
     private Boolean sandbox;
 
-    /// 服务商编号(MISV+16位数字, 仅服务商产品填充; 直连产品为空)
+    /// 服务商编号(MISV+雪花ID, 仅服务商产品填充; 直连产品为空)
     private String isvNo;
 
     /// 商户私钥(PEM PKCS#8 原文, 网关请求签名用; 主体级独立密钥时为该主体行私钥)
@@ -34,6 +34,6 @@ public class MockSdkCredential {
     /// 非空时 one 侧随请求报文或查询串携带 key_owner_no, mock 子应用按主体编号查公钥登记表验签, 空时按全局公钥验签)
     private String keyOwnerNo;
 
-    /// 服务商接入网关地址(仅服务商级独立密钥时填充, 可空; one 侧空回落 yml base-url)
+    /// 接入网关地址(仅主体级独立密钥时填充: 直连=商户行/服务商=服务商行, 可空; one 侧空回落 yml base-url)
     private String gatewayBaseUrl;
 }

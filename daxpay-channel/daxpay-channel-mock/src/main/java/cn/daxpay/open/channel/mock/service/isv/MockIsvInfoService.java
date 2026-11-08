@@ -82,7 +82,7 @@ public class MockIsvInfoService {
         // 编号格式对齐 DDL 语义: MISV + 雪花ID(open 无 BizNoGenerateUtil, 本类内自拼)
         entity.setIsvNo("MISV" + IdUtil.getSnowflakeNextId());
         entity.setIsvName(param.getIsvName());
-        // mock 无密钥配置环节, 启停位缺省即启用
+        // 启停位缺省即启用(服务商接入密钥由密钥端点后置维护, 不作为启用前置条件)
         entity.setEnable(param.getEnable() == null || param.getEnable());
         entity.setPayEnable(param.getPayEnable() == null || param.getPayEnable());
         mockIsvInfoManager.save(entity);
@@ -99,9 +99,11 @@ public class MockIsvInfoService {
     }
 
     /// 删除服务商(名下仍有服务商通道商户(mock_isv)绑定时拒绝)
+    ///
+    /// 同事务级联清理该服务商的接入密钥行(mock_isv_credential, 按服务商编号), 避免遗留孤儿密钥。
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        mockIsvInfoManager.findById(id)
+        MockIsvInfo isv = mockIsvInfoManager.findById(id)
                 // mock: 模拟服务商不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.mock.isvNotExist", id));
         if (mockIsvChannelMerchantManager.existsByIsvId(id)) {
@@ -109,6 +111,8 @@ public class MockIsvInfoService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.mock.isvHasChannelMerchant", id);
         }
+        // 级联清理服务商接入密钥(一服务商一行)
+        mockIsvCredentialManager.deleteByIsvNo(isv.getIsvNo());
         mockIsvInfoManager.deleteById(id);
     }
 }

@@ -35,6 +35,13 @@ public class ChannelMerchant extends MchBaseEntity implements ToResult<ChannelMe
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String product;
 
+    /// 归属服务商编号
+    ///
+    /// 服务商模式通道商户建档时固化(如 mock_isv 写 mock_isv_info.isv_no), 之后不随服务商变更,
+    /// 供归属锁定与列表筛选直读; 直连产品为空。
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private String isvNo;
+
     /// 是否启用
     private Boolean enable;
 

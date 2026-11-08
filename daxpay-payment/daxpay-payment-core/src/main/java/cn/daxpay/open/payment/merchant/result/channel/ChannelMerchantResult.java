@@ -35,6 +35,10 @@ public class ChannelMerchantResult extends MchBaseResult {
     @Schema(description = "所属支付产品")
     private String product;
 
+    /// 归属服务商编号(服务商模式建档时固化, 直连产品为空)
+    @Schema(description = "归属服务商编号(服务商模式有值)")
+    private String isvNo;
+
     /// 通道商户创建来源
     /// @see ChannelMerchantSourceEnum
     @Schema(description = "创建来源")

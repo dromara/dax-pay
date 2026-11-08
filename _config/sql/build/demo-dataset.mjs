@@ -7,7 +7,7 @@
  *
  * 三段：
  *   [4.3] buildIdentity     商户 / 用户 / 应用 / 门店 / 码牌 / 路由
- *   [4.4] buildChannels     mock 全局与直连凭证 + 微信应用 + 产品生效环境
+ *   [4.4] buildChannels     mock 全局与直连凭证 + 模拟服务商 + 微信应用 + 产品生效环境
  *   [4.5] buildTransactions 交易流水（订单/退款/资金流水/通知/回调）
  *
  * 开源版口径（相对 DaxPay Plus 商业版剧本裁剪，2026-11-03 阶段 B 移植）：
@@ -58,6 +58,8 @@ export const ANCHORS = {
   mockChannelMchNo: 'MOCKM99999',
   mockWxAppId: 'wx9999999999999999',
   mockWxAppSecret: '9'.repeat(32),
+  // 演示模拟服务商编号（mock_isv 服务商管理页主数据，避免新环境空列表；2026-11-08 起）
+  mockIsvNo: 'MISV1000000000001',
   // 演示账号（运营 admin / 商户 csqysh；2026-11-03 起与商业版统一为 admin）
   adminUser: 'admin',
   merchantUser: 'csqysh',
@@ -379,6 +381,16 @@ export function buildChannels(gen, ctx) {
     merchant_private_key: MOCK_MERCHANT_PRIVATE_KEY,
     platform_public_key: MOCK_PLATFORM_PUBLIC_KEY,
     gateway_base_url: null,
+  })
+
+  // ===== mock 服务商主数据 =====
+  // 模拟服务商管理页的演示数据（仅主数据，不挂服务商通道商户与服务商密钥，演示时按需在页面建档）
+  gen.add('mock_isv_info', {
+    ...base(idCfg(34)),
+    isv_no: ANCHORS.mockIsvNo,
+    isv_name: '演示模拟服务商',
+    enable: true,
+    pay_enable: true,
   })
 
   return { wxMchAppId }

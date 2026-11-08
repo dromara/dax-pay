@@ -59,7 +59,7 @@
       "notNull": "ID ứng dụng không thể rỗng"
     },
     "channelMchNo": {
-      "size": "Số người bán kênh không được vượt quá 32 ký tự",
+      "size": "Số người bán kênh vượt quá giới hạn độ dài",
       "notBlank": "Số người bán kênh không được để trống"
     },
     "level": {

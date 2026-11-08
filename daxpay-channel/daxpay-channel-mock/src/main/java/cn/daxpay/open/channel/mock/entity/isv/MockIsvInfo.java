@@ -13,14 +13,15 @@ import lombok.experimental.Accessors;
 
 /// # Mock 模拟服务商信息
 ///
-/// mock 通道服务商(ISV)模式的主数据: 模拟服务商不对接真实三方, 无密钥配置,
-/// 仅承载「服务商编号 + 支付开关」语义, 供服务商形态通道商户(mock_isv 产品)归属与
-/// 支付闸门([cn.daxpay.open.channel.mock.service.isv.MockIsvPaymentSwitchService])使用。
+/// mock 通道服务商(ISV)模式的主数据: 模拟服务商不对接真实三方, 主数据仅承载
+/// 「服务商编号 + 启停开关」语义, 供服务商形态通道商户(mock_isv 产品)归属与
+/// 支付闸门([cn.daxpay.open.channel.mock.service.isv.MockIsvPaymentSwitchService])使用;
+/// 服务商级接入密钥另表维护([cn.daxpay.open.channel.mock.entity.credential.MockIsvCredential])。
 /// 全局面数据(非商户隔离), 形态参照微信服务商信息大幅裁剪。
 ///
-/// open 版通用通道商户主表(mch_channel_merchant)无 isv_no 列, 服务商归属只落在
-/// 私有绑定表 [MockIsvChannelMerchant], 由
-/// [cn.daxpay.open.channel.mock.service.isv.MockIsvConfigAssembler] 按通道商户号反解。
+/// 服务商归属双落: 通用通道商户主表(mch_channel_merchant)isv_no 建档时固化本表服务商编号,
+/// 私有绑定表 [MockIsvChannelMerchant] 存本表主键, 由
+/// [cn.daxpay.open.channel.mock.service.isv.MockIsvConfigAssembler] 按通道商户号反解装配。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

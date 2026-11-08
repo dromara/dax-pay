@@ -21,7 +21,8 @@ import org.springframework.stereotype.Service;
 /// [MockPayStrategy] + 服务商支付闸门:
 /// doBeforePay 校验归属服务商支付开关(payEnable=false 拒新支付, 退款/同步/回调不受影响),
 /// 微信 JSAPI/小程序族方式再解析服务商双应用回填(对齐微信服务商范式),
-/// 支付执行委托给共用的 [MockPayService](凭证由 Service 内按 product 二选一组装)。
+/// 支付执行委托给共用的 [MockPayService](凭证由 Service 内按 product 二选一组装),
+/// 解析出的 sp/sub 双应用经上下文缓存后随请求下传(对齐商业版 spAppId/subAppId 契约)。
 ///
 /// open 版 [WxAppFacade#resolveIsvPair] 无 isvNo 入参, sp 应用按通道能力绑/产品级平台默认绑解析,
 /// 解析不到由门面抛「未配置该能力对应的平台应用」; 本类不额外强制显式 channelAppId。
@@ -63,10 +64,14 @@ public class MockIsvPayStrategy extends AbsNormalPayStrategy {
         payParam.setChannelAppId(StrUtil.blankToDefault(
                 pair.merchant() == null ? null : pair.merchant().wxAppId(),
                 pair.platform().wxAppId()));
+        // 双应用结果缓存到上下文, doPay 直接透传 sp/sub 给 mock 子应用(避免用回填后的 sub_appid 二次解析)
+        context.setChannelConfig(pair);
     }
 
+    /// 执行支付: 委托共用 [MockPayService], 携带 doBeforePay 缓存的服务商双应用(非微信 JSAPI 族为空)
     @Override
     public PayTradeResultBo doPay(PayStrategyContext context) {
-        return mockPayService.pay(context.getTrade(), context.getPayParam(), context.getNormalOrder());
+        return mockPayService.pay(context.getTrade(), context.getPayParam(), context.getNormalOrder(),
+                context.getChannelConfig(WxIsvAppPair.class));
     }
 }

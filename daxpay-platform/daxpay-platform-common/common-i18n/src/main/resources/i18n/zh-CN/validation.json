@@ -90,7 +90,7 @@
       "notNull": "应用ID不可为空"
     },
     "channelMchNo": {
-      "size": "通道商户号不可超过32位",
+      "size": "通道商户号长度超出限制",
       "notBlank": "通道商户号不可为空"
     },
     "level": {
