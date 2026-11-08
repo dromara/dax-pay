@@ -19,8 +19,7 @@ import lombok.experimental.Accessors;
 /// 服务商级接入密钥另表维护([cn.daxpay.open.channel.mock.entity.credential.MockIsvCredential])。
 /// 全局面数据(非商户隔离), 形态参照微信服务商信息大幅裁剪。
 ///
-/// 服务商归属双落: 通用通道商户主表(mch_channel_merchant)isv_no 建档时固化本表服务商编号,
-/// 私有绑定表 [MockIsvChannelMerchant] 存本表主键, 由
+/// 服务商归属只落私有绑定表 [MockIsvChannelMerchant](存本表主键), 由
 /// [cn.daxpay.open.channel.mock.service.isv.MockIsvConfigAssembler] 按通道商户号反解装配。
 @EqualsAndHashCode(callSuper = true)
 @Data

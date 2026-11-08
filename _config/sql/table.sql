@@ -7260,8 +7260,7 @@ CREATE TABLE public.mch_channel_merchant (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
     deleted boolean DEFAULT false NOT NULL,
-    sandbox boolean DEFAULT false,
-    isv_no character varying(32)
+    sandbox boolean DEFAULT false
 );
 
 --
@@ -7359,12 +7358,6 @@ COMMENT ON COLUMN public.mch_channel_merchant.deleted IS '删除标志';
 --
 
 COMMENT ON COLUMN public.mch_channel_merchant.sandbox IS '是否沙箱环境商户';
-
---
--- Name: COLUMN mch_channel_merchant.isv_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mch_channel_merchant.isv_no IS '归属服务商编号';
 
 --
 -- Name: mch_credential; Type: TABLE; Schema: public; Owner: -

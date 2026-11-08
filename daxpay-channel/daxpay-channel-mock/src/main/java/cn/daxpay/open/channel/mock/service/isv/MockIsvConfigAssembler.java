@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 ///
 /// 供服务商产品(mock_isv)支付/退款/同步/关闭/分账/回调链路组装通道调用凭证
 /// (经 [cn.daxpay.open.channel.mock.service.MockCredentialSupport] 按 product 分发)。
-/// 装配仍经私有绑定表 isv_id 反解服务商 Id 再取编号(通用主表 isv_no 为建档固化的展示/筛选冗余,
-/// 装配不依赖它, 存量未回填行也不受影响)。
+/// 装配经私有绑定表 isv_id 反解服务商 Id 再取编号(服务商归属只落私有表, 通用主表不存 isv_no)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
