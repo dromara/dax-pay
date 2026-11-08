@@ -1,7 +1,7 @@
 {
   "fileName": "交易憑證",
   "tradeNo": "平台交易號",
-  "mchNo": "商戶號",
+  "mchNo": "商戶編號",
   "mchName": "商戶名稱",
   "appId": "應用號",
   "title": "訂單標題",

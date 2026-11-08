@@ -80,9 +80,9 @@
       "notNull": "是否啟用不可為空"
     },
     "mchNo": {
-      "notBlank": "商戶號不可為空",
-      "size": "商戶號不可超過32位",
-      "notNull": "商戶號不可為空"
+      "notBlank": "商戶編號不可為空",
+      "size": "商戶編號不可超過32位",
+      "notNull": "商戶編號不可為空"
     },
     "appId": {
       "notBlank": "商戶AppId不可為空",

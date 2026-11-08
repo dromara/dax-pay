@@ -1,7 +1,7 @@
 {
   "fileName": "閘道支付業務單",
   "orderNo": "平台閘道單號",
-  "mchNo": "商戶號",
+  "mchNo": "商戶編號",
   "mchName": "商戶名稱",
   "appId": "應用號",
   "bizOrderNo": "商戶訂單號",

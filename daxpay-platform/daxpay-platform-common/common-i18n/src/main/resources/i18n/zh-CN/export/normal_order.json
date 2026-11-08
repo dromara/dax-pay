@@ -1,7 +1,7 @@
 {
   "fileName": "普通支付业务单",
   "orderNo": "平台业务单号",
-  "mchNo": "商户号",
+  "mchNo": "商户编号",
   "mchName": "商户名称",
   "appId": "应用号",
   "bizOrderNo": "商户订单号",

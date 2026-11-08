@@ -1,7 +1,7 @@
 {
   "fileName": "退款訂單",
   "refundNo": "退款號",
-  "mchNo": "商戶號",
+  "mchNo": "商戶編號",
   "mchName": "商戶名稱",
   "appId": "應用編號",
   "tradeNo": "資金交易號",

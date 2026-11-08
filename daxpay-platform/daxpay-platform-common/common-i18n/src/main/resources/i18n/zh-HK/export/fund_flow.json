@@ -1,7 +1,7 @@
 {
   "fileName": "資金流水",
   "tradeNo": "資金交易號",
-  "mchNo": "商戶號",
+  "mchNo": "商戶編號",
   "mchName": "商戶名稱",
   "appId": "應用編號",
   "flowType": "流水類型",

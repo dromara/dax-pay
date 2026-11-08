@@ -1,7 +1,7 @@
 {
   "payFailure": "支付失敗",
   "notExists": "交易不存在",
-  "orderNotBelong": "訂單不屬於當前商戶，請檢查商戶號與訂單歸屬",
+  "orderNotBelong": "訂單不屬於當前商戶，請檢查商戶編號與訂單歸屬",
   "statusError": "交易狀態錯誤",
   "channelNotExist": "不存在的支付通道",
   "channelNotEnable": "支付通道未啓用",
@@ -113,7 +113,7 @@
   "assist": {
     "mchPublicKeyEmpty": "商户公鑰為空",
     "signEmpty": "簽名為空",
-    "mchNoAppNoMatch": "商户號和應用號不匹配",
+    "mchNoAppNoMatch": "商户編號和應用號不匹配",
     "mchNotOwnApp": "該商户不擁有該應用",
     "mchNotEnabled": "商户未啓用",
     "mchAppNotEnabled": "商户應用未啓用",

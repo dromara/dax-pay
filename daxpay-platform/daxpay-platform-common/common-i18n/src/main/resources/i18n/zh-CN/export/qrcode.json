@@ -3,7 +3,7 @@
   "code": "码牌编码",
   "name": "码牌名称",
   "batchNo": "批次号",
-  "mchNo": "商户号",
+  "mchNo": "商户编号",
   "mchName": "商户名称",
   "appId": "应用号",
   "appName": "应用名称",

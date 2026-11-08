@@ -75,7 +75,7 @@ COMMENT ON COLUMN public.adapay_direct_key_config.id IS '主键';
 -- Name: COLUMN adapay_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.adapay_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN adapay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -185,7 +185,7 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.id IS '主键';
 -- Name: COLUMN alipay_direct_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -324,7 +324,7 @@ COMMENT ON COLUMN public.alipay_direct_app.id IS '主键';
 -- Name: COLUMN alipay_direct_app.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_direct_app.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_direct_app.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -420,7 +420,7 @@ COMMENT ON COLUMN public.alipay_direct_app_capability.id IS '主键';
 -- Name: COLUMN alipay_direct_app_capability.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_capability.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_direct_app_capability.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_direct_app_capability.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -518,7 +518,7 @@ COMMENT ON COLUMN public.alipay_direct_app_key_config.id IS '主键';
 -- Name: COLUMN alipay_direct_app_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_direct_app_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -657,7 +657,7 @@ COMMENT ON COLUMN public.alipay_direct_channel_merchant.id IS '主键';
 -- Name: COLUMN alipay_direct_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_direct_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_direct_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -760,7 +760,7 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.id IS '主键';
 -- Name: COLUMN alipay_isv_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_isv_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -1095,7 +1095,7 @@ COMMENT ON COLUMN public.alipay_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN alipay_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -1196,7 +1196,7 @@ COMMENT ON COLUMN public.alipay_transfer_config.id IS '主键';
 -- Name: COLUMN alipay_transfer_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_transfer_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_transfer_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -1281,7 +1281,7 @@ COMMENT ON COLUMN public.alipay_transfer_scene_config.id IS '主键';
 -- Name: COLUMN alipay_transfer_scene_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_scene_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.alipay_transfer_scene_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN alipay_transfer_scene_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -1382,7 +1382,7 @@ COMMENT ON COLUMN public.baofu_direct_key_config.id IS '主键';
 -- Name: COLUMN baofu_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.baofu_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN baofu_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -1962,7 +1962,7 @@ COMMENT ON COLUMN public.cpcn_direct_key_config.id IS '主键';
 -- Name: COLUMN cpcn_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.cpcn_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -2108,7 +2108,7 @@ COMMENT ON COLUMN public.device_qr_code.batch_no IS '批次号';
 -- Name: COLUMN device_qr_code.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.mch_no IS '所属商户号';
+COMMENT ON COLUMN public.device_qr_code.mch_no IS '所属商户编号';
 
 --
 -- Name: COLUMN device_qr_code.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -2228,7 +2228,7 @@ COMMENT ON COLUMN public.dougong_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN dougong_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.dougong_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN dougong_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -2425,7 +2425,7 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.id IS '主键';
 -- Name: COLUMN douyin_direct_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.mch_no IS '商户号';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -2575,7 +2575,7 @@ COMMENT ON COLUMN public.douyin_direct_channel_merchant.id IS '主键';
 -- Name: COLUMN douyin_direct_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.douyin_direct_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN douyin_direct_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -2666,7 +2666,7 @@ COMMENT ON COLUMN public.douyin_direct_key_config.id IS '主键';
 -- Name: COLUMN douyin_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.douyin_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN douyin_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -2797,7 +2797,7 @@ COMMENT ON COLUMN public.douyin_transfer_config.deleted IS '删除标志';
 -- Name: COLUMN douyin_transfer_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_transfer_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.douyin_transfer_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN douyin_transfer_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -2849,7 +2849,7 @@ COMMENT ON COLUMN public.duolabao_direct_key_config.id IS '主键';
 -- Name: COLUMN duolabao_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.duolabao_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3000,7 +3000,7 @@ COMMENT ON COLUMN public.dy_channel_app_capability.deleted IS '删除标志';
 -- Name: COLUMN dy_channel_app_capability.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_channel_app_capability.mch_no IS '商户号';
+COMMENT ON COLUMN public.dy_channel_app_capability.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN dy_channel_app_capability.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3097,7 +3097,7 @@ COMMENT ON COLUMN public.dy_mch_app.deleted IS '删除标志';
 -- Name: COLUMN dy_mch_app.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_mch_app.mch_no IS '商户号';
+COMMENT ON COLUMN public.dy_mch_app.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN dy_mch_app.app_name; Type: COMMENT; Schema: public; Owner: -
@@ -3332,7 +3332,7 @@ COMMENT ON COLUMN public.easy_pay_key_config.id IS '主键';
 -- Name: COLUMN easy_pay_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.easy_pay_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.easy_pay_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN easy_pay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3438,7 +3438,7 @@ COMMENT ON COLUMN public.epaylinks_direct_key_config.id IS '主键';
 -- Name: COLUMN epaylinks_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3555,7 +3555,7 @@ COMMENT ON COLUMN public.fubei_direct_key_config.id IS '主键';
 -- Name: COLUMN fubei_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.fubei_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN fubei_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3666,7 +3666,7 @@ COMMENT ON COLUMN public.fuyou_direct_key_config.id IS '主键';
 -- Name: COLUMN fuyou_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.fuyou_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3776,7 +3776,7 @@ COMMENT ON COLUMN public.fuyou_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN fuyou_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.fuyou_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN fuyou_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -3985,7 +3985,7 @@ COMMENT ON COLUMN public.fuyou_rsa_key_config.id IS '主键';
 -- Name: COLUMN fuyou_rsa_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -4097,7 +4097,7 @@ COMMENT ON COLUMN public.helipay_key_config.id IS '主键';
 -- Name: COLUMN helipay_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.helipay_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN helipay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -4213,7 +4213,7 @@ COMMENT ON COLUMN public.hkrt_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN hkrt_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_channel_merchant.mch_no IS '平台商户号';
+COMMENT ON COLUMN public.hkrt_isv_channel_merchant.mch_no IS '平台商户编号';
 
 --
 -- Name: COLUMN hkrt_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -4414,7 +4414,7 @@ COMMENT ON COLUMN public.hmpay_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN hmpay_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.hmpay_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN hmpay_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -6146,7 +6146,7 @@ COMMENT ON COLUMN public.jee_pay_key_config.id IS '主键';
 -- Name: COLUMN jee_pay_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.jee_pay_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN jee_pay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -6252,7 +6252,7 @@ COMMENT ON COLUMN public.jlpay_direct_key_config.id IS '主键';
 -- Name: COLUMN jlpay_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.jlpay_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -6374,7 +6374,7 @@ COMMENT ON COLUMN public.kuaiqian_direct_key_config.id IS '主键';
 -- Name: COLUMN kuaiqian_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -6514,7 +6514,7 @@ COMMENT ON COLUMN public.lakala_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN lakala_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_channel_merchant.mch_no IS '平台商户号';
+COMMENT ON COLUMN public.lakala_isv_channel_merchant.mch_no IS '平台商户编号';
 
 --
 -- Name: COLUMN lakala_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -6735,7 +6735,7 @@ COMMENT ON COLUMN public.leshua_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN leshua_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.leshua_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN leshua_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -6940,7 +6940,7 @@ COMMENT ON COLUMN public.llianpay_direct_key_config.id IS '主键';
 -- Name: COLUMN llianpay_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.llianpay_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -7064,7 +7064,7 @@ COMMENT ON COLUMN public.long_pay_direct_key_config.id IS '主键';
 -- Name: COLUMN long_pay_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.long_pay_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -7179,7 +7179,7 @@ COMMENT ON COLUMN public.mch_app_info.id IS '主键';
 -- Name: COLUMN mch_app_info.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_app_info.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_app_info.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_app_info.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -7280,7 +7280,7 @@ COMMENT ON COLUMN public.mch_channel_merchant.id IS '主键';
 -- Name: COLUMN mch_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -7399,7 +7399,7 @@ COMMENT ON COLUMN public.mch_credential.id IS '主键';
 -- Name: COLUMN mch_credential.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_credential.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_credential.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_credential.public_key; Type: COMMENT; Schema: public; Owner: -
@@ -7485,7 +7485,7 @@ COMMENT ON COLUMN public.mch_info.id IS '主键';
 -- Name: COLUMN mch_info.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_info.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_info.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_info.mch_name; Type: COMMENT; Schema: public; Owner: -
@@ -7627,7 +7627,7 @@ COMMENT ON COLUMN public.mch_notice_record.deleted IS '删除标志';
 -- Name: COLUMN mch_notice_record.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_record.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_notice_record.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_notice_record.task_id; Type: COMMENT; Schema: public; Owner: -
@@ -7754,7 +7754,7 @@ COMMENT ON COLUMN public.mch_notice_task.deleted IS '删除标志';
 -- Name: COLUMN mch_notice_task.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_notice_task.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_notice_task.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -7897,7 +7897,7 @@ COMMENT ON COLUMN public.mch_store_info.id IS '主键';
 -- Name: COLUMN mch_store_info.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_store_info.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_store_info.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_store_info.store_no; Type: COMMENT; Schema: public; Owner: -
@@ -8054,7 +8054,7 @@ COMMENT ON COLUMN public.mch_user.user_id IS '用户ID';
 -- Name: COLUMN mch_user.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_user.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_user.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_user.administrator; Type: COMMENT; Schema: public; Owner: -
@@ -8110,7 +8110,7 @@ COMMENT ON COLUMN public.mch_wx_domain_verify.id IS '主键';
 -- Name: COLUMN mch_wx_domain_verify.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.mch_no IS '商户号';
+COMMENT ON COLUMN public.mch_wx_domain_verify.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.platform; Type: COMMENT; Schema: public; Owner: -
@@ -8220,7 +8220,7 @@ COMMENT ON COLUMN public.mock_alloc_receiver.id IS '主键';
 -- Name: COLUMN mock_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.mch_no IS '商户号';
+COMMENT ON COLUMN public.mock_alloc_receiver.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mock_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -8524,7 +8524,7 @@ COMMENT ON COLUMN public.mock_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN mock_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.mock_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN mock_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -9221,7 +9221,7 @@ COMMENT ON COLUMN public.pay_abnormal_order.id IS '主键';
 -- Name: COLUMN pay_abnormal_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_abnormal_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_abnormal_order.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -9732,7 +9732,7 @@ COMMENT ON COLUMN public.pay_alloc_order.error_msg IS '错误信息';
 -- Name: COLUMN pay_alloc_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_alloc_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_alloc_order.creator; Type: COMMENT; Schema: public; Owner: -
@@ -9969,7 +9969,7 @@ COMMENT ON COLUMN public.pay_callback_record.deleted IS '删除标志';
 -- Name: COLUMN pay_callback_record.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_callback_record.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_callback_record.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_callback_record.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -10120,7 +10120,7 @@ COMMENT ON COLUMN public.pay_channel_terminal.remark IS '备注';
 -- Name: COLUMN pay_channel_terminal.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_channel_terminal.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_channel_terminal.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_channel_terminal.creator; Type: COMMENT; Schema: public; Owner: -
@@ -10205,7 +10205,7 @@ COMMENT ON COLUMN public.pay_close_record.id IS '主键';
 -- Name: COLUMN pay_close_record.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_close_record.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_close_record.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_close_record.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -10355,7 +10355,7 @@ COMMENT ON COLUMN public.pay_easy_pay_config.limit_pay IS '限制支付方式';
 -- Name: COLUMN pay_easy_pay_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_easy_pay_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_easy_pay_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -10480,7 +10480,7 @@ COMMENT ON COLUMN public.pay_easy_pay_credential.public_key IS '商户RSA公钥'
 -- Name: COLUMN pay_easy_pay_credential.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_credential.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_easy_pay_credential.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_easy_pay_credential.creator; Type: COMMENT; Schema: public; Owner: -
@@ -10703,7 +10703,7 @@ COMMENT ON COLUMN public.pay_easy_pay_order.pay_body IS '支付参数体';
 -- Name: COLUMN pay_easy_pay_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_easy_pay_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_easy_pay_order.creator; Type: COMMENT; Schema: public; Owner: -
@@ -10785,7 +10785,7 @@ COMMENT ON COLUMN public.pay_easy_pay_refund_order.id IS '主键ID';
 -- Name: COLUMN pay_easy_pay_refund_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_easy_pay_refund_order.refund_id; Type: COMMENT; Schema: public; Owner: -
@@ -10945,7 +10945,7 @@ COMMENT ON COLUMN public.pay_fund_flow.id IS '主键';
 -- Name: COLUMN pay_fund_flow.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_fund_flow.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_fund_flow.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_fund_flow.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -11169,7 +11169,7 @@ COMMENT ON COLUMN public.pay_gateway_cashier_item.capability IS '支付能力';
 -- Name: COLUMN pay_gateway_cashier_item.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.creator; Type: COMMENT; Schema: public; Owner: -
@@ -11526,7 +11526,7 @@ COMMENT ON COLUMN public.pay_gateway_order.error_msg IS '错误信息';
 -- Name: COLUMN pay_gateway_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_gateway_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_gateway_order.creator; Type: COMMENT; Schema: public; Owner: -
@@ -11607,7 +11607,7 @@ COMMENT ON COLUMN public.pay_gateway_pay_client_env.id IS '主键';
 -- Name: COLUMN pay_gateway_pay_client_env.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.config_id; Type: COMMENT; Schema: public; Owner: -
@@ -11715,7 +11715,7 @@ COMMENT ON COLUMN public.pay_gateway_pay_config.id IS '主键';
 -- Name: COLUMN pay_gateway_pay_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_gateway_pay_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_gateway_pay_config.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -11807,7 +11807,7 @@ COMMENT ON COLUMN public.pay_mch_app_device_config.id IS '主键';
 -- Name: COLUMN pay_mch_app_device_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.mch_no IS '所属商户号';
+COMMENT ON COLUMN public.pay_mch_app_device_config.mch_no IS '所属商户编号';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -12895,7 +12895,7 @@ COMMENT ON COLUMN public.pay_normal_order.error_msg IS '错误信息';
 -- Name: COLUMN pay_normal_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_normal_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_normal_order.creator; Type: COMMENT; Schema: public; Owner: -
@@ -13263,7 +13263,7 @@ COMMENT ON COLUMN public.pay_refund_order.error_msg IS '错误信息';
 -- Name: COLUMN pay_refund_order.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_refund_order.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_refund_order.creator; Type: COMMENT; Schema: public; Owner: -
@@ -13422,7 +13422,7 @@ COMMENT ON COLUMN public.pay_risk_hit.blacklist_id IS '关联名单 ID';
 -- Name: COLUMN pay_risk_hit.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_risk_hit.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_risk_hit.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -13720,7 +13720,7 @@ COMMENT ON COLUMN public.pay_route_strategy.app_id IS '应用号';
 -- Name: COLUMN pay_route_strategy.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_route_strategy.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_route_strategy.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_route_strategy.mode; Type: COMMENT; Schema: public; Owner: -
@@ -13808,7 +13808,7 @@ COMMENT ON COLUMN public.pay_sync_record.id IS '主键';
 -- Name: COLUMN pay_sync_record.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_sync_record.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_sync_record.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_sync_record.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -13972,7 +13972,7 @@ COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_terminal_id IS '通�
 -- Name: COLUMN pay_terminal_channel_bind.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_channel_bind.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_terminal_channel_bind.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_terminal_channel_bind.creator; Type: COMMENT; Schema: public; Owner: -
@@ -14095,7 +14095,7 @@ COMMENT ON COLUMN public.pay_terminal_device.remark IS '备注';
 -- Name: COLUMN pay_terminal_device.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_device.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_terminal_device.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_terminal_device.creator; Type: COMMENT; Schema: public; Owner: -
@@ -14287,7 +14287,7 @@ COMMENT ON COLUMN public.pay_trade.app_id IS '应用号';
 -- Name: COLUMN pay_trade.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_trade.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_trade.creator; Type: COMMENT; Schema: public; Owner: -
@@ -14431,7 +14431,7 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.out_transfer_no IS '通道转
 -- Name: COLUMN pay_transfer_order_alipay.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.amount; Type: COMMENT; Schema: public; Owner: -
@@ -14646,7 +14646,7 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.out_transfer_no IS '通道转
 -- Name: COLUMN pay_transfer_order_douyin.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.amount; Type: COMMENT; Schema: public; Owner: -
@@ -14856,7 +14856,7 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.out_transfer_no IS '通道转
 -- Name: COLUMN pay_transfer_order_wechat.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.amount; Type: COMMENT; Schema: public; Owner: -
@@ -15119,7 +15119,7 @@ COMMENT ON COLUMN public.pay_transfer_trade.title IS '转账标题';
 -- Name: COLUMN pay_transfer_trade.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.mch_no IS '商户号';
+COMMENT ON COLUMN public.pay_transfer_trade.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN pay_transfer_trade.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15224,7 +15224,7 @@ COMMENT ON COLUMN public.pay_virtual_device.batch_no IS '批次号';
 -- Name: COLUMN pay_virtual_device.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.mch_no IS '所属商户号';
+COMMENT ON COLUMN public.pay_virtual_device.mch_no IS '所属商户编号';
 
 --
 -- Name: COLUMN pay_virtual_device.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -15354,7 +15354,7 @@ COMMENT ON COLUMN public.sand_direct_key_config.id IS '主键';
 -- Name: COLUMN sand_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.sand_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN sand_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -15469,7 +15469,7 @@ COMMENT ON COLUMN public.sheng_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN sheng_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN sheng_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -15657,7 +15657,7 @@ COMMENT ON COLUMN public.sheng_key_config.id IS '主键';
 -- Name: COLUMN sheng_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.sheng_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN sheng_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -15761,7 +15761,7 @@ COMMENT ON COLUMN public.shouqianba_direct_key_config.id IS '主键';
 -- Name: COLUMN shouqianba_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.shouqianba_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.shouqianba_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN shouqianba_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -16196,7 +16196,7 @@ COMMENT ON COLUMN public.starter_audit_unipay_log.id IS '主键';
 -- Name: COLUMN starter_audit_unipay_log.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_audit_unipay_log.mch_no IS '商户号';
+COMMENT ON COLUMN public.starter_audit_unipay_log.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN starter_audit_unipay_log.api_path; Type: COMMENT; Schema: public; Owner: -
@@ -16454,7 +16454,7 @@ COMMENT ON COLUMN public.stripe_channel_merchant.id IS '主键';
 -- Name: COLUMN stripe_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.stripe_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.stripe_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN stripe_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -16545,7 +16545,7 @@ COMMENT ON COLUMN public.stripe_key_config.id IS '主键';
 -- Name: COLUMN stripe_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.stripe_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.stripe_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN stripe_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -17198,7 +17198,7 @@ COMMENT ON COLUMN public.system_sensitive_word_hit.source IS '来源';
 -- Name: COLUMN system_sensitive_word_hit.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word_hit.mch_no IS '商户号';
+COMMENT ON COLUMN public.system_sensitive_word_hit.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN system_sensitive_word_hit.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -17302,7 +17302,7 @@ COMMENT ON COLUMN public.umfpay_direct_key_config.id IS '主键';
 -- Name: COLUMN umfpay_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.umfpay_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -17408,7 +17408,7 @@ COMMENT ON COLUMN public.ums_direct_key_config.id IS '主键';
 -- Name: COLUMN ums_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ums_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.ums_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN ums_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -17528,7 +17528,7 @@ COMMENT ON COLUMN public.union_key_config.id IS '主键';
 -- Name: COLUMN union_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.union_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN union_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -17655,7 +17655,7 @@ COMMENT ON COLUMN public.vbill_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN vbill_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_channel_merchant.mch_no IS '平台商户号';
+COMMENT ON COLUMN public.vbill_isv_channel_merchant.mch_no IS '平台商户编号';
 
 --
 -- Name: COLUMN vbill_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -17858,7 +17858,7 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.id IS '主键';
 -- Name: COLUMN wechat_direct_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.mch_no IS '商户号';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18009,7 +18009,7 @@ COMMENT ON COLUMN public.wechat_direct_channel_merchant.id IS '主键';
 -- Name: COLUMN wechat_direct_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.wechat_direct_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wechat_direct_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18110,7 +18110,7 @@ COMMENT ON COLUMN public.wechat_direct_key_config.id IS '主键';
 -- Name: COLUMN wechat_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.wechat_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wechat_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18241,7 +18241,7 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.id IS '主键';
 -- Name: COLUMN wechat_isv_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.mch_no IS '商户号';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18397,7 +18397,7 @@ COMMENT ON COLUMN public.wechat_isv_channel_merchant.id IS '主键';
 -- Name: COLUMN wechat_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_channel_merchant.mch_no IS '商户号';
+COMMENT ON COLUMN public.wechat_isv_channel_merchant.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wechat_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18612,7 +18612,7 @@ COMMENT ON COLUMN public.wechat_transfer_config.id IS '主键';
 -- Name: COLUMN wechat_transfer_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_transfer_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.wechat_transfer_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wechat_transfer_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18739,7 +18739,7 @@ COMMENT ON COLUMN public.wx_channel_app_capability.deleted IS '删除标志';
 -- Name: COLUMN wx_channel_app_capability.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_channel_app_capability.mch_no IS '商户号';
+COMMENT ON COLUMN public.wx_channel_app_capability.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wx_channel_app_capability.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -18836,7 +18836,7 @@ COMMENT ON COLUMN public.wx_mch_app.deleted IS '删除标志';
 -- Name: COLUMN wx_mch_app.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_mch_app.mch_no IS '商户号';
+COMMENT ON COLUMN public.wx_mch_app.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN wx_mch_app.app_name; Type: COMMENT; Schema: public; Owner: -
@@ -19071,7 +19071,7 @@ COMMENT ON COLUMN public.xingyi_direct_key_config.id IS '主键';
 -- Name: COLUMN xingyi_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.xingyi_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -19179,7 +19179,7 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.id IS '主键';
 -- Name: COLUMN yeepay_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.yeepay_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -19308,7 +19308,7 @@ COMMENT ON COLUMN public.yisheng_direct_key_config.id IS '主键';
 -- Name: COLUMN yisheng_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.yisheng_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -19421,7 +19421,7 @@ COMMENT ON COLUMN public.yizhifubj_direct_key_config.id IS '主键';
 -- Name: COLUMN yizhifubj_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -19544,7 +19544,7 @@ COMMENT ON COLUMN public.youzan_direct_key_config.id IS '主键';
 -- Name: COLUMN youzan_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.youzan_direct_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN youzan_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -19657,7 +19657,7 @@ COMMENT ON COLUMN public.ysep_key_config.id IS '主键';
 -- Name: COLUMN ysep_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.mch_no IS '商户号';
+COMMENT ON COLUMN public.ysep_key_config.mch_no IS '商户编号';
 
 --
 -- Name: COLUMN ysep_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -21053,7 +21053,7 @@ CREATE INDEX idx_dy_channel_app_cap_mch ON public.dy_channel_app_capability USIN
 -- Name: INDEX idx_dy_channel_app_cap_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_dy_channel_app_cap_mch IS '商户号关联查询';
+COMMENT ON INDEX public.idx_dy_channel_app_cap_mch IS '商户编号关联查询';
 
 --
 -- Name: idx_dy_channel_app_cap_ref; Type: INDEX; Schema: public; Owner: -
@@ -21077,7 +21077,7 @@ CREATE INDEX idx_dy_mch_app_app_type ON public.dy_mch_app USING btree (mch_no, a
 -- Name: INDEX idx_dy_mch_app_app_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_dy_mch_app_app_type IS '按商户号+应用类型查询';
+COMMENT ON INDEX public.idx_dy_mch_app_app_type IS '按商户编号+应用类型查询';
 
 --
 -- Name: idx_dy_platform_app_app_type; Type: INDEX; Schema: public; Owner: -
@@ -21149,7 +21149,7 @@ CREATE INDEX idx_gateway_cashier_item_mch ON public.pay_gateway_cashier_item USI
 -- Name: INDEX idx_gateway_cashier_item_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_gateway_cashier_item_mch IS '商户号关联查询';
+COMMENT ON INDEX public.idx_gateway_cashier_item_mch IS '商户编号关联查询';
 
 --
 -- Name: idx_gateway_order_app_biz; Type: INDEX; Schema: public; Owner: -
@@ -21269,7 +21269,7 @@ CREATE INDEX idx_mch_app_info_mch_no ON public.mch_app_info USING btree (mch_no)
 -- Name: INDEX idx_mch_app_info_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_app_info_mch_no IS '商户号索引';
+COMMENT ON INDEX public.idx_mch_app_info_mch_no IS '商户编号索引';
 
 --
 -- Name: idx_mch_channel_merchant_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -21281,7 +21281,7 @@ CREATE INDEX idx_mch_channel_merchant_mch_no ON public.mch_channel_merchant USIN
 -- Name: INDEX idx_mch_channel_merchant_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_channel_merchant_mch_no IS '通道商户按商户号检索';
+COMMENT ON INDEX public.idx_mch_channel_merchant_mch_no IS '通道商户按商户编号检索';
 
 --
 -- Name: idx_mch_credential_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -21293,7 +21293,7 @@ CREATE INDEX idx_mch_credential_mch_no ON public.mch_credential USING btree (mch
 -- Name: INDEX idx_mch_credential_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_credential_mch_no IS '商户号索引';
+COMMENT ON INDEX public.idx_mch_credential_mch_no IS '商户编号索引';
 
 --
 -- Name: idx_mch_info_status; Type: INDEX; Schema: public; Owner: -
@@ -21389,7 +21389,7 @@ CREATE INDEX idx_mch_store_info_mch_default ON public.mch_store_info USING btree
 -- Name: INDEX idx_mch_store_info_mch_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_store_info_mch_default IS '按商户号查默认门店';
+COMMENT ON INDEX public.idx_mch_store_info_mch_default IS '按商户编号查默认门店';
 
 --
 -- Name: idx_mch_store_info_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -21401,7 +21401,7 @@ CREATE INDEX idx_mch_store_info_mch_no ON public.mch_store_info USING btree (mch
 -- Name: INDEX idx_mch_store_info_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_store_info_mch_no IS '按商户号查询门店列表';
+COMMENT ON INDEX public.idx_mch_store_info_mch_no IS '按商户编号查询门店列表';
 
 --
 -- Name: idx_mch_wx_domain_verify_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -21413,7 +21413,7 @@ CREATE INDEX idx_mch_wx_domain_verify_mch_no ON public.mch_wx_domain_verify USIN
 -- Name: INDEX idx_mch_wx_domain_verify_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_wx_domain_verify_mch_no IS '商户号关联查询';
+COMMENT ON INDEX public.idx_mch_wx_domain_verify_mch_no IS '商户编号关联查询';
 
 --
 -- Name: idx_mch_wx_domain_verify_platform; Type: INDEX; Schema: public; Owner: -
@@ -21665,7 +21665,7 @@ CREATE INDEX idx_pay_callback_record_mch_no ON public.pay_callback_record USING 
 -- Name: INDEX idx_pay_callback_record_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_callback_record_mch_no IS '商户号关联查询';
+COMMENT ON INDEX public.idx_pay_callback_record_mch_no IS '商户编号关联查询';
 
 --
 -- Name: idx_pay_callback_record_out_trade_no; Type: INDEX; Schema: public; Owner: -
@@ -21725,7 +21725,7 @@ CREATE INDEX idx_pay_channel_terminal_mch_no ON public.pay_channel_terminal USIN
 -- Name: INDEX idx_pay_channel_terminal_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_channel_terminal_mch_no IS '商户号关联查询';
+COMMENT ON INDEX public.idx_pay_channel_terminal_mch_no IS '商户编号关联查询';
 
 --
 -- Name: idx_pay_channel_terminal_status; Type: INDEX; Schema: public; Owner: -
@@ -21893,7 +21893,7 @@ CREATE INDEX idx_pay_terminal_channel_bind_mch ON public.pay_terminal_channel_bi
 -- Name: INDEX idx_pay_terminal_channel_bind_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_terminal_channel_bind_mch IS '商户号关联查询';
+COMMENT ON INDEX public.idx_pay_terminal_channel_bind_mch IS '商户编号关联查询';
 
 --
 -- Name: idx_pay_terminal_channel_bind_system; Type: INDEX; Schema: public; Owner: -
@@ -21917,7 +21917,7 @@ CREATE INDEX idx_pay_terminal_device_mch_no ON public.pay_terminal_device USING 
 -- Name: INDEX idx_pay_terminal_device_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_terminal_device_mch_no IS '商户号关联查询';
+COMMENT ON INDEX public.idx_pay_terminal_device_mch_no IS '商户编号关联查询';
 
 --
 -- Name: idx_pay_terminal_device_store_no; Type: INDEX; Schema: public; Owner: -
@@ -22025,7 +22025,7 @@ CREATE INDEX idx_pay_transfer_order_alipay_mch ON public.pay_transfer_order_alip
 -- Name: INDEX idx_pay_transfer_order_alipay_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_order_alipay_mch IS '按商户号+创建时间查询';
+COMMENT ON INDEX public.idx_pay_transfer_order_alipay_mch IS '按商户编号+创建时间查询';
 
 --
 -- Name: idx_pay_transfer_order_alipay_status_time; Type: INDEX; Schema: public; Owner: -
@@ -22049,7 +22049,7 @@ CREATE INDEX idx_pay_transfer_order_douyin_mch ON public.pay_transfer_order_douy
 -- Name: INDEX idx_pay_transfer_order_douyin_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_order_douyin_mch IS '按商户号+创建时间查询';
+COMMENT ON INDEX public.idx_pay_transfer_order_douyin_mch IS '按商户编号+创建时间查询';
 
 --
 -- Name: idx_pay_transfer_order_douyin_status_time; Type: INDEX; Schema: public; Owner: -
@@ -22073,7 +22073,7 @@ CREATE INDEX idx_pay_transfer_order_wechat_mch ON public.pay_transfer_order_wech
 -- Name: INDEX idx_pay_transfer_order_wechat_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_order_wechat_mch IS '按商户号+创建时间查询';
+COMMENT ON INDEX public.idx_pay_transfer_order_wechat_mch IS '按商户编号+创建时间查询';
 
 --
 -- Name: idx_pay_transfer_order_wechat_status_time; Type: INDEX; Schema: public; Owner: -
@@ -22109,7 +22109,7 @@ CREATE INDEX idx_pay_transfer_trade_mch ON public.pay_transfer_trade USING btree
 -- Name: INDEX idx_pay_transfer_trade_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_trade_mch IS '按商户号+创建时间查询';
+COMMENT ON INDEX public.idx_pay_transfer_trade_mch IS '按商户编号+创建时间查询';
 
 --
 -- Name: idx_pay_transfer_trade_status_time; Type: INDEX; Schema: public; Owner: -
@@ -22157,7 +22157,7 @@ CREATE INDEX idx_pay_virtual_device_mch_no ON public.pay_virtual_device USING bt
 -- Name: INDEX idx_pay_virtual_device_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_no IS '按商户号查询设备';
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_no IS '按商户编号查询设备';
 
 --
 -- Name: idx_pay_virtual_device_mch_store; Type: INDEX; Schema: public; Owner: -
@@ -22241,7 +22241,7 @@ CREATE INDEX idx_starter_audit_unipay_log_mch_time ON public.starter_audit_unipa
 -- Name: INDEX idx_starter_audit_unipay_log_mch_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_starter_audit_unipay_log_mch_time IS '按商户号+时间倒序查询审计日志';
+COMMENT ON INDEX public.idx_starter_audit_unipay_log_mch_time IS '按商户编号+时间倒序查询审计日志';
 
 --
 -- Name: idx_starter_audit_unipay_log_success_time; Type: INDEX; Schema: public; Owner: -
@@ -22301,7 +22301,7 @@ CREATE INDEX idx_system_sensitive_word_hit_mch ON public.system_sensitive_word_h
 -- Name: INDEX idx_system_sensitive_word_hit_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_system_sensitive_word_hit_mch IS '按商户号+时间查询命中记录';
+COMMENT ON INDEX public.idx_system_sensitive_word_hit_mch IS '按商户编号+时间查询命中记录';
 
 --
 -- Name: idx_system_sensitive_word_hit_scene; Type: INDEX; Schema: public; Owner: -
@@ -22397,7 +22397,7 @@ CREATE INDEX idx_wx_channel_app_cap_mch ON public.wx_channel_app_capability USIN
 -- Name: INDEX idx_wx_channel_app_cap_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_wx_channel_app_cap_mch IS '商户号关联查询';
+COMMENT ON INDEX public.idx_wx_channel_app_cap_mch IS '商户编号关联查询';
 
 --
 -- Name: idx_wx_channel_app_cap_ref; Type: INDEX; Schema: public; Owner: -
@@ -22421,7 +22421,7 @@ CREATE INDEX idx_wx_mch_app_app_type ON public.wx_mch_app USING btree (mch_no, a
 -- Name: INDEX idx_wx_mch_app_app_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_wx_mch_app_app_type IS '按商户号+应用类型查询';
+COMMENT ON INDEX public.idx_wx_mch_app_app_type IS '按商户编号+应用类型查询';
 
 --
 -- Name: idx_wx_platform_app_app_type; Type: INDEX; Schema: public; Owner: -

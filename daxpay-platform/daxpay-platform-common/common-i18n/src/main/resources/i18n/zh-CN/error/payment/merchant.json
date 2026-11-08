@@ -1,6 +1,6 @@
 {
-  "mchNoGenFailed": "商户号生成失败",
-  "dataErrorNoMchNo": "数据错误, 未发现商户号",
+  "mchNoGenFailed": "商户编号生成失败",
+  "dataErrorNoMchNo": "数据错误, 未发现商户编号",
   "mchNotExist": "商户信息不存在",
   "mchAppNotFound": "商户应用未找到",
   "appNoGenFailed": "应用号生成失败",

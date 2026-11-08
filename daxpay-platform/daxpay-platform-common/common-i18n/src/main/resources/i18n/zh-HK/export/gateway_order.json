@@ -1,7 +1,7 @@
 {
   "fileName": "網關支付業務單",
   "orderNo": "平台網關單號",
-  "mchNo": "商戶號",
+  "mchNo": "商戶編號",
   "mchName": "商戶名稱",
   "appId": "應用編號",
   "bizOrderNo": "商戶訂單號",
