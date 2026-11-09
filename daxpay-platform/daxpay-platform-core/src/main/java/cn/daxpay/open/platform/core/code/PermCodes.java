@@ -161,6 +161,21 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "merchant:file";
         }
+
+        /// 日志(商户端只读) menuCode=merchant:log:*
+        interface Log {
+            /// 登录日志(商户端) menuCode=merchant:log:login
+            interface Login {
+                /// 菜单编码
+                String MENU = "merchant:log:login";
+            }
+
+            /// 操作日志(商户端) menuCode=merchant:log:operate
+            interface Operate {
+                /// 菜单编码
+                String MENU = "merchant:log:operate";
+            }
+        }
     }
 
     /// 支付平台能力（主数据 + 配置 + ISV；不含交易单据）
