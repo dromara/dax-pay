@@ -3412,6 +3412,9 @@ INSERT INTO public.base_province (code, name) VALUES ('65', '新疆维吾尔自�
 INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000001, '用户协议', 'DaxPay 用户服务协议', 'USER_AGREEMENT', 'WEB', true, 'zh-CN', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
 INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000002, '隐私政策', 'DaxPay 隐私政策', 'PRIVACY_POLICY', 'WEB', true, 'zh-CN', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
 
+INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000003, '用户协议', 'DaxPay 用户服务协议', 'USER_AGREEMENT', 'MINIAPP', true, 'zh-CN', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000004, '隐私政策', 'DaxPay 隐私政策', 'PRIVACY_POLICY', 'MINIAPP', true, 'zh-CN', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+
 --
 -- Data for Name: base_user_protocol_item; Type: TABLE DATA; Schema: public; Owner: -
 --
@@ -3583,6 +3586,496 @@ INSERT INTO public.base_user_protocol_version (id, protocol_id, language, versio
 <p>本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。</p>
 <h2>七、隐私政策变更</h2>
 <p>本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。</p>', 'MARKDOWN', 'PUBLISHED', '2026-10-05 00:00:00+00', '平台默认隐私政策模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
+
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000103, 2091000000000000003, 'zh-CN', 1, 'v1.0', 'DaxPay 用户服务协议', '## 一、协议的接受
+
+欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。
+
+## 二、服务说明
+
+本平台为商户及运营管理人员提供支付交易管理、资金结算、订单查询、数据统计及相关增值服务。具体服务内容以本平台实际提供的为准。本平台保留对服务内容进行调整、升级或终止的权利。
+
+## 三、用户账号
+
+1. 您应使用真实、准确的信息注册和管理账号，并对账号及密码的安全负全部责任。
+2. 您不得将账号转让、出借给第三方使用，由此产生的一切责任由您自行承担。
+3. 如发现账号存在安全隐患或被未经授权使用，应立即通知本平台。
+
+## 四、用户行为规范
+
+您承诺不利用本平台从事下列行为：
+
+1. 违反国家法律法规的行为；
+2. 侵犯他人合法权益的行为；
+3. 虚假交易、洗钱、套现等违规支付行为；
+4. 破坏本平台系统安全或干扰正常运行的行为；
+5. 其他损害本平台或第三方权益的行为。
+
+## 五、知识产权
+
+本平台的所有内容，包括但不限于文字、图片、软件、界面设计、程序代码等，其知识产权均归本平台所有。未经书面授权，您不得复制、转载、修改或将其用于其他商业用途。
+
+## 六、免责声明
+
+1. 因不可抗力、系统维护、网络故障等原因导致服务中断，本平台不承担责任。
+2. 本平台不对交易数据的完整性和准确性作出绝对保证，您应及时核对相关信息。
+3. 对于您因违反本协议或法律法规而产生的损失，本平台不承担责任。
+
+## 七、协议的变更
+
+本平台有权根据法律法规及业务发展需要修改本协议，修改后的协议将在本平台公布。您继续使用服务即视为接受修改后的协议；如不同意，您应停止使用本平台服务。
+
+## 八、适用法律与争议解决
+
+本协议的订立、执行和解释适用中华人民共和国法律。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均可向本平台所在地有管辖权的人民法院提起诉讼。', '<h2>一、协议的接受</h2>
+<p>欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。</p>
+<h2>二、服务说明</h2>
+<p>本平台为商户及运营管理人员提供支付交易管理、资金结算、订单查询、数据统计及相关增值服务。具体服务内容以本平台实际提供的为准。本平台保留对服务内容进行调整、升级或终止的权利。</p>
+<h2>三、用户账号</h2>
+<ol>
+<li>您应使用真实、准确的信息注册和管理账号，并对账号及密码的安全负全部责任。</li>
+<li>您不得将账号转让、出借给第三方使用，由此产生的一切责任由您自行承担。</li>
+<li>如发现账号存在安全隐患或被未经授权使用，应立即通知本平台。</li>
+</ol>
+<h2>四、用户行为规范</h2>
+<p>您承诺不利用本平台从事下列行为：</p>
+<ol>
+<li>违反国家法律法规的行为；</li>
+<li>侵犯他人合法权益的行为；</li>
+<li>虚假交易、洗钱、套现等违规支付行为；</li>
+<li>破坏本平台系统安全或干扰正常运行的行为；</li>
+<li>其他损害本平台或第三方权益的行为。</li>
+</ol>
+<h2>五、知识产权</h2>
+<p>本平台的所有内容，包括但不限于文字、图片、软件、界面设计、程序代码等，其知识产权均归本平台所有。未经书面授权，您不得复制、转载、修改或将其用于其他商业用途。</p>
+<h2>六、免责声明</h2>
+<ol>
+<li>因不可抗力、系统维护、网络故障等原因导致服务中断，本平台不承担责任。</li>
+<li>本平台不对交易数据的完整性和准确性作出绝对保证，您应及时核对相关信息。</li>
+<li>对于您因违反本协议或法律法规而产生的损失，本平台不承担责任。</li>
+</ol>
+<h2>七、协议的变更</h2>
+<p>本平台有权根据法律法规及业务发展需要修改本协议，修改后的协议将在本平台公布。您继续使用服务即视为接受修改后的协议；如不同意，您应停止使用本平台服务。</p>
+<h2>八、适用法律与争议解决</h2>
+<p>本协议的订立、执行和解释适用中华人民共和国法律。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均可向本平台所在地有管辖权的人民法院提起诉讼。</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', '小程序端用户服务协议模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000104, 2091000000000000003, 'en-US', 1, 'v1.0', 'DaxPay Terms of Service', '## 1. Acceptance of Terms
+
+Welcome to the DaxPay Payment Management Platform ("the Platform"). Please read and fully understand all terms of this agreement before using the Platform''s services. By clicking "Agree" or using the Platform''s services, you acknowledge that you have read and accepted all terms of this agreement, which constitutes a legally binding contract between you and the Platform.
+
+## 2. Service Description
+
+The Platform provides merchants and operators with payment transaction management, fund settlement, order inquiry, data statistics, and related value-added services. The specific services are subject to the Platform''s actual offerings. The Platform reserves the right to adjust, upgrade, or terminate services.
+
+## 3. User Account
+
+1. You shall register and manage your account with true and accurate information, and you are solely responsible for the security of your account and password.
+2. You shall not transfer or lend your account to any third party. You shall bear all responsibilities arising therefrom.
+3. If you discover any security risk or unauthorized use of your account, you shall notify the Platform immediately.
+
+## 4. User Conduct
+
+You agree not to use the Platform to engage in the following:
+
+1. Acts that violate applicable laws and regulations;
+2. Acts that infringe upon the lawful rights of others;
+3. Fraudulent transactions, money laundering, cash-out, or other illicit payment activities;
+4. Acts that compromise the Platform''s system security or interfere with its normal operation;
+5. Other acts that harm the rights of the Platform or any third party.
+
+## 5. Intellectual Property
+
+All content on the Platform, including but not limited to text, images, software, interface design, and source code, is owned by the Platform. Without written authorization, you may not copy, reproduce, modify, or use it for other commercial purposes.
+
+## 6. Disclaimer
+
+1. The Platform is not liable for service interruptions caused by force majeure, system maintenance, or network failures.
+2. The Platform does not guarantee the absolute completeness or accuracy of transaction data. You shall verify relevant information in a timely manner.
+3. The Platform is not liable for any losses arising from your breach of this agreement or applicable laws.
+
+## 7. Changes to the Agreement
+
+The Platform reserves the right to modify this agreement in accordance with laws, regulations, and business development. The modified agreement will be published on the Platform. Your continued use of the services constitutes acceptance of the modified agreement; if you disagree, you shall cease using the Platform''s services.
+
+## 8. Governing Law and Dispute Resolution
+
+The formation, performance, and interpretation of this agreement shall be governed by the laws of the People''s Republic of China. Disputes arising from this agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may bring a lawsuit before a people''s court with jurisdiction at the Platform''s location.', '<h2>1. Acceptance of Terms</h2>
+<p>Welcome to the DaxPay Payment Management Platform ("the Platform"). Please read and fully understand all terms of this agreement before using the Platform''s services. By clicking "Agree" or using the Platform''s services, you acknowledge that you have read and accepted all terms of this agreement, which constitutes a legally binding contract between you and the Platform.</p>
+<h2>2. Service Description</h2>
+<p>The Platform provides merchants and operators with payment transaction management, fund settlement, order inquiry, data statistics, and related value-added services. The specific services are subject to the Platform''s actual offerings. The Platform reserves the right to adjust, upgrade, or terminate services.</p>
+<h2>3. User Account</h2>
+<ol>
+<li>You shall register and manage your account with true and accurate information, and you are solely responsible for the security of your account and password.</li>
+<li>You shall not transfer or lend your account to any third party. You shall bear all responsibilities arising therefrom.</li>
+<li>If you discover any security risk or unauthorized use of your account, you shall notify the Platform immediately.</li>
+</ol>
+<h2>4. User Conduct</h2>
+<p>You agree not to use the Platform to engage in the following:</p>
+<ol>
+<li>Acts that violate applicable laws and regulations;</li>
+<li>Acts that infringe upon the lawful rights of others;</li>
+<li>Fraudulent transactions, money laundering, cash-out, or other illicit payment activities;</li>
+<li>Acts that compromise the Platform''s system security or interfere with its normal operation;</li>
+<li>Other acts that harm the rights of the Platform or any third party.</li>
+</ol>
+<h2>5. Intellectual Property</h2>
+<p>All content on the Platform, including but not limited to text, images, software, interface design, and source code, is owned by the Platform. Without written authorization, you may not copy, reproduce, modify, or use it for other commercial purposes.</p>
+<h2>6. Disclaimer</h2>
+<ol>
+<li>The Platform is not liable for service interruptions caused by force majeure, system maintenance, or network failures.</li>
+<li>The Platform does not guarantee the absolute completeness or accuracy of transaction data. You shall verify relevant information in a timely manner.</li>
+<li>The Platform is not liable for any losses arising from your breach of this agreement or applicable laws.</li>
+</ol>
+<h2>7. Changes to the Agreement</h2>
+<p>The Platform reserves the right to modify this agreement in accordance with laws, regulations, and business development. The modified agreement will be published on the Platform. Your continued use of the services constitutes acceptance of the modified agreement; if you disagree, you shall cease using the Platform''s services.</p>
+<h2>8. Governing Law and Dispute Resolution</h2>
+<p>The formation, performance, and interpretation of this agreement shall be governed by the laws of the People''s Republic of China. Disputes arising from this agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may bring a lawsuit before a people''s court with jurisdiction at the Platform''s location.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', 'English template of the mini program terms of service', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000105, 2091000000000000004, 'zh-CN', 1, 'v1.0', 'DaxPay 隐私政策', 'DaxPay（以下简称"本平台"）高度重视用户隐私保护。本隐私政策说明本平台在您使用服务时如何收集、使用、共享和保护您的个人信息。请您仔细阅读本政策，使用本平台服务即表示您同意本政策所述内容。
+
+## 一、信息收集
+
+本平台在您使用服务过程中可能收集以下信息：
+
+1. 账号信息：用户名、密码（加密存储）、角色信息；
+2. 交易信息：订单数据、交易记录、资金流水；
+3. 设备信息：设备标识、操作系统、网络状态；
+4. 日志信息：登录时间、操作日志、访问记录。
+
+## 二、信息使用
+
+收集的信息将用于：
+
+1. 提供支付管理与交易服务；
+2. 身份验证与安全保障；
+3. 数据统计与业务分析；
+4. 风险控制与反欺诈；
+5. 法律法规要求或监管需要。
+
+## 三、信息共享
+
+本平台不会向第三方出售您的个人信息。在以下情形下，本平台可能共享您的信息：
+
+1. 获得您的明确同意；
+2. 根据法律法规或有权机关的要求；
+3. 与合作支付通道完成交易（仅限必要信息）；
+4. 为维护本平台合法权益。
+
+## 四、信息安全
+
+本平台采取行业通行的安全措施（包括数据加密、访问控制、安全审计等）保护您的信息安全。但请注意，互联网传输并非绝对安全，本平台不能保证信息传输的绝对安全性。
+
+## 五、用户权利
+
+您对个人信息享有以下权利：
+
+1. 查询、更正个人信息；
+2. 删除个人信息或注销账号；
+3. 撤回授权同意；
+4. 投诉举报。
+
+行使上述权利请联系本平台客服。
+
+## 六、未成年人保护
+
+本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。
+
+## 七、隐私政策变更
+
+本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。', '<p>DaxPay（以下简称"本平台"）高度重视用户隐私保护。本隐私政策说明本平台在您使用服务时如何收集、使用、共享和保护您的个人信息。请您仔细阅读本政策，使用本平台服务即表示您同意本政策所述内容。</p>
+<h2>一、信息收集</h2>
+<p>本平台在您使用服务过程中可能收集以下信息：</p>
+<ol>
+<li>账号信息：用户名、密码（加密存储）、角色信息；</li>
+<li>交易信息：订单数据、交易记录、资金流水；</li>
+<li>设备信息：设备标识、操作系统、网络状态；</li>
+<li>日志信息：登录时间、操作日志、访问记录。</li>
+</ol>
+<h2>二、信息使用</h2>
+<p>收集的信息将用于：</p>
+<ol>
+<li>提供支付管理与交易服务；</li>
+<li>身份验证与安全保障；</li>
+<li>数据统计与业务分析；</li>
+<li>风险控制与反欺诈；</li>
+<li>法律法规要求或监管需要。</li>
+</ol>
+<h2>三、信息共享</h2>
+<p>本平台不会向第三方出售您的个人信息。在以下情形下，本平台可能共享您的信息：</p>
+<ol>
+<li>获得您的明确同意；</li>
+<li>根据法律法规或有权机关的要求；</li>
+<li>与合作支付通道完成交易（仅限必要信息）；</li>
+<li>为维护本平台合法权益。</li>
+</ol>
+<h2>四、信息安全</h2>
+<p>本平台采取行业通行的安全措施（包括数据加密、访问控制、安全审计等）保护您的信息安全。但请注意，互联网传输并非绝对安全，本平台不能保证信息传输的绝对安全性。</p>
+<h2>五、用户权利</h2>
+<p>您对个人信息享有以下权利：</p>
+<ol>
+<li>查询、更正个人信息；</li>
+<li>删除个人信息或注销账号；</li>
+<li>撤回授权同意；</li>
+<li>投诉举报。</li>
+</ol>
+<p>行使上述权利请联系本平台客服。</p>
+<h2>六、未成年人保护</h2>
+<p>本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。</p>
+<h2>七、隐私政策变更</h2>
+<p>本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', '小程序端隐私政策模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000106, 2091000000000000004, 'en-US', 1, 'v1.0', 'DaxPay Privacy Policy', 'DaxPay ("the Platform") takes user privacy seriously. This Privacy Policy explains how the Platform collects, uses, shares, and protects your personal information when you use our services. Please read this policy carefully. Using the Platform''s services indicates your agreement with this policy.
+
+## 1. Information Collection
+
+The Platform may collect the following information when you use our services:
+
+1. Account information: username, password (encrypted), role information;
+2. Transaction information: order data, transaction records, fund flow;
+3. Device information: device identifier, operating system, network status;
+4. Log information: login time, operation logs, access records.
+
+## 2. Information Use
+
+The collected information will be used for:
+
+1. Providing payment management and transaction services;
+2. Identity verification and security;
+3. Data statistics and business analysis;
+4. Risk control and anti-fraud;
+5. Legal or regulatory requirements.
+
+## 3. Information Sharing
+
+The Platform will not sell your personal information to third parties. Under the following circumstances, the Platform may share your information:
+
+1. With your explicit consent;
+2. As required by laws, regulations, or competent authorities;
+3. With partner payment channels to complete transactions (only necessary information);
+4. To protect the Platform''s lawful rights.
+
+## 4. Information Security
+
+The Platform adopts industry-standard security measures (including data encryption, access control, and security audits) to protect your information. However, please note that internet transmission is not absolutely secure, and the Platform cannot guarantee absolute security of information transmission.
+
+## 5. User Rights
+
+You have the following rights regarding your personal information:
+
+1. Access and correct your personal information;
+2. Delete your personal information or deactivate your account;
+3. Withdraw your consent;
+4. File complaints or reports.
+
+To exercise these rights, please contact the Platform''s customer service.
+
+## 6. Protection of Minors
+
+The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.
+
+## 7. Changes to this Privacy Policy
+
+The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.', '<p>DaxPay ("the Platform") takes user privacy seriously. This Privacy Policy explains how the Platform collects, uses, shares, and protects your personal information when you use our services. Please read this policy carefully. Using the Platform''s services indicates your agreement with this policy.</p>
+<h2>1. Information Collection</h2>
+<p>The Platform may collect the following information when you use our services:</p>
+<ol>
+<li>Account information: username, password (encrypted), role information;</li>
+<li>Transaction information: order data, transaction records, fund flow;</li>
+<li>Device information: device identifier, operating system, network status;</li>
+<li>Log information: login time, operation logs, access records.</li>
+</ol>
+<h2>2. Information Use</h2>
+<p>The collected information will be used for:</p>
+<ol>
+<li>Providing payment management and transaction services;</li>
+<li>Identity verification and security;</li>
+<li>Data statistics and business analysis;</li>
+<li>Risk control and anti-fraud;</li>
+<li>Legal or regulatory requirements.</li>
+</ol>
+<h2>3. Information Sharing</h2>
+<p>The Platform will not sell your personal information to third parties. Under the following circumstances, the Platform may share your information:</p>
+<ol>
+<li>With your explicit consent;</li>
+<li>As required by laws, regulations, or competent authorities;</li>
+<li>With partner payment channels to complete transactions (only necessary information);</li>
+<li>To protect the Platform''s lawful rights.</li>
+</ol>
+<h2>4. Information Security</h2>
+<p>The Platform adopts industry-standard security measures (including data encryption, access control, and security audits) to protect your information. However, please note that internet transmission is not absolutely secure, and the Platform cannot guarantee absolute security of information transmission.</p>
+<h2>5. User Rights</h2>
+<p>You have the following rights regarding your personal information:</p>
+<ol>
+<li>Access and correct your personal information;</li>
+<li>Delete your personal information or deactivate your account;</li>
+<li>Withdraw your consent;</li>
+<li>File complaints or reports.</li>
+</ol>
+<p>To exercise these rights, please contact the Platform''s customer service.</p>
+<h2>6. Protection of Minors</h2>
+<p>The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.</p>
+<h2>7. Changes to this Privacy Policy</h2>
+<p>The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', 'English template of the mini program privacy policy', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000107, 2091000000000000001, 'en-US', 1, 'v1.0', 'DaxPay Terms of Service', '## 1. Acceptance of Terms
+
+Welcome to the DaxPay Payment Management Platform ("the Platform"). Please read and fully understand all terms of this agreement before using the Platform''s services. By clicking "Agree" or using the Platform''s services, you acknowledge that you have read and accepted all terms of this agreement, which constitutes a legally binding contract between you and the Platform.
+
+## 2. Service Description
+
+The Platform provides merchants and operators with payment transaction management, fund settlement, order inquiry, data statistics, and related value-added services. The specific services are subject to the Platform''s actual offerings. The Platform reserves the right to adjust, upgrade, or terminate services.
+
+## 3. User Account
+
+1. You shall register and manage your account with true and accurate information, and you are solely responsible for the security of your account and password.
+2. You shall not transfer or lend your account to any third party. You shall bear all responsibilities arising therefrom.
+3. If you discover any security risk or unauthorized use of your account, you shall notify the Platform immediately.
+
+## 4. User Conduct
+
+You agree not to use the Platform to engage in the following:
+
+1. Acts that violate applicable laws and regulations;
+2. Acts that infringe upon the lawful rights of others;
+3. Fraudulent transactions, money laundering, cash-out, or other illicit payment activities;
+4. Acts that compromise the Platform''s system security or interfere with its normal operation;
+5. Other acts that harm the rights of the Platform or any third party.
+
+## 5. Intellectual Property
+
+All content on the Platform, including but not limited to text, images, software, interface design, and source code, is owned by the Platform. Without written authorization, you may not copy, reproduce, modify, or use it for other commercial purposes.
+
+## 6. Disclaimer
+
+1. The Platform is not liable for service interruptions caused by force majeure, system maintenance, or network failures.
+2. The Platform does not guarantee the absolute completeness or accuracy of transaction data. You shall verify relevant information in a timely manner.
+3. The Platform is not liable for any losses arising from your breach of this agreement or applicable laws.
+
+## 7. Changes to the Agreement
+
+The Platform reserves the right to modify this agreement in accordance with laws, regulations, and business development. The modified agreement will be published on the Platform. Your continued use of the services constitutes acceptance of the modified agreement; if you disagree, you shall cease using the Platform''s services.
+
+## 8. Governing Law and Dispute Resolution
+
+The formation, performance, and interpretation of this agreement shall be governed by the laws of the People''s Republic of China. Disputes arising from this agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may bring a lawsuit before a people''s court with jurisdiction at the Platform''s location.', '<h2>1. Acceptance of Terms</h2>
+<p>Welcome to the DaxPay Payment Management Platform ("the Platform"). Please read and fully understand all terms of this agreement before using the Platform''s services. By clicking "Agree" or using the Platform''s services, you acknowledge that you have read and accepted all terms of this agreement, which constitutes a legally binding contract between you and the Platform.</p>
+<h2>2. Service Description</h2>
+<p>The Platform provides merchants and operators with payment transaction management, fund settlement, order inquiry, data statistics, and related value-added services. The specific services are subject to the Platform''s actual offerings. The Platform reserves the right to adjust, upgrade, or terminate services.</p>
+<h2>3. User Account</h2>
+<ol>
+<li>You shall register and manage your account with true and accurate information, and you are solely responsible for the security of your account and password.</li>
+<li>You shall not transfer or lend your account to any third party. You shall bear all responsibilities arising therefrom.</li>
+<li>If you discover any security risk or unauthorized use of your account, you shall notify the Platform immediately.</li>
+</ol>
+<h2>4. User Conduct</h2>
+<p>You agree not to use the Platform to engage in the following:</p>
+<ol>
+<li>Acts that violate applicable laws and regulations;</li>
+<li>Acts that infringe upon the lawful rights of others;</li>
+<li>Fraudulent transactions, money laundering, cash-out, or other illicit payment activities;</li>
+<li>Acts that compromise the Platform''s system security or interfere with its normal operation;</li>
+<li>Other acts that harm the rights of the Platform or any third party.</li>
+</ol>
+<h2>5. Intellectual Property</h2>
+<p>All content on the Platform, including but not limited to text, images, software, interface design, and source code, is owned by the Platform. Without written authorization, you may not copy, reproduce, modify, or use it for other commercial purposes.</p>
+<h2>6. Disclaimer</h2>
+<ol>
+<li>The Platform is not liable for service interruptions caused by force majeure, system maintenance, or network failures.</li>
+<li>The Platform does not guarantee the absolute completeness or accuracy of transaction data. You shall verify relevant information in a timely manner.</li>
+<li>The Platform is not liable for any losses arising from your breach of this agreement or applicable laws.</li>
+</ol>
+<h2>7. Changes to the Agreement</h2>
+<p>The Platform reserves the right to modify this agreement in accordance with laws, regulations, and business development. The modified agreement will be published on the Platform. Your continued use of the services constitutes acceptance of the modified agreement; if you disagree, you shall cease using the Platform''s services.</p>
+<h2>8. Governing Law and Dispute Resolution</h2>
+<p>The formation, performance, and interpretation of this agreement shall be governed by the laws of the People''s Republic of China. Disputes arising from this agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may bring a lawsuit before a people''s court with jurisdiction at the Platform''s location.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', 'Web 端用户服务协议英文模板', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000108, 2091000000000000002, 'en-US', 1, 'v1.0', 'DaxPay Privacy Policy', 'DaxPay ("the Platform") takes user privacy seriously. This Privacy Policy explains how the Platform collects, uses, shares, and protects your personal information when you use our services. Please read this policy carefully. Using the Platform''s services indicates your agreement with this policy.
+
+## 1. Information Collection
+
+The Platform may collect the following information when you use our services:
+
+1. Account information: username, password (encrypted), role information;
+2. Transaction information: order data, transaction records, fund flow;
+3. Device information: device identifier, operating system, network status;
+4. Log information: login time, operation logs, access records.
+
+## 2. Information Use
+
+The collected information will be used for:
+
+1. Providing payment management and transaction services;
+2. Identity verification and security;
+3. Data statistics and business analysis;
+4. Risk control and anti-fraud;
+5. Legal or regulatory requirements.
+
+## 3. Information Sharing
+
+The Platform will not sell your personal information to third parties. Under the following circumstances, the Platform may share your information:
+
+1. With your explicit consent;
+2. As required by laws, regulations, or competent authorities;
+3. With partner payment channels to complete transactions (only necessary information);
+4. To protect the Platform''s lawful rights.
+
+## 4. Information Security
+
+The Platform adopts industry-standard security measures (including data encryption, access control, and security audits) to protect your information. However, please note that internet transmission is not absolutely secure, and the Platform cannot guarantee absolute security of information transmission.
+
+## 5. User Rights
+
+You have the following rights regarding your personal information:
+
+1. Access and correct your personal information;
+2. Delete your personal information or deactivate your account;
+3. Withdraw your consent;
+4. File complaints or reports.
+
+To exercise these rights, please contact the Platform''s customer service.
+
+## 6. Protection of Minors
+
+The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.
+
+## 7. Changes to this Privacy Policy
+
+The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.', '<p>DaxPay ("the Platform") takes user privacy seriously. This Privacy Policy explains how the Platform collects, uses, shares, and protects your personal information when you use our services. Please read this policy carefully. Using the Platform''s services indicates your agreement with this policy.</p>
+<h2>1. Information Collection</h2>
+<p>The Platform may collect the following information when you use our services:</p>
+<ol>
+<li>Account information: username, password (encrypted), role information;</li>
+<li>Transaction information: order data, transaction records, fund flow;</li>
+<li>Device information: device identifier, operating system, network status;</li>
+<li>Log information: login time, operation logs, access records.</li>
+</ol>
+<h2>2. Information Use</h2>
+<p>The collected information will be used for:</p>
+<ol>
+<li>Providing payment management and transaction services;</li>
+<li>Identity verification and security;</li>
+<li>Data statistics and business analysis;</li>
+<li>Risk control and anti-fraud;</li>
+<li>Legal or regulatory requirements.</li>
+</ol>
+<h2>3. Information Sharing</h2>
+<p>The Platform will not sell your personal information to third parties. Under the following circumstances, the Platform may share your information:</p>
+<ol>
+<li>With your explicit consent;</li>
+<li>As required by laws, regulations, or competent authorities;</li>
+<li>With partner payment channels to complete transactions (only necessary information);</li>
+<li>To protect the Platform''s lawful rights.</li>
+</ol>
+<h2>4. Information Security</h2>
+<p>The Platform adopts industry-standard security measures (including data encryption, access control, and security audits) to protect your information. However, please note that internet transmission is not absolutely secure, and the Platform cannot guarantee absolute security of information transmission.</p>
+<h2>5. User Rights</h2>
+<p>You have the following rights regarding your personal information:</p>
+<ol>
+<li>Access and correct your personal information;</li>
+<li>Delete your personal information or deactivate your account;</li>
+<li>Withdraw your consent;</li>
+<li>File complaints or reports.</li>
+</ol>
+<p>To exercise these rights, please contact the Platform''s customer service.</p>
+<h2>6. Protection of Minors</h2>
+<p>The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.</p>
+<h2>7. Changes to this Privacy Policy</h2>
+<p>The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', 'Web 端隐私政策英文模板', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
 
 --
 -- Data for Name: iam_perm_code; Type: TABLE DATA; Schema: public; Owner: -
