@@ -31,7 +31,11 @@ import { argv, exit, platform, cwd } from 'node:process'
 
 import { KEEP_TABLES, BOOTX_ADMIN_TABLES, BOOTX_LINK_RULES, MOCK_ROW_RULES, parseInsert, isMockRow } from './redact-data.mjs'
 import { createGenerator } from './demo-gen.mjs'
-import { ANCHORS, buildIdentity, buildChannels, buildTransactions, buildAssertBlock } from './demo-dataset.mjs'
+import {
+  ANCHORS, buildIdentity, buildChannels, buildTerminals, buildGateway, buildTransactions,
+  buildGatewayOrders, buildAbnormalOrders, buildNotices, buildSecurity, buildTransfers, buildP2Extras,
+  assertConsistency, buildAssertBlock,
+} from './demo-dataset.mjs'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const sqlDir = resolve(here, '..')                    // _config/sql
@@ -416,8 +420,14 @@ function buildDemoSection() {
   const gen = createGenerator(schemaSection.body, {
     track: new Set([
       'mch_info.mch_no', 'iam_user_info.id', 'mch_app_info.app_id',
+      'mch_store_info.store_no',
+      'device_terminal.terminal_no', 'device_channel_terminal.id', 'device_channel_terminal.out_terminal_no',
+      'device_qr_code.code',
       'pay_route_strategy.id', 'pay_normal_order.id',
       'pay_trade.id', 'pay_trade.trade_no', 'mch_notice_task.id',
+      'pay_gateway_pay_config.id', 'pay_gateway_order.id',
+      // 通知全家桶 / 安全域（2026-11-10）：公告被已读记录回指、黑名单被风险命中回指
+      'notify_notice.id', 'pay_blacklist.id',
     ]),
     refs: [
       { table: 'mch_info', col: 'admin_user_id', to: 'iam_user_info', toCol: 'id' },
@@ -428,22 +438,79 @@ function buildDemoSection() {
       { table: 'mch_credential', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
       { table: 'mch_channel_merchant', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
       { table: 'mch_store_info', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'mch_store_info', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
       { table: 'device_qr_code', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'device_qr_code', col: 'store_no', to: 'mch_store_info', toCol: 'store_no' },
+      // 终端设备域：终端→门店、通道终端→商户、绑定→终端/通道终端、虚拟设备→门店/应用、播报打印配置→应用
+      { table: 'device_terminal', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'device_terminal', col: 'store_no', to: 'mch_store_info', toCol: 'store_no' },
+      { table: 'device_channel_terminal', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'device_terminal_channel_bind', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'device_terminal_channel_bind', col: 'system_terminal_no', to: 'device_terminal', toCol: 'terminal_no' },
+      { table: 'device_terminal_channel_bind', col: 'channel_terminal_id', to: 'device_channel_terminal', toCol: 'id' },
+      { table: 'device_virtual', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'device_virtual', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
+      { table: 'device_virtual', col: 'store_no', to: 'mch_store_info', toCol: 'store_no' },
+      { table: 'device_mch_app_config', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'device_mch_app_config', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
+      // 路由：策略收敛为唯一 basic 行（双策略行会触发运行时 oneOpt 异常），basic 子表回指策略主表
       { table: 'pay_route_strategy', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
       { table: 'pay_route_basic_config', col: 'strategy_id', to: 'pay_route_strategy', toCol: 'id' },
+      // 网关配置域：主表→应用、客户端环境→主表、收银项→应用
+      { table: 'pay_gateway_pay_config', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'pay_gateway_pay_config', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
+      { table: 'pay_gateway_pay_client_env', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'pay_gateway_pay_client_env', col: 'config_id', to: 'pay_gateway_pay_config', toCol: 'id' },
+      { table: 'pay_gateway_cashier_item', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'pay_gateway_cashier_item', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
       { table: 'pay_normal_order', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
-      { table: 'pay_trade', col: 'container_id', to: 'pay_normal_order', toCol: 'id' },
+      // 交易四维度跨域引用（2026-11-10）：订单→门店/码牌/终端/通道终端出号
+      { table: 'pay_normal_order', col: 'store_no', to: 'mch_store_info', toCol: 'store_no' },
+      { table: 'pay_normal_order', col: 'qr_code', to: 'device_qr_code', toCol: 'code' },
+      { table: 'pay_normal_order', col: 'terminal_no', to: 'device_terminal', toCol: 'terminal_no' },
+      { table: 'pay_normal_order', col: 'out_terminal_no', to: 'device_channel_terminal', toCol: 'out_terminal_no' },
+      // pay_trade.container_id 不再建 ref：normal/gateway 两套容器分属不同表，
+      // 分型完整性由 demo-dataset checkConsistency 1a/1b + 装机断言 [4.6]#2 双向兜底
+      // 网关订单：→商户/应用/门店；gateway 交易的容器回指同样由断言兜底
+      { table: 'pay_gateway_order', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'pay_gateway_order', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
+      { table: 'pay_gateway_order', col: 'store_no', to: 'mch_store_info', toCol: 'store_no' },
       { table: 'pay_fund_flow', col: 'trade_no', to: 'pay_trade', toCol: 'trade_no' },
       { table: 'pay_refund_order', col: 'trade_no', to: 'pay_trade', toCol: 'trade_no' },
+      // 异常订单 → 交易（动态引用 buildTransactions 生成结果，禁止硬编码）
+      { table: 'pay_abnormal_order', col: 'trade_no', to: 'pay_trade', toCol: 'trade_no' },
       { table: 'mch_notice_record', col: 'task_id', to: 'mch_notice_task', toCol: 'id' },
+      // 通知全家桶（2026-11-10）：已读回指公告、个人消息回指剧本内用户
+      //（notice_read.user_id 与审计日志 user_id 不建 ref：bootx id=1 来自 [2] 段种子，不在 gen 行集内，
+      //  由 checkConsistency 21/27 的 knownUserIds 集合 + 装机断言 [4.6]#27/#33 兜底）
+      { table: 'notify_notice_read', col: 'notice_id', to: 'notify_notice', toCol: 'id' },
+      { table: 'notify_message', col: 'user_id', to: 'iam_user_info', toCol: 'id' },
+      // 安全域：风险命中 → 黑名单（可空，海外命中无名单行）/ 交易（动态引用）
+      { table: 'pay_risk_hit', col: 'blacklist_id', to: 'pay_blacklist', toCol: 'id' },
+      { table: 'pay_risk_hit', col: 'trade_no', to: 'pay_trade', toCol: 'trade_no' },
+      // 域名校验商户行回指商户（平台行 mch_no='0' 不建 ref，由 checkConsistency 24 归属断言兜底）
+      // unipay 日志 / 敏感词命中 → 演示商户（mch_no 可空）
+      { table: 'starter_audit_unipay_log', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
+      { table: 'system_sensitive_word_hit', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
     ],
   })
 
   const ctx = buildIdentity(gen)
   const nIdentity = gen.count()
   buildChannels(gen, ctx)
+  buildTerminals(gen, ctx)
+  buildGateway(gen, ctx)
   const nChannel = gen.count()
   const txStats = buildTransactions(gen, ctx)
+  buildGatewayOrders(gen, ctx, txStats)
+  buildAbnormalOrders(gen, ctx, txStats)
+  // 2026-11-10 三组新维度：通知全家桶 / 安全与平台（依赖 tx 动态交易引用）/ 转账终态单（续用 tx 序列）
+  buildNotices(gen, ctx)
+  buildSecurity(gen, ctx, txStats)
+  buildTransfers(gen, ctx, txStats)
+  buildP2Extras(gen, ctx)
+  // 全部交易域 builder 完成后统一断言（normal + gateway + abnormal + 通知/安全/转账/P2 跨域一致）
+  assertConsistency(gen)
   const { lines, stats } = gen.build()
 
   const part = (from, to) => lines.slice(from, to).join('\n')
@@ -459,18 +526,23 @@ function buildDemoSection() {
     seedSection.bypass,
     '',
     '-- ---------------------------------------------------------------------------',
-    '-- [4.3] 身份与配置（剧本生成：商户 / 用户 / 应用 / 门店 / 码牌 / 路由策略）',
+    '-- [4.3] 身份与配置（剧本生成：商户 / 用户 / 应用 / 门店×5 / 码牌×8 / 路由策略 basic / 协议版本）',
     '-- ---------------------------------------------------------------------------',
     part(0, nIdentity),
     '',
     '-- ---------------------------------------------------------------------------',
-    '-- [4.4] 通道配置（mock 全局/直连凭证 + 模拟服务商 + 微信应用 + mock 产品沙箱生效环境）',
+    '-- [4.4] 通道与设备网关配置（mock 全局/直连凭证 + 模拟服务商 + 微信应用 + mock 产品沙箱生效环境',
+    '--       + 终端设备域 5 表 + 网关支付/收银配置 3 表）',
     '-- ---------------------------------------------------------------------------',
     part(nIdentity, nChannel),
     '',
     '-- ---------------------------------------------------------------------------',
     `-- [4.5] 交易流水（剧本生成：${txStats.orders} 单 / ${txStats.trades} 交易 / ${txStats.refunds} 退款 / `,
-    `--       ${txStats.flows} 资金流水 / ${txStats.notices} 通知任务 / ${txStats.records} 通知记录 / 近 30 天）`,
+    `--       ${txStats.flows} 资金流水 / ${txStats.notices} 通知任务 / ${txStats.records} 通知记录 / 近 30 天；`,
+    `--       网关订单 ${txStats.gwOrders} 笔 / 异常订单 ${txStats.abnormals} 条；`,
+    '--       订单四维度已打通：门店加权分布 / 码牌回指 / 终端绑定链出号 / 方式按码牌形态解析；',
+    `--       通知全家桶（公告 6 / 已读 6 / 个人消息 4）+ 安全与平台（黑名单 5 / 风险命中 4 / 域名校验 4 / 平台配置 2）`,
+    `--       + 转账终态单 ${txStats.transfers ?? 0} 笔 + P2 审计（登录 8 / 操作 5 / unipay 6 / 敏感词命中 3）`,
     '-- ---------------------------------------------------------------------------',
     part(nChannel),
     '',
@@ -639,7 +711,13 @@ if (demoSection) {
   if (!demoSql) {
     assertFails.push('data-demo.sql 未生成（--profile demo/all 却无 [4] 段）')
   } else {
-    for (const anchor of [ANCHORS.mchMain, ANCHORS.appMain, ANCHORS.mockChannelMchNo, ANCHORS.mockWxAppId, ANCHORS.qrCodes[0]]) {
+    for (const anchor of [
+      ANCHORS.mchMain, ANCHORS.appMain, ANCHORS.mockChannelMchNo, ANCHORS.mockWxAppId,
+      ANCHORS.qrCodes[0], ANCHORS.qrCodes[7], ANCHORS.qrCodes[8], ANCHORS.stores[4],
+      ANCHORS.terminals[0], ANCHORS.virtualDevices[0],
+      // 2026-11-10 新维度锚点：黑名单 IP / 域名校验文件名 / 转账单号前缀 / 种子敏感词 / 平台配置
+      '203.0.113.10', 'MP_verify_', 'DEMOTRF', '测试敏感词', 'MP_verify_a1b2c3d4e5f60718',
+    ]) {
       if (!demoSql.includes(anchor)) assertFails.push(`data-demo.sql 缺演示锚点 ${anchor}`)
     }
     for (const t of DEMO_STALE_ANCHORS) {
@@ -653,8 +731,30 @@ if (demoSection) {
     if (!/^DO \$\$/m.test(demoSection.body)) assertFails.push('演示段缺 [4.6] DO $$ 装机期断言')
     if (!/RAISE EXCEPTION/.test(demoSection.body)) assertFails.push('演示段 DO $$ 块无 RAISE EXCEPTION')
     if (demoSection.txStats.orders < 150) assertFails.push(`演示订单数 ${demoSection.txStats.orders} 低于装机断言下限 150`)
+    // 网关订单/异常订单（2026-11-10 新域）：行数下限 + 表必须真实出现
+    if (demoSection.txStats.gwOrders < 9) assertFails.push(`网关订单数 ${demoSection.txStats.gwOrders} 低于预期 9`)
+    if (demoSection.txStats.abnormals < 3) assertFails.push(`异常订单数 ${demoSection.txStats.abnormals} 低于预期 3`)
+    if (!/^INSERT INTO public\.pay_gateway_order /m.test(demoSection.body)) assertFails.push('演示段缺 pay_gateway_order 网关订单')
+    if (!/^INSERT INTO public\.pay_abnormal_order /m.test(demoSection.body)) assertFails.push('演示段缺 pay_abnormal_order 异常订单')
     if (!/^INSERT INTO public\.mock_gateway_credential \(id, /m.test(demoSection.body)) {
       assertFails.push('演示段缺 mock_gateway_credential（主键固定 id=1）')
+    }
+    // 2026-11-10 新维度表必须真实出现（通知全家桶 / 安全与平台 / 转账 / P2 审计）
+    for (const t of [
+      'notify_notice', 'notify_notice_read', 'notify_message',
+      'pay_blacklist', 'pay_risk_hit', 'mch_wx_domain_verify', 'system_platform_config',
+      'starter_audit_login_log', 'starter_audit_operate_log', 'starter_audit_unipay_log',
+      'system_sensitive_word_hit', 'pay_transfer_trade', 'pay_transfer_order_wechat',
+      'pay_transfer_order_alipay', 'pay_transfer_order_douyin',
+    ]) {
+      if (!new RegExp(`^INSERT INTO public\\.${t} `, 'm').test(demoSection.body)) {
+        assertFails.push(`演示段缺 ${t}（2026-11-10 新维度表）`)
+      }
+    }
+    // 黑名单红线构建期兜底：演示段任何黑名单行不得拉黑内网/回环/北京段（构建期断言 22 之外的产物级双保险）
+    const blacklistInserts = demoSection.body.split('\n').filter((ln) => ln.startsWith('INSERT INTO public.pay_blacklist '))
+    if (blacklistInserts.some((ln) => /'127\.|'192\.168\.|'10\.\d|'localhost|'::1|'11(?:0000)?'/.test(ln))) {
+      assertFails.push('演示段黑名单含禁拉段（内网/回环/北京），会拦死本机演示扫码')
     }
     const mockProductCfg = demoSection.body.split('\n').find((ln) => ln.startsWith('INSERT INTO public.pay_md_product_config '))
     if (!mockProductCfg || !mockProductCfg.includes("'mock_pay'") || !mockProductCfg.includes("'sandbox'")) {
@@ -677,6 +777,13 @@ report.push(`[菜单段] 菜单 ${menuSection.menuCount} 条 + 角色绑定 ${me
 if (demoSection) {
   report.push(`[data-demo.sql] 旁路 ${menuSection.bypassCount + seedSection.bypassCount} 条 + 剧本 ${demoSection.rows} 行，${demoSection.tables} 张表 / INSERT ${demoSection.inserts} 条`)
   report.push(`  交易: ${demoSection.txStats.orders} 单 / ${demoSection.txStats.trades} 交易 / ${demoSection.txStats.refunds} 退款 / ${demoSection.txStats.flows} 资金流水 / ${demoSection.txStats.notices} 通知任务 / ${demoSection.txStats.records} 通知记录`)
+  report.push(`  网关: ${demoSection.txStats.gwOrders} 网关订单 / ${demoSection.txStats.gwTrades} gateway 交易；异常订单 ${demoSection.txStats.abnormals} 条`)
+  const dimStats = { notify_notice: 6, notify_notice_read: 6, notify_message: 4, pay_blacklist: 5, pay_risk_hit: 4, mch_wx_domain_verify: 4, system_platform_config: 2, starter_audit_login_log: 8, starter_audit_operate_log: 5, starter_audit_unipay_log: 6, system_sensitive_word_hit: 3, pay_transfer_trade: 3, pay_transfer_order_wechat: 1, pay_transfer_order_alipay: 1, pay_transfer_order_douyin: 1 }
+  const dimBad = Object.entries(dimStats).filter(([t, want]) => {
+    const got = (demoSection.body.match(new RegExp(`^INSERT INTO public\\.${t} `, 'gm')) ?? []).length
+    return got !== want
+  })
+  report.push(`  新维度: ${dimBad.length === 0 ? '行数全部符合预期（通知/安全/转账/审计 15 表）' : `行数不符: ${dimBad.map(([t]) => t).join(', ')}`}`)
 }
 report.push(`[检查] ${assertFails.length ? '存在不通过项' : '全部通过'}`)
 
