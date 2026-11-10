@@ -39,21 +39,22 @@ const repoDir = resolve(sqlDir, '..', '..')           // dax-pay-open 仓根
 const devYml = join(repoDir, 'daxpay-start', 'src', 'main', 'resources', 'application-dev.yml')
 
 // 阶段 A 的硬口径（dev 库 2026-11-02 实测 170 张表 / 2506 条列注释;
-// 2026-11-06 异步通知配置下线删 mch_app_notify_config 后为 169 张）
-const EXPECT_TABLE_COUNT = 169
+// 2026-11-06 异步通知配置下线删 mch_app_notify_config 后为 169 张;
+// 2026-11-09 mock 去多服务商删 mock_isv_credential 后为 168 张）
+const EXPECT_TABLE_COUNT = 168
 const MIN_COLUMN_COMMENTS = 2400
 
-// 演示菜单 id（Demos 6 条 {2,202,204,205,206,208} + mock 工作台 3 条 {4040133,4040134,4040135}）：
-// 纯净版排除，演示版由旁路注入（[4.1] 段）。4040135 = 模拟支付直连工作台（2026-11-08 起）。
+// 演示菜单 id（Demos 6 条 {2,202,204,205,206,208}）：
+// 纯净版排除，演示版由旁路注入（[4.1] 段）。
 // 4010130~4040132 是真实商户分组菜单（menu.payment.merchant.group.*），不是演示菜单，禁止加入本集合。
-const DEMO_MENU_IDS = new Set(['2', '202', '204', '205', '206', '208', '4040133', '4040134', '4040135'])
+const DEMO_MENU_IDS = new Set(['2', '202', '204', '205', '206', '208'])
 
 // 菜单两表之外的硬守卫: 这些表出现在纯净种子即断言失败（凭证/演示数据走演示段, 菜单走菜单段）
 const FORBIDDEN_IN_DATA = new Set([
   'iam_perm_menu', 'iam_role_menu',
   'mch_credential',
-  // 开源版 mock 通道凭证/服务商档案（plus 版为单个 mock_channel_credential, 开源版拆成多张）
-  'mock_channel_credential', 'mock_direct_credential', 'mock_isv_credential',
+  // 开源版 mock 通道凭证/服务商档案（plus 版为单张凭证表, 开源版拆成多张）
+  'mock_gateway_credential', 'mock_pay_credential',
   'mock_isv_info', 'mock_isv_channel_merchant', 'mock_alloc_receiver',
 ])
 
@@ -652,8 +653,8 @@ if (demoSection) {
     if (!/^DO \$\$/m.test(demoSection.body)) assertFails.push('演示段缺 [4.6] DO $$ 装机期断言')
     if (!/RAISE EXCEPTION/.test(demoSection.body)) assertFails.push('演示段 DO $$ 块无 RAISE EXCEPTION')
     if (demoSection.txStats.orders < 150) assertFails.push(`演示订单数 ${demoSection.txStats.orders} 低于装机断言下限 150`)
-    if (!/^INSERT INTO public\.mock_channel_credential \(id, /m.test(demoSection.body)) {
-      assertFails.push('演示段缺 mock_channel_credential（主键固定 id=1）')
+    if (!/^INSERT INTO public\.mock_gateway_credential \(id, /m.test(demoSection.body)) {
+      assertFails.push('演示段缺 mock_gateway_credential（主键固定 id=1）')
     }
     const mockProductCfg = demoSection.body.split('\n').find((ln) => ln.startsWith('INSERT INTO public.pay_md_product_config '))
     if (!mockProductCfg || !mockProductCfg.includes("'mock_pay'") || !mockProductCfg.includes("'sandbox'")) {

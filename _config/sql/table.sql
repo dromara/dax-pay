@@ -1,5 +1,5 @@
 -- ============================================================================
--- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-07T03:23:18.596Z
+-- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-09T03:52:26.466Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432
 -- 内容: [1] 表结构 169 张表（建表 / 主键 / 索引 / 注释）
 -- 用法: 空库先执行本文件，再执行 data.sql（纯净版）或 data-demo.sql（演示版，阶段 B）
@@ -2049,6 +2049,249 @@ COMMENT ON COLUMN public.cpcn_direct_key_config.version IS '版本号';
 COMMENT ON COLUMN public.cpcn_direct_key_config.deleted IS '删除标志';
 
 --
+-- Name: device_channel_terminal; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.device_channel_terminal (
+    id bigint NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    product character varying(64) NOT NULL,
+    channel character varying(64) NOT NULL,
+    type character varying(32) NOT NULL,
+    name character varying(100) NOT NULL,
+    out_terminal_no character varying(64),
+    status character varying(32) DEFAULT 'init'::character varying NOT NULL,
+    error_msg character varying(255),
+    remark character varying(255),
+    mch_no character varying(64) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    extra text
+);
+
+--
+-- Name: TABLE device_channel_terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.device_channel_terminal IS '通道终端台账';
+
+--
+-- Name: COLUMN device_channel_terminal.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.id IS '主键';
+
+--
+-- Name: COLUMN device_channel_terminal.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.channel_mch_no IS '通道商户号';
+
+--
+-- Name: COLUMN device_channel_terminal.product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.product IS '所属支付产品';
+
+--
+-- Name: COLUMN device_channel_terminal.channel; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.channel IS '所属通道编码';
+
+--
+-- Name: COLUMN device_channel_terminal.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.type IS '报送类型';
+
+--
+-- Name: COLUMN device_channel_terminal.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.name IS '终端名称';
+
+--
+-- Name: COLUMN device_channel_terminal.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.out_terminal_no IS '通道侧终端号';
+
+--
+-- Name: COLUMN device_channel_terminal.status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.status IS '登记状态';
+
+--
+-- Name: COLUMN device_channel_terminal.error_msg; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.error_msg IS '错误信息';
+
+--
+-- Name: COLUMN device_channel_terminal.remark; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.remark IS '备注';
+
+--
+-- Name: COLUMN device_channel_terminal.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN device_channel_terminal.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.creator IS '创建者ID';
+
+--
+-- Name: COLUMN device_channel_terminal.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.create_time IS '创建时间';
+
+--
+-- Name: COLUMN device_channel_terminal.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.last_modifier IS '最后修改者ID';
+
+--
+-- Name: COLUMN device_channel_terminal.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN device_channel_terminal.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.version IS '乐观锁版本号';
+
+--
+-- Name: COLUMN device_channel_terminal.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.deleted IS '删除标志';
+
+--
+-- Name: COLUMN device_channel_terminal.extra; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_channel_terminal.extra IS '通道报备参数';
+
+--
+-- Name: device_mch_app_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.device_mch_app_config (
+    id bigint NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64) NOT NULL,
+    broadcast_enable boolean DEFAULT true NOT NULL,
+    print_enable boolean DEFAULT true NOT NULL,
+    template_code character varying(32) DEFAULT 'standard'::character varying NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone DEFAULT now(),
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    store_strict_match boolean
+);
+
+--
+-- Name: TABLE device_mch_app_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.device_mch_app_config IS '商户应用设备联动配置';
+
+--
+-- Name: COLUMN device_mch_app_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.id IS '主键';
+
+--
+-- Name: COLUMN device_mch_app_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.mch_no IS '所属商户编号';
+
+--
+-- Name: COLUMN device_mch_app_config.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.app_id IS '应用号';
+
+--
+-- Name: COLUMN device_mch_app_config.broadcast_enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.broadcast_enable IS '是否播报';
+
+--
+-- Name: COLUMN device_mch_app_config.print_enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.print_enable IS '是否允许打印';
+
+--
+-- Name: COLUMN device_mch_app_config.template_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.template_code IS '打印版式代码';
+
+--
+-- Name: COLUMN device_mch_app_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.creator IS '创建者ID';
+
+--
+-- Name: COLUMN device_mch_app_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.create_time IS '创建时间';
+
+--
+-- Name: COLUMN device_mch_app_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.last_modifier IS '最后修改者ID';
+
+--
+-- Name: COLUMN device_mch_app_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN device_mch_app_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.version IS '版本号';
+
+--
+-- Name: COLUMN device_mch_app_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.deleted IS '删除标志';
+
+--
+-- Name: COLUMN device_mch_app_config.store_strict_match; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_mch_app_config.store_strict_match IS '门店订单严格匹配';
+
+--
 -- Name: device_qr_code; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2193,6 +2436,374 @@ COMMENT ON COLUMN public.device_qr_code.store_no IS '绑定门店号';
 --
 
 COMMENT ON COLUMN public.device_qr_code.allocation IS '是否分账码牌';
+
+--
+-- Name: device_terminal; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.device_terminal (
+    id bigint NOT NULL,
+    terminal_no character varying(32) NOT NULL,
+    name character varying(100) NOT NULL,
+    store_no character varying(64),
+    enable boolean DEFAULT true NOT NULL,
+    remark character varying(255),
+    mch_no character varying(64) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    default_terminal boolean DEFAULT false NOT NULL
+);
+
+--
+-- Name: TABLE device_terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.device_terminal IS '系统终端';
+
+--
+-- Name: COLUMN device_terminal.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.id IS '主键';
+
+--
+-- Name: COLUMN device_terminal.terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.terminal_no IS '系统终端编码';
+
+--
+-- Name: COLUMN device_terminal.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.name IS '终端名称';
+
+--
+-- Name: COLUMN device_terminal.store_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.store_no IS '绑定门店号';
+
+--
+-- Name: COLUMN device_terminal.enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.enable IS '是否启用';
+
+--
+-- Name: COLUMN device_terminal.remark; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.remark IS '备注';
+
+--
+-- Name: COLUMN device_terminal.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN device_terminal.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.creator IS '创建者ID';
+
+--
+-- Name: COLUMN device_terminal.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.create_time IS '创建时间';
+
+--
+-- Name: COLUMN device_terminal.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.last_modifier IS '最后修改者ID';
+
+--
+-- Name: COLUMN device_terminal.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN device_terminal.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.version IS '乐观锁版本号';
+
+--
+-- Name: COLUMN device_terminal.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.deleted IS '删除标志';
+
+--
+-- Name: COLUMN device_terminal.default_terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal.default_terminal IS '是否门店默认终端';
+
+--
+-- Name: device_terminal_channel_bind; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.device_terminal_channel_bind (
+    id bigint NOT NULL,
+    system_terminal_no character varying(32) NOT NULL,
+    channel_terminal_id bigint NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    channel_mch_no character varying(64),
+    channel character varying(32),
+    type character varying(32)
+);
+
+--
+-- Name: TABLE device_terminal_channel_bind; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.device_terminal_channel_bind IS '系统终端与通道终端多对多绑定';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.id IS '主键';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.system_terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.system_terminal_no IS '系统终端编码';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.channel_terminal_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.channel_terminal_id IS '通道终端主键';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.creator IS '创建者ID';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.create_time IS '创建时间';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.last_modifier IS '最后修改者ID';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.version IS '乐观锁版本号';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.deleted IS '删除标志';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.channel_mch_no IS '通道商户号';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.channel; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.channel IS '通道编码';
+
+--
+-- Name: COLUMN device_terminal_channel_bind.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_terminal_channel_bind.type IS '报送类型';
+
+--
+-- Name: device_virtual; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.device_virtual (
+    id bigint NOT NULL,
+    name character varying(128),
+    device_no character varying(64),
+    batch_no character varying(64),
+    mch_no character varying(64),
+    app_id character varying(64),
+    store_no character varying(32),
+    enable boolean DEFAULT true NOT NULL,
+    secret character varying(64),
+    last_pay_ack_time timestamp(6) with time zone,
+    last_pay_ack_msg_id character varying(64),
+    last_pay_ack_ok boolean,
+    last_online_time timestamp(6) with time zone,
+    creator bigint,
+    create_time timestamp(6) with time zone DEFAULT now(),
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    activated_time timestamp(6) with time zone
+);
+
+--
+-- Name: TABLE device_virtual; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.device_virtual IS '虚拟设备';
+
+--
+-- Name: COLUMN device_virtual.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.id IS '主键';
+
+--
+-- Name: COLUMN device_virtual.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.name IS '设备名称';
+
+--
+-- Name: COLUMN device_virtual.device_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.device_no IS '设备号';
+
+--
+-- Name: COLUMN device_virtual.batch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.batch_no IS '批次号';
+
+--
+-- Name: COLUMN device_virtual.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.mch_no IS '所属商户编号';
+
+--
+-- Name: COLUMN device_virtual.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.app_id IS '关联应用号';
+
+--
+-- Name: COLUMN device_virtual.store_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.store_no IS '使用门店号';
+
+--
+-- Name: COLUMN device_virtual.enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.enable IS '是否启用';
+
+--
+-- Name: COLUMN device_virtual.secret; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.secret IS '播报加密密钥';
+
+--
+-- Name: COLUMN device_virtual.last_pay_ack_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.last_pay_ack_time IS '最近一次收款播报回执时间';
+
+--
+-- Name: COLUMN device_virtual.last_pay_ack_msg_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.last_pay_ack_msg_id IS '最近一次收款播报回执消息ID';
+
+--
+-- Name: COLUMN device_virtual.last_pay_ack_ok; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.last_pay_ack_ok IS '最近一次收款播报回执结果';
+
+--
+-- Name: COLUMN device_virtual.last_online_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.last_online_time IS '设备最后在线时间';
+
+--
+-- Name: COLUMN device_virtual.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.creator IS '创建者ID';
+
+--
+-- Name: COLUMN device_virtual.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.create_time IS '创建时间';
+
+--
+-- Name: COLUMN device_virtual.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.last_modifier IS '最后修改者ID';
+
+--
+-- Name: COLUMN device_virtual.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN device_virtual.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.version IS '版本号';
+
+--
+-- Name: COLUMN device_virtual.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.deleted IS '删除标志';
+
+--
+-- Name: COLUMN device_virtual.activated_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.device_virtual.activated_time IS '最近一次成功激活时间';
 
 --
 -- Name: dougong_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -3297,6 +3908,221 @@ COMMENT ON COLUMN public.dy_platform_app_capability.dy_platform_app_id IS '平�
 COMMENT ON COLUMN public.dy_platform_app_capability.product IS '产品编码';
 
 --
+-- Name: easy_pay_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.easy_pay_config (
+    id bigint NOT NULL,
+    pid integer NOT NULL,
+    app_id character varying(64) NOT NULL,
+    limit_pay character varying(64),
+    mch_no character varying(64) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+--
+-- Name: TABLE easy_pay_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.easy_pay_config IS '易支付场景配置表';
+
+--
+-- Name: COLUMN easy_pay_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.id IS '主键';
+
+--
+-- Name: COLUMN easy_pay_config.pid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.pid IS '易支付商户号';
+
+--
+-- Name: COLUMN easy_pay_config.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.app_id IS '应用号';
+
+--
+-- Name: COLUMN easy_pay_config.limit_pay; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.limit_pay IS '限制支付方式';
+
+--
+-- Name: COLUMN easy_pay_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN easy_pay_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.creator IS '创建人';
+
+--
+-- Name: COLUMN easy_pay_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.create_time IS '创建时间';
+
+--
+-- Name: COLUMN easy_pay_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.last_modifier IS '最后修改人';
+
+--
+-- Name: COLUMN easy_pay_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN easy_pay_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.version IS '乐观锁版本';
+
+--
+-- Name: COLUMN easy_pay_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_config.deleted IS '逻辑删除';
+
+--
+-- Name: easy_pay_credential; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.easy_pay_credential (
+    id bigint NOT NULL,
+    pid integer NOT NULL,
+    app_id character varying(64) NOT NULL,
+    enable boolean DEFAULT false NOT NULL,
+    enable_v1 boolean DEFAULT false NOT NULL,
+    enable_v2 boolean DEFAULT true NOT NULL,
+    md5_key character varying(128),
+    use_system_key boolean DEFAULT true NOT NULL,
+    public_key text,
+    mch_no character varying(64) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+--
+-- Name: TABLE easy_pay_credential; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.easy_pay_credential IS '易支付凭证配置表';
+
+--
+-- Name: COLUMN easy_pay_credential.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.id IS '主键';
+
+--
+-- Name: COLUMN easy_pay_credential.pid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.pid IS '易支付商户号';
+
+--
+-- Name: COLUMN easy_pay_credential.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.app_id IS '应用号';
+
+--
+-- Name: COLUMN easy_pay_credential.enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.enable IS '是否启用';
+
+--
+-- Name: COLUMN easy_pay_credential.enable_v1; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.enable_v1 IS '是否开启V1接口';
+
+--
+-- Name: COLUMN easy_pay_credential.enable_v2; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.enable_v2 IS '是否开启V2接口';
+
+--
+-- Name: COLUMN easy_pay_credential.md5_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.md5_key IS 'V1 MD5密钥';
+
+--
+-- Name: COLUMN easy_pay_credential.use_system_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.use_system_key IS 'V2是否使用系统公私钥';
+
+--
+-- Name: COLUMN easy_pay_credential.public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.public_key IS '商户RSA公钥';
+
+--
+-- Name: COLUMN easy_pay_credential.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN easy_pay_credential.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.creator IS '创建人';
+
+--
+-- Name: COLUMN easy_pay_credential.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.create_time IS '创建时间';
+
+--
+-- Name: COLUMN easy_pay_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.last_modifier IS '最后修改人';
+
+--
+-- Name: COLUMN easy_pay_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN easy_pay_credential.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.version IS '乐观锁版本';
+
+--
+-- Name: COLUMN easy_pay_credential.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_credential.deleted IS '逻辑删除';
+
+--
 -- Name: easy_pay_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3399,6 +4225,389 @@ COMMENT ON COLUMN public.easy_pay_key_config.version IS '乐观锁版本号';
 --
 
 COMMENT ON COLUMN public.easy_pay_key_config.deleted IS '逻辑删除标志';
+
+--
+-- Name: easy_pay_order; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.easy_pay_order (
+    id bigint NOT NULL,
+    order_id bigint,
+    pid integer NOT NULL,
+    app_id character varying(64) NOT NULL,
+    trade_no character varying(128),
+    out_trade_no character varying(100) NOT NULL,
+    api_trade_no character varying(64),
+    type character varying(32),
+    status integer DEFAULT 0 NOT NULL,
+    add_time timestamp(6) with time zone,
+    end_time timestamp(6) with time zone,
+    name character varying(200),
+    money bigint NOT NULL,
+    refund_money bigint DEFAULT 0,
+    notify_url character varying(500),
+    return_url character varying(500),
+    param character varying(500),
+    buyer character varying(128),
+    client_ip character varying(64),
+    api_version character varying(8),
+    pc_call_type character varying(32),
+    pay_url character varying(1000),
+    pay_body text,
+    mch_no character varying(64) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+--
+-- Name: TABLE easy_pay_order; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.easy_pay_order IS '易支付协议订单表';
+
+--
+-- Name: COLUMN easy_pay_order.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.id IS '主键';
+
+--
+-- Name: COLUMN easy_pay_order.order_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.order_id IS '关联内核容器ID';
+
+--
+-- Name: COLUMN easy_pay_order.pid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.pid IS '易支付商户号';
+
+--
+-- Name: COLUMN easy_pay_order.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.app_id IS '应用号';
+
+--
+-- Name: COLUMN easy_pay_order.trade_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.trade_no IS '平台业务单号';
+
+--
+-- Name: COLUMN easy_pay_order.out_trade_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.out_trade_no IS '商户订单号';
+
+--
+-- Name: COLUMN easy_pay_order.api_trade_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.api_trade_no IS '通道订单号';
+
+--
+-- Name: COLUMN easy_pay_order.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.type IS '协议支付方式';
+
+--
+-- Name: COLUMN easy_pay_order.status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.status IS '协议状态 0待付 1成功';
+
+--
+-- Name: COLUMN easy_pay_order.add_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.add_time IS '创建时间';
+
+--
+-- Name: COLUMN easy_pay_order.end_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.end_time IS '完成时间';
+
+--
+-- Name: COLUMN easy_pay_order.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.name IS '商品名称';
+
+--
+-- Name: COLUMN easy_pay_order.money; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.money IS '订单金额';
+
+--
+-- Name: COLUMN easy_pay_order.refund_money; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.refund_money IS '已退款金额';
+
+--
+-- Name: COLUMN easy_pay_order.notify_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.notify_url IS '异步通知地址';
+
+--
+-- Name: COLUMN easy_pay_order.return_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.return_url IS '同步跳转地址';
+
+--
+-- Name: COLUMN easy_pay_order.param; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.param IS '业务扩展参数';
+
+--
+-- Name: COLUMN easy_pay_order.buyer; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.buyer IS '支付用户标识';
+
+--
+-- Name: COLUMN easy_pay_order.client_ip; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.client_ip IS '客户端IP';
+
+--
+-- Name: COLUMN easy_pay_order.api_version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.api_version IS 'API版本 v1/v2';
+
+--
+-- Name: COLUMN easy_pay_order.pc_call_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.pc_call_type IS '支付调用方式';
+
+--
+-- Name: COLUMN easy_pay_order.pay_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.pay_url IS '支付链接';
+
+--
+-- Name: COLUMN easy_pay_order.pay_body; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.pay_body IS '支付参数体';
+
+--
+-- Name: COLUMN easy_pay_order.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN easy_pay_order.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.creator IS '创建人';
+
+--
+-- Name: COLUMN easy_pay_order.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.create_time IS '创建时间';
+
+--
+-- Name: COLUMN easy_pay_order.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.last_modifier IS '最后修改人';
+
+--
+-- Name: COLUMN easy_pay_order.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN easy_pay_order.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.version IS '乐观锁版本';
+
+--
+-- Name: COLUMN easy_pay_order.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_order.deleted IS '逻辑删除';
+
+--
+-- Name: easy_pay_refund_order; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.easy_pay_refund_order (
+    id bigint NOT NULL,
+    mch_no character varying(64),
+    refund_id bigint,
+    easy_pay_order_id bigint,
+    pid integer,
+    app_id character varying(64),
+    refund_no character varying(64),
+    biz_refund_no character varying(64),
+    trade_no character varying(128),
+    out_trade_no character varying(64),
+    money bigint,
+    status integer,
+    api_version character varying(20),
+    add_time timestamp(6) with time zone,
+    end_time timestamp(6) with time zone,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+--
+-- Name: TABLE easy_pay_refund_order; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.easy_pay_refund_order IS '易支付协议退款订单表';
+
+--
+-- Name: COLUMN easy_pay_refund_order.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.id IS '主键ID';
+
+--
+-- Name: COLUMN easy_pay_refund_order.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.mch_no IS '商户编号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.refund_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.refund_id IS '关联内核退款单ID';
+
+--
+-- Name: COLUMN easy_pay_refund_order.easy_pay_order_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.easy_pay_order_id IS '关联易支付订单ID';
+
+--
+-- Name: COLUMN easy_pay_refund_order.pid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.pid IS '易支付商户号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.app_id IS '应用号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.refund_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.refund_no IS '平台退款单号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.biz_refund_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.biz_refund_no IS '商户退款单号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.trade_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.trade_no IS '平台业务单号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.out_trade_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.out_trade_no IS '商户订单号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.money; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.money IS '退款金额';
+
+--
+-- Name: COLUMN easy_pay_refund_order.status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.status IS '协议退款状态';
+
+--
+-- Name: COLUMN easy_pay_refund_order.api_version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.api_version IS 'API版本 v1/v2';
+
+--
+-- Name: COLUMN easy_pay_refund_order.add_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.add_time IS '退款发起时间';
+
+--
+-- Name: COLUMN easy_pay_refund_order.end_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.end_time IS '退款完成时间';
+
+--
+-- Name: COLUMN easy_pay_refund_order.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.creator IS '创建者ID';
+
+--
+-- Name: COLUMN easy_pay_refund_order.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.create_time IS '创建时间';
+
+--
+-- Name: COLUMN easy_pay_refund_order.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.last_modifier IS '最后修改者ID';
+
+--
+-- Name: COLUMN easy_pay_refund_order.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN easy_pay_refund_order.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.version IS '版本号';
+
+--
+-- Name: COLUMN easy_pay_refund_order.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_refund_order.deleted IS '删除标志';
 
 --
 -- Name: epaylinks_direct_key_config; Type: TABLE; Schema: public; Owner: -
@@ -8318,10 +9527,10 @@ COMMENT ON COLUMN public.mock_alloc_receiver.version IS '乐观锁版本号';
 COMMENT ON COLUMN public.mock_alloc_receiver.deleted IS '逻辑删除标志';
 
 --
--- Name: mock_channel_credential; Type: TABLE; Schema: public; Owner: -
+-- Name: mock_gateway_credential; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE public.mock_channel_credential (
+CREATE TABLE public.mock_gateway_credential (
     id bigint NOT NULL,
     merchant_private_key text,
     platform_public_key text,
@@ -8334,154 +9543,64 @@ CREATE TABLE public.mock_channel_credential (
 );
 
 --
--- Name: TABLE mock_channel_credential; Type: COMMENT; Schema: public; Owner: -
+-- Name: TABLE mock_gateway_credential; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.mock_channel_credential IS 'Mock 通道网关签名密钥';
+COMMENT ON TABLE public.mock_gateway_credential IS 'Mock 通道网关签名密钥';
 
 --
--- Name: COLUMN mock_channel_credential.id; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.id IS '主键';
+COMMENT ON COLUMN public.mock_gateway_credential.id IS '主键';
 
 --
--- Name: COLUMN mock_channel_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.merchant_private_key IS '商户私钥';
+COMMENT ON COLUMN public.mock_gateway_credential.merchant_private_key IS '商户私钥';
 
 --
--- Name: COLUMN mock_channel_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.platform_public_key IS '平台公钥';
+COMMENT ON COLUMN public.mock_gateway_credential.platform_public_key IS '平台公钥';
 
 --
--- Name: COLUMN mock_channel_credential.creator; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.creator; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.creator IS '创建人';
+COMMENT ON COLUMN public.mock_gateway_credential.creator IS '创建人';
 
 --
--- Name: COLUMN mock_channel_credential.create_time; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.create_time IS '创建时间';
+COMMENT ON COLUMN public.mock_gateway_credential.create_time IS '创建时间';
 
 --
--- Name: COLUMN mock_channel_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.last_modifier IS '最后修改人';
+COMMENT ON COLUMN public.mock_gateway_credential.last_modifier IS '最后修改人';
 
 --
--- Name: COLUMN mock_channel_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN public.mock_gateway_credential.last_modified_time IS '最后修改时间';
 
 --
--- Name: COLUMN mock_channel_credential.version; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.version IS '乐观锁版本号';
+COMMENT ON COLUMN public.mock_gateway_credential.version IS '乐观锁版本号';
 
 --
--- Name: COLUMN mock_channel_credential.deleted; Type: COMMENT; Schema: public; Owner: -
+-- Name: COLUMN mock_gateway_credential.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.deleted IS '逻辑删除标志';
-
---
--- Name: mock_direct_credential; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_direct_credential (
-    id bigint NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    merchant_private_key text,
-    platform_public_key text,
-    gateway_base_url character varying(256),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE mock_direct_credential; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_direct_credential IS 'Mock 直连商户接入密钥';
-
---
--- Name: COLUMN mock_direct_credential.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.id IS '主键';
-
---
--- Name: COLUMN mock_direct_credential.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.channel_mch_no IS '通道商户号';
-
---
--- Name: COLUMN mock_direct_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.merchant_private_key IS '商户私钥';
-
---
--- Name: COLUMN mock_direct_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.platform_public_key IS '平台公钥';
-
---
--- Name: COLUMN mock_direct_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.gateway_base_url IS '商户接入网关地址';
-
---
--- Name: COLUMN mock_direct_credential.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.creator IS '创建人';
-
---
--- Name: COLUMN mock_direct_credential.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.create_time IS '创建时间';
-
---
--- Name: COLUMN mock_direct_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.last_modifier IS '最后修改人';
-
---
--- Name: COLUMN mock_direct_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN mock_direct_credential.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.version IS '乐观锁版本号';
-
---
--- Name: COLUMN mock_direct_credential.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.deleted IS '逻辑删除标志';
+COMMENT ON COLUMN public.mock_gateway_credential.deleted IS '逻辑删除标志';
 
 --
 -- Name: mock_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -8574,96 +9693,6 @@ COMMENT ON COLUMN public.mock_isv_channel_merchant.deleted IS '逻辑删除标�
 COMMENT ON COLUMN public.mock_isv_channel_merchant.isv_id IS '归属模拟服务商ID';
 
 --
--- Name: mock_isv_credential; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_isv_credential (
-    id bigint NOT NULL,
-    isv_no character varying(32) NOT NULL,
-    merchant_private_key text,
-    platform_public_key text,
-    gateway_base_url character varying(256),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE mock_isv_credential; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_isv_credential IS 'Mock 服务商接入密钥';
-
---
--- Name: COLUMN mock_isv_credential.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.id IS '主键';
-
---
--- Name: COLUMN mock_isv_credential.isv_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.isv_no IS '服务商编号';
-
---
--- Name: COLUMN mock_isv_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.merchant_private_key IS '商户私钥';
-
---
--- Name: COLUMN mock_isv_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.platform_public_key IS '平台公钥';
-
---
--- Name: COLUMN mock_isv_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.gateway_base_url IS '服务商接入网关地址';
-
---
--- Name: COLUMN mock_isv_credential.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.creator IS '创建人';
-
---
--- Name: COLUMN mock_isv_credential.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.create_time IS '创建时间';
-
---
--- Name: COLUMN mock_isv_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.last_modifier IS '最后修改人';
-
---
--- Name: COLUMN mock_isv_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN mock_isv_credential.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.version IS '乐观锁版本号';
-
---
--- Name: COLUMN mock_isv_credential.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.deleted IS '逻辑删除标志';
-
---
 -- Name: mock_isv_info; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -8752,6 +9781,96 @@ COMMENT ON COLUMN public.mock_isv_info.deleted IS '逻辑删除标志';
 --
 
 COMMENT ON COLUMN public.mock_isv_info.pay_enable IS '是否启用服务商支付';
+
+--
+-- Name: mock_pay_credential; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_pay_credential (
+    id bigint NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    merchant_private_key text,
+    platform_public_key text,
+    gateway_base_url character varying(256),
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+--
+-- Name: TABLE mock_pay_credential; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_pay_credential IS 'Mock 直连商户接入密钥';
+
+--
+-- Name: COLUMN mock_pay_credential.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.id IS '主键';
+
+--
+-- Name: COLUMN mock_pay_credential.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.channel_mch_no IS '通道商户号';
+
+--
+-- Name: COLUMN mock_pay_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.merchant_private_key IS '商户私钥';
+
+--
+-- Name: COLUMN mock_pay_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.platform_public_key IS '平台公钥';
+
+--
+-- Name: COLUMN mock_pay_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.gateway_base_url IS '商户接入网关地址';
+
+--
+-- Name: COLUMN mock_pay_credential.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.creator IS '创建人';
+
+--
+-- Name: COLUMN mock_pay_credential.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.create_time IS '创建时间';
+
+--
+-- Name: COLUMN mock_pay_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.last_modifier IS '最后修改人';
+
+--
+-- Name: COLUMN mock_pay_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.last_modified_time IS '最后修改时间';
+
+--
+-- Name: COLUMN mock_pay_credential.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.version IS '乐观锁版本号';
+
+--
+-- Name: COLUMN mock_pay_credential.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_pay_credential.deleted IS '逻辑删除标志';
 
 --
 -- Name: notify_mail_record; Type: TABLE; Schema: public; Owner: -
@@ -10019,145 +11138,6 @@ COMMENT ON COLUMN public.pay_callback_record.status IS '回调处理状态';
 COMMENT ON COLUMN public.pay_callback_record.error_msg IS '错误信息';
 
 --
--- Name: pay_channel_terminal; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_channel_terminal (
-    id bigint NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    product character varying(64) NOT NULL,
-    channel character varying(64) NOT NULL,
-    type character varying(32) NOT NULL,
-    name character varying(100) NOT NULL,
-    out_terminal_no character varying(64),
-    status character varying(32) DEFAULT 'init'::character varying NOT NULL,
-    error_msg character varying(255),
-    remark character varying(255),
-    mch_no character varying(64) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    extra text
-);
-
---
--- Name: TABLE pay_channel_terminal; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_channel_terminal IS '通道终端台账';
-
---
--- Name: COLUMN pay_channel_terminal.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.id IS '主键';
-
---
--- Name: COLUMN pay_channel_terminal.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.channel_mch_no IS '通道商户号';
-
---
--- Name: COLUMN pay_channel_terminal.product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.product IS '所属支付产品';
-
---
--- Name: COLUMN pay_channel_terminal.channel; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.channel IS '所属通道编码';
-
---
--- Name: COLUMN pay_channel_terminal.type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.type IS '报送类型';
-
---
--- Name: COLUMN pay_channel_terminal.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.name IS '终端名称';
-
---
--- Name: COLUMN pay_channel_terminal.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.out_terminal_no IS '通道侧终端号';
-
---
--- Name: COLUMN pay_channel_terminal.status; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.status IS '登记状态';
-
---
--- Name: COLUMN pay_channel_terminal.error_msg; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.error_msg IS '错误信息';
-
---
--- Name: COLUMN pay_channel_terminal.remark; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.remark IS '备注';
-
---
--- Name: COLUMN pay_channel_terminal.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_channel_terminal.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.creator IS '创建者ID';
-
---
--- Name: COLUMN pay_channel_terminal.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_channel_terminal.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.last_modifier IS '最后修改者ID';
-
---
--- Name: COLUMN pay_channel_terminal.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_channel_terminal.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.version IS '乐观锁版本号';
-
---
--- Name: COLUMN pay_channel_terminal.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.deleted IS '删除标志';
-
---
--- Name: COLUMN pay_channel_terminal.extra; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_channel_terminal.extra IS '通道报备参数';
-
---
 -- Name: pay_close_record; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -10295,604 +11275,6 @@ COMMENT ON COLUMN public.pay_close_record.version IS '乐观锁版本号';
 --
 
 COMMENT ON COLUMN public.pay_close_record.deleted IS '逻辑删除标志';
-
---
--- Name: pay_easy_pay_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_easy_pay_config (
-    id bigint NOT NULL,
-    pid integer NOT NULL,
-    app_id character varying(64) NOT NULL,
-    limit_pay character varying(64),
-    mch_no character varying(64) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE pay_easy_pay_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_easy_pay_config IS '易支付场景配置表';
-
---
--- Name: COLUMN pay_easy_pay_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.id IS '主键';
-
---
--- Name: COLUMN pay_easy_pay_config.pid; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.pid IS '易支付商户号';
-
---
--- Name: COLUMN pay_easy_pay_config.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.app_id IS '应用号';
-
---
--- Name: COLUMN pay_easy_pay_config.limit_pay; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.limit_pay IS '限制支付方式';
-
---
--- Name: COLUMN pay_easy_pay_config.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_easy_pay_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.creator IS '创建人';
-
---
--- Name: COLUMN pay_easy_pay_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_easy_pay_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.last_modifier IS '最后修改人';
-
---
--- Name: COLUMN pay_easy_pay_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_easy_pay_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.version IS '乐观锁版本';
-
---
--- Name: COLUMN pay_easy_pay_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_config.deleted IS '逻辑删除';
-
---
--- Name: pay_easy_pay_credential; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_easy_pay_credential (
-    id bigint NOT NULL,
-    pid integer NOT NULL,
-    app_id character varying(64) NOT NULL,
-    enable boolean DEFAULT false NOT NULL,
-    enable_v1 boolean DEFAULT false NOT NULL,
-    enable_v2 boolean DEFAULT true NOT NULL,
-    md5_key character varying(128),
-    use_system_key boolean DEFAULT true NOT NULL,
-    public_key text,
-    mch_no character varying(64) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE pay_easy_pay_credential; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_easy_pay_credential IS '易支付凭证配置表';
-
---
--- Name: COLUMN pay_easy_pay_credential.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.id IS '主键';
-
---
--- Name: COLUMN pay_easy_pay_credential.pid; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.pid IS '易支付商户号';
-
---
--- Name: COLUMN pay_easy_pay_credential.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.app_id IS '应用号';
-
---
--- Name: COLUMN pay_easy_pay_credential.enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.enable IS '是否启用';
-
---
--- Name: COLUMN pay_easy_pay_credential.enable_v1; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.enable_v1 IS '是否开启V1接口';
-
---
--- Name: COLUMN pay_easy_pay_credential.enable_v2; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.enable_v2 IS '是否开启V2接口';
-
---
--- Name: COLUMN pay_easy_pay_credential.md5_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.md5_key IS 'V1 MD5密钥';
-
---
--- Name: COLUMN pay_easy_pay_credential.use_system_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.use_system_key IS 'V2是否使用系统公私钥';
-
---
--- Name: COLUMN pay_easy_pay_credential.public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.public_key IS '商户RSA公钥';
-
---
--- Name: COLUMN pay_easy_pay_credential.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_easy_pay_credential.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.creator IS '创建人';
-
---
--- Name: COLUMN pay_easy_pay_credential.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_easy_pay_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.last_modifier IS '最后修改人';
-
---
--- Name: COLUMN pay_easy_pay_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_easy_pay_credential.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.version IS '乐观锁版本';
-
---
--- Name: COLUMN pay_easy_pay_credential.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_credential.deleted IS '逻辑删除';
-
---
--- Name: pay_easy_pay_order; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_easy_pay_order (
-    id bigint NOT NULL,
-    order_id bigint,
-    pid integer NOT NULL,
-    app_id character varying(64) NOT NULL,
-    trade_no character varying(128),
-    out_trade_no character varying(100) NOT NULL,
-    api_trade_no character varying(64),
-    type character varying(32),
-    status integer DEFAULT 0 NOT NULL,
-    add_time timestamp(6) with time zone,
-    end_time timestamp(6) with time zone,
-    name character varying(200),
-    money bigint NOT NULL,
-    refund_money bigint DEFAULT 0,
-    notify_url character varying(500),
-    return_url character varying(500),
-    param character varying(500),
-    buyer character varying(128),
-    client_ip character varying(64),
-    api_version character varying(8),
-    pc_call_type character varying(32),
-    pay_url character varying(1000),
-    pay_body text,
-    mch_no character varying(64) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE pay_easy_pay_order; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_easy_pay_order IS '易支付协议订单表';
-
---
--- Name: COLUMN pay_easy_pay_order.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.id IS '主键';
-
---
--- Name: COLUMN pay_easy_pay_order.order_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.order_id IS '关联内核容器ID';
-
---
--- Name: COLUMN pay_easy_pay_order.pid; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.pid IS '易支付商户号';
-
---
--- Name: COLUMN pay_easy_pay_order.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.app_id IS '应用号';
-
---
--- Name: COLUMN pay_easy_pay_order.trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.trade_no IS '平台业务单号';
-
---
--- Name: COLUMN pay_easy_pay_order.out_trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.out_trade_no IS '商户订单号';
-
---
--- Name: COLUMN pay_easy_pay_order.api_trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.api_trade_no IS '通道订单号';
-
---
--- Name: COLUMN pay_easy_pay_order.type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.type IS '协议支付方式';
-
---
--- Name: COLUMN pay_easy_pay_order.status; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.status IS '协议状态 0待付 1成功';
-
---
--- Name: COLUMN pay_easy_pay_order.add_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.add_time IS '创建时间';
-
---
--- Name: COLUMN pay_easy_pay_order.end_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.end_time IS '完成时间';
-
---
--- Name: COLUMN pay_easy_pay_order.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.name IS '商品名称';
-
---
--- Name: COLUMN pay_easy_pay_order.money; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.money IS '订单金额';
-
---
--- Name: COLUMN pay_easy_pay_order.refund_money; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.refund_money IS '已退款金额';
-
---
--- Name: COLUMN pay_easy_pay_order.notify_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.notify_url IS '异步通知地址';
-
---
--- Name: COLUMN pay_easy_pay_order.return_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.return_url IS '同步跳转地址';
-
---
--- Name: COLUMN pay_easy_pay_order.param; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.param IS '业务扩展参数';
-
---
--- Name: COLUMN pay_easy_pay_order.buyer; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.buyer IS '支付用户标识';
-
---
--- Name: COLUMN pay_easy_pay_order.client_ip; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.client_ip IS '客户端IP';
-
---
--- Name: COLUMN pay_easy_pay_order.api_version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.api_version IS 'API版本 v1/v2';
-
---
--- Name: COLUMN pay_easy_pay_order.pc_call_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.pc_call_type IS '支付调用方式';
-
---
--- Name: COLUMN pay_easy_pay_order.pay_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.pay_url IS '支付链接';
-
---
--- Name: COLUMN pay_easy_pay_order.pay_body; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.pay_body IS '支付参数体';
-
---
--- Name: COLUMN pay_easy_pay_order.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_easy_pay_order.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.creator IS '创建人';
-
---
--- Name: COLUMN pay_easy_pay_order.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_easy_pay_order.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.last_modifier IS '最后修改人';
-
---
--- Name: COLUMN pay_easy_pay_order.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_easy_pay_order.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.version IS '乐观锁版本';
-
---
--- Name: COLUMN pay_easy_pay_order.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_order.deleted IS '逻辑删除';
-
---
--- Name: pay_easy_pay_refund_order; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_easy_pay_refund_order (
-    id bigint NOT NULL,
-    mch_no character varying(64),
-    refund_id bigint,
-    easy_pay_order_id bigint,
-    pid integer,
-    app_id character varying(64),
-    refund_no character varying(64),
-    biz_refund_no character varying(64),
-    trade_no character varying(128),
-    out_trade_no character varying(64),
-    money bigint,
-    status integer,
-    api_version character varying(20),
-    add_time timestamp(6) with time zone,
-    end_time timestamp(6) with time zone,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0,
-    deleted boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE pay_easy_pay_refund_order; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_easy_pay_refund_order IS '易支付协议退款订单表';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.id IS '主键ID';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.refund_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.refund_id IS '关联内核退款单ID';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.easy_pay_order_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.easy_pay_order_id IS '关联易支付订单ID';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.pid; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.pid IS '易支付商户号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.app_id IS '应用号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.refund_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.refund_no IS '平台退款单号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.biz_refund_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.biz_refund_no IS '商户退款单号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.trade_no IS '平台业务单号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.out_trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.out_trade_no IS '商户订单号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.money; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.money IS '退款金额';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.status; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.status IS '协议退款状态';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.api_version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.api_version IS 'API版本 v1/v2';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.add_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.add_time IS '退款发起时间';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.end_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.end_time IS '退款完成时间';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.creator IS '创建者ID';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.last_modifier IS '最后修改者ID';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.version IS '版本号';
-
---
--- Name: COLUMN pay_easy_pay_refund_order.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.deleted IS '删除标志';
 
 --
 -- Name: pay_fund_flow; Type: TABLE; Schema: public; Owner: -
@@ -11763,110 +12145,6 @@ COMMENT ON COLUMN public.pay_gateway_pay_config.last_modified_time IS '最后修
 --
 
 COMMENT ON COLUMN public.pay_gateway_pay_config.version IS '版本号';
-
---
--- Name: pay_mch_app_device_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_mch_app_device_config (
-    id bigint NOT NULL,
-    mch_no character varying(64) NOT NULL,
-    app_id character varying(64) NOT NULL,
-    broadcast_enable boolean DEFAULT true NOT NULL,
-    print_enable boolean DEFAULT true NOT NULL,
-    template_code character varying(32) DEFAULT 'standard'::character varying NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone DEFAULT now(),
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    store_strict_match boolean
-);
-
---
--- Name: TABLE pay_mch_app_device_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_mch_app_device_config IS '商户应用设备联动配置';
-
---
--- Name: COLUMN pay_mch_app_device_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.id IS '主键';
-
---
--- Name: COLUMN pay_mch_app_device_config.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.mch_no IS '所属商户编号';
-
---
--- Name: COLUMN pay_mch_app_device_config.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.app_id IS '应用号';
-
---
--- Name: COLUMN pay_mch_app_device_config.broadcast_enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.broadcast_enable IS '是否播报';
-
---
--- Name: COLUMN pay_mch_app_device_config.print_enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.print_enable IS '是否允许打印';
-
---
--- Name: COLUMN pay_mch_app_device_config.template_code; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.template_code IS '打印版式代码';
-
---
--- Name: COLUMN pay_mch_app_device_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.creator IS '创建者ID';
-
---
--- Name: COLUMN pay_mch_app_device_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_mch_app_device_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.last_modifier IS '最后修改者ID';
-
---
--- Name: COLUMN pay_mch_app_device_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_mch_app_device_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.version IS '版本号';
-
---
--- Name: COLUMN pay_mch_app_device_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.deleted IS '删除标志';
-
---
--- Name: COLUMN pay_mch_app_device_config.store_strict_match; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_mch_app_device_config.store_strict_match IS '门店订单严格匹配';
 
 --
 -- Name: pay_md_capability; Type: TABLE; Schema: public; Owner: -
@@ -13918,221 +14196,6 @@ COMMENT ON COLUMN public.pay_sync_record.version IS '乐观锁版本号';
 COMMENT ON COLUMN public.pay_sync_record.deleted IS '逻辑删除标志';
 
 --
--- Name: pay_terminal_channel_bind; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_terminal_channel_bind (
-    id bigint NOT NULL,
-    system_terminal_no character varying(32) NOT NULL,
-    channel_terminal_id bigint NOT NULL,
-    mch_no character varying(64) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    channel_mch_no character varying(64),
-    channel character varying(32),
-    type character varying(32)
-);
-
---
--- Name: TABLE pay_terminal_channel_bind; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_terminal_channel_bind IS '系统终端与通道终端多对多绑定';
-
---
--- Name: COLUMN pay_terminal_channel_bind.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.id IS '主键';
-
---
--- Name: COLUMN pay_terminal_channel_bind.system_terminal_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.system_terminal_no IS '系统终端编码';
-
---
--- Name: COLUMN pay_terminal_channel_bind.channel_terminal_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_terminal_id IS '通道终端主键';
-
---
--- Name: COLUMN pay_terminal_channel_bind.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_terminal_channel_bind.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.creator IS '创建者ID';
-
---
--- Name: COLUMN pay_terminal_channel_bind.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_terminal_channel_bind.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.last_modifier IS '最后修改者ID';
-
---
--- Name: COLUMN pay_terminal_channel_bind.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_terminal_channel_bind.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.version IS '乐观锁版本号';
-
---
--- Name: COLUMN pay_terminal_channel_bind.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.deleted IS '删除标志';
-
---
--- Name: COLUMN pay_terminal_channel_bind.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_mch_no IS '通道商户号';
-
---
--- Name: COLUMN pay_terminal_channel_bind.channel; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel IS '通道编码';
-
---
--- Name: COLUMN pay_terminal_channel_bind.type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_channel_bind.type IS '报送类型';
-
---
--- Name: pay_terminal_device; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_terminal_device (
-    id bigint NOT NULL,
-    terminal_no character varying(32) NOT NULL,
-    name character varying(100) NOT NULL,
-    store_no character varying(64),
-    enable boolean DEFAULT true NOT NULL,
-    remark character varying(255),
-    mch_no character varying(64) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    default_terminal boolean DEFAULT false NOT NULL
-);
-
---
--- Name: TABLE pay_terminal_device; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_terminal_device IS '系统终端';
-
---
--- Name: COLUMN pay_terminal_device.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.id IS '主键';
-
---
--- Name: COLUMN pay_terminal_device.terminal_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.terminal_no IS '系统终端编码';
-
---
--- Name: COLUMN pay_terminal_device.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.name IS '终端名称';
-
---
--- Name: COLUMN pay_terminal_device.store_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.store_no IS '绑定门店号';
-
---
--- Name: COLUMN pay_terminal_device.enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.enable IS '是否启用';
-
---
--- Name: COLUMN pay_terminal_device.remark; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.remark IS '备注';
-
---
--- Name: COLUMN pay_terminal_device.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.mch_no IS '商户编号';
-
---
--- Name: COLUMN pay_terminal_device.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.creator IS '创建者ID';
-
---
--- Name: COLUMN pay_terminal_device.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_terminal_device.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.last_modifier IS '最后修改者ID';
-
---
--- Name: COLUMN pay_terminal_device.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_terminal_device.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.version IS '乐观锁版本号';
-
---
--- Name: COLUMN pay_terminal_device.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.deleted IS '删除标志';
-
---
--- Name: COLUMN pay_terminal_device.default_terminal; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_terminal_device.default_terminal IS '是否门店默认终端';
-
---
 -- Name: pay_trade; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -15155,159 +15218,6 @@ COMMENT ON COLUMN public.pay_transfer_trade.deleted IS '逻辑删除';
 --
 
 COMMENT ON COLUMN public.pay_transfer_trade.app_id IS '应用ID';
-
---
--- Name: pay_virtual_device; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.pay_virtual_device (
-    id bigint NOT NULL,
-    name character varying(128),
-    device_no character varying(64),
-    batch_no character varying(64),
-    mch_no character varying(64),
-    app_id character varying(64),
-    store_no character varying(32),
-    enable boolean DEFAULT true NOT NULL,
-    secret character varying(64),
-    last_pay_ack_time timestamp(6) with time zone,
-    last_pay_ack_msg_id character varying(64),
-    last_pay_ack_ok boolean,
-    last_online_time timestamp(6) with time zone,
-    creator bigint,
-    create_time timestamp(6) with time zone DEFAULT now(),
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    activated_time timestamp(6) with time zone
-);
-
---
--- Name: TABLE pay_virtual_device; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.pay_virtual_device IS '虚拟设备';
-
---
--- Name: COLUMN pay_virtual_device.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.id IS '主键';
-
---
--- Name: COLUMN pay_virtual_device.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.name IS '设备名称';
-
---
--- Name: COLUMN pay_virtual_device.device_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.device_no IS '设备号';
-
---
--- Name: COLUMN pay_virtual_device.batch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.batch_no IS '批次号';
-
---
--- Name: COLUMN pay_virtual_device.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.mch_no IS '所属商户编号';
-
---
--- Name: COLUMN pay_virtual_device.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.app_id IS '关联应用号';
-
---
--- Name: COLUMN pay_virtual_device.store_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.store_no IS '使用门店号';
-
---
--- Name: COLUMN pay_virtual_device.enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.enable IS '是否启用';
-
---
--- Name: COLUMN pay_virtual_device.secret; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.secret IS '播报加密密钥';
-
---
--- Name: COLUMN pay_virtual_device.last_pay_ack_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_time IS '最近一次收款播报回执时间';
-
---
--- Name: COLUMN pay_virtual_device.last_pay_ack_msg_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_msg_id IS '最近一次收款播报回执消息ID';
-
---
--- Name: COLUMN pay_virtual_device.last_pay_ack_ok; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_ok IS '最近一次收款播报回执结果';
-
---
--- Name: COLUMN pay_virtual_device.last_online_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.last_online_time IS '设备最后在线时间';
-
---
--- Name: COLUMN pay_virtual_device.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.creator IS '创建者ID';
-
---
--- Name: COLUMN pay_virtual_device.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.create_time IS '创建时间';
-
---
--- Name: COLUMN pay_virtual_device.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.last_modifier IS '最后修改者ID';
-
---
--- Name: COLUMN pay_virtual_device.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.last_modified_time IS '最后修改时间';
-
---
--- Name: COLUMN pay_virtual_device.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.version IS '版本号';
-
---
--- Name: COLUMN pay_virtual_device.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.deleted IS '删除标志';
-
---
--- Name: COLUMN pay_virtual_device.activated_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_virtual_device.activated_time IS '最近一次成功激活时间';
 
 --
 -- Name: sand_direct_key_config; Type: TABLE; Schema: public; Owner: -
@@ -20080,10 +19990,10 @@ ALTER TABLE ONLY public.pay_callback_record
     ADD CONSTRAINT pay_callback_record_pkey PRIMARY KEY (id);
 
 --
--- Name: pay_channel_terminal pay_channel_terminal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: device_channel_terminal pay_channel_terminal_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_channel_terminal
+ALTER TABLE ONLY public.device_channel_terminal
     ADD CONSTRAINT pay_channel_terminal_pkey PRIMARY KEY (id);
 
 --
@@ -20094,10 +20004,10 @@ ALTER TABLE ONLY public.pay_close_record
     ADD CONSTRAINT pay_close_record_pkey PRIMARY KEY (id);
 
 --
--- Name: pay_easy_pay_refund_order pay_easy_pay_refund_order_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: easy_pay_refund_order pay_easy_pay_refund_order_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_easy_pay_refund_order
+ALTER TABLE ONLY public.easy_pay_refund_order
     ADD CONSTRAINT pay_easy_pay_refund_order_pkey PRIMARY KEY (id);
 
 --
@@ -20199,17 +20109,17 @@ ALTER TABLE ONLY public.pay_sync_record
     ADD CONSTRAINT pay_sync_record_pkey PRIMARY KEY (id);
 
 --
--- Name: pay_terminal_channel_bind pay_terminal_channel_bind_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: device_terminal_channel_bind pay_terminal_channel_bind_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_terminal_channel_bind
+ALTER TABLE ONLY public.device_terminal_channel_bind
     ADD CONSTRAINT pay_terminal_channel_bind_pkey PRIMARY KEY (id);
 
 --
--- Name: pay_terminal_device pay_terminal_device_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: device_terminal pay_terminal_device_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_terminal_device
+ALTER TABLE ONLY public.device_terminal
     ADD CONSTRAINT pay_terminal_device_pkey PRIMARY KEY (id);
 
 --
@@ -20486,17 +20396,17 @@ ALTER TABLE ONLY public.mock_alloc_receiver
     ADD CONSTRAINT pk_mock_alloc_receiver PRIMARY KEY (id);
 
 --
--- Name: mock_channel_credential pk_mock_channel_credential; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: mock_gateway_credential pk_mock_channel_credential; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.mock_channel_credential
+ALTER TABLE ONLY public.mock_gateway_credential
     ADD CONSTRAINT pk_mock_channel_credential PRIMARY KEY (id);
 
 --
--- Name: mock_direct_credential pk_mock_direct_credential; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: mock_pay_credential pk_mock_direct_credential; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.mock_direct_credential
+ALTER TABLE ONLY public.mock_pay_credential
     ADD CONSTRAINT pk_mock_direct_credential PRIMARY KEY (id);
 
 --
@@ -20505,13 +20415,6 @@ ALTER TABLE ONLY public.mock_direct_credential
 
 ALTER TABLE ONLY public.mock_isv_channel_merchant
     ADD CONSTRAINT pk_mock_isv_channel_merchant PRIMARY KEY (id);
-
---
--- Name: mock_isv_credential pk_mock_isv_credential; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_isv_credential
-    ADD CONSTRAINT pk_mock_isv_credential PRIMARY KEY (id);
 
 --
 -- Name: mock_isv_info pk_mock_isv_info; Type: CONSTRAINT; Schema: public; Owner: -
@@ -20549,24 +20452,24 @@ ALTER TABLE ONLY public.pay_alloc_order
     ADD CONSTRAINT pk_pay_alloc_order PRIMARY KEY (id);
 
 --
--- Name: pay_easy_pay_config pk_pay_easy_pay_config; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: easy_pay_config pk_pay_easy_pay_config; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_easy_pay_config
+ALTER TABLE ONLY public.easy_pay_config
     ADD CONSTRAINT pk_pay_easy_pay_config PRIMARY KEY (id);
 
 --
--- Name: pay_easy_pay_credential pk_pay_easy_pay_credential; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: easy_pay_credential pk_pay_easy_pay_credential; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_easy_pay_credential
+ALTER TABLE ONLY public.easy_pay_credential
     ADD CONSTRAINT pk_pay_easy_pay_credential PRIMARY KEY (id);
 
 --
--- Name: pay_easy_pay_order pk_pay_easy_pay_order; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: easy_pay_order pk_pay_easy_pay_order; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_easy_pay_order
+ALTER TABLE ONLY public.easy_pay_order
     ADD CONSTRAINT pk_pay_easy_pay_order PRIMARY KEY (id);
 
 --
@@ -20591,10 +20494,10 @@ ALTER TABLE ONLY public.pay_gateway_order
     ADD CONSTRAINT pk_pay_gateway_order PRIMARY KEY (id);
 
 --
--- Name: pay_mch_app_device_config pk_pay_mch_app_device_config; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: device_mch_app_config pk_pay_mch_app_device_config; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_mch_app_device_config
+ALTER TABLE ONLY public.device_mch_app_config
     ADD CONSTRAINT pk_pay_mch_app_device_config PRIMARY KEY (id);
 
 --
@@ -20661,10 +20564,10 @@ ALTER TABLE ONLY public.pay_transfer_trade
     ADD CONSTRAINT pk_pay_transfer_trade PRIMARY KEY (id);
 
 --
--- Name: pay_virtual_device pk_pay_virtual_device; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: device_virtual pk_pay_virtual_device; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.pay_virtual_device
+ALTER TABLE ONLY public.device_virtual
     ADD CONSTRAINT pk_pay_virtual_device PRIMARY KEY (id);
 
 --
@@ -20871,13 +20774,6 @@ ALTER TABLE ONLY public.system_sensitive_word
     ADD CONSTRAINT system_sensitive_word_pkey PRIMARY KEY (id);
 
 --
--- Name: iam_social_login_config uk_iam_social_config_source; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.iam_social_login_config
-    ADD CONSTRAINT uk_iam_social_config_source UNIQUE (source);
-
---
 -- Name: notify_notice_read uk_notify_notice_read; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -21013,6 +20909,54 @@ CREATE INDEX idx_base_user_protocol_type_client ON public.base_user_protocol USI
 COMMENT ON INDEX public.idx_base_user_protocol_type_client IS '按协议类型与终端类型查询';
 
 --
+-- Name: idx_device_channel_terminal_channel_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_channel_terminal_channel_mch_no ON public.device_channel_terminal USING btree (channel_mch_no);
+
+--
+-- Name: INDEX idx_device_channel_terminal_channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_channel_terminal_channel_mch_no IS '按通道商户号查询终端';
+
+--
+-- Name: idx_device_channel_terminal_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_channel_terminal_mch_no ON public.device_channel_terminal USING btree (mch_no);
+
+--
+-- Name: INDEX idx_device_channel_terminal_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_channel_terminal_mch_no IS '商户编号关联查询';
+
+--
+-- Name: idx_device_channel_terminal_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_channel_terminal_status ON public.device_channel_terminal USING btree (status);
+
+--
+-- Name: INDEX idx_device_channel_terminal_status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_channel_terminal_status IS '状态筛选';
+
+--
+-- Name: idx_device_qr_code_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_qr_code_mch_no ON public.device_qr_code USING btree (mch_no);
+
+--
+-- Name: INDEX idx_device_qr_code_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_qr_code_mch_no IS '商户码牌列表查询';
+
+--
 -- Name: idx_device_qr_code_store_no; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21023,6 +20967,90 @@ CREATE INDEX idx_device_qr_code_store_no ON public.device_qr_code USING btree (s
 --
 
 COMMENT ON INDEX public.idx_device_qr_code_store_no IS '按门店号查询二维码设备';
+
+--
+-- Name: idx_device_terminal_channel_bind_mch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_terminal_channel_bind_mch ON public.device_terminal_channel_bind USING btree (mch_no);
+
+--
+-- Name: INDEX idx_device_terminal_channel_bind_mch; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_terminal_channel_bind_mch IS '商户编号关联查询';
+
+--
+-- Name: idx_device_terminal_channel_bind_system; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_terminal_channel_bind_system ON public.device_terminal_channel_bind USING btree (system_terminal_no);
+
+--
+-- Name: INDEX idx_device_terminal_channel_bind_system; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_terminal_channel_bind_system IS '按系统终端号查询绑定';
+
+--
+-- Name: idx_device_terminal_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_terminal_mch_no ON public.device_terminal USING btree (mch_no);
+
+--
+-- Name: INDEX idx_device_terminal_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_terminal_mch_no IS '商户编号关联查询';
+
+--
+-- Name: idx_device_terminal_store_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_terminal_store_no ON public.device_terminal USING btree (store_no);
+
+--
+-- Name: INDEX idx_device_terminal_store_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_terminal_store_no IS '按门店号查询设备';
+
+--
+-- Name: idx_device_virtual_batch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_virtual_batch_no ON public.device_virtual USING btree (batch_no);
+
+--
+-- Name: INDEX idx_device_virtual_batch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_virtual_batch_no IS '批次号索引';
+
+--
+-- Name: idx_device_virtual_mch_app; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_virtual_mch_app ON public.device_virtual USING btree (mch_no, app_id);
+
+--
+-- Name: INDEX idx_device_virtual_mch_app; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_virtual_mch_app IS '按商户+应用查询播报打印设备';
+
+--
+-- Name: idx_device_virtual_mch_store; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_device_virtual_mch_store ON public.device_virtual USING btree (mch_no, store_no);
+
+--
+-- Name: INDEX idx_device_virtual_mch_store; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_device_virtual_mch_store IS '按商户+门店查询设备';
 
 --
 -- Name: idx_douyin_transfer_config_mch; Type: INDEX; Schema: public; Owner: -
@@ -21088,7 +21116,7 @@ COMMENT ON INDEX public.idx_dy_platform_app_app_type IS '按应用类型筛选';
 -- Name: idx_easy_pay_order_order_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_easy_pay_order_order_id ON public.pay_easy_pay_order USING btree (order_id);
+CREATE INDEX idx_easy_pay_order_order_id ON public.easy_pay_order USING btree (order_id);
 
 --
 -- Name: INDEX idx_easy_pay_order_order_id; Type: COMMENT; Schema: public; Owner: -
@@ -21097,10 +21125,22 @@ CREATE INDEX idx_easy_pay_order_order_id ON public.pay_easy_pay_order USING btre
 COMMENT ON INDEX public.idx_easy_pay_order_order_id IS '按支付订单 ID 查询';
 
 --
+-- Name: idx_easy_pay_order_out_trade_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_easy_pay_order_out_trade_no ON public.easy_pay_order USING btree (out_trade_no);
+
+--
+-- Name: INDEX idx_easy_pay_order_out_trade_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_easy_pay_order_out_trade_no IS '外部单号查询';
+
+--
 -- Name: idx_easy_pay_order_pid_out; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_easy_pay_order_pid_out ON public.pay_easy_pay_order USING btree (pid, out_trade_no);
+CREATE INDEX idx_easy_pay_order_pid_out ON public.easy_pay_order USING btree (pid, out_trade_no);
 
 --
 -- Name: INDEX idx_easy_pay_order_pid_out; Type: COMMENT; Schema: public; Owner: -
@@ -21112,7 +21152,7 @@ COMMENT ON INDEX public.idx_easy_pay_order_pid_out IS '按易支付商户号+商
 -- Name: idx_easy_pay_order_trade_no; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_easy_pay_order_trade_no ON public.pay_easy_pay_order USING btree (trade_no);
+CREATE INDEX idx_easy_pay_order_trade_no ON public.easy_pay_order USING btree (trade_no);
 
 --
 -- Name: INDEX idx_easy_pay_order_trade_no; Type: COMMENT; Schema: public; Owner: -
@@ -21263,18 +21303,6 @@ CREATE INDEX idx_mch_app_info_mch_no ON public.mch_app_info USING btree (mch_no)
 --
 
 COMMENT ON INDEX public.idx_mch_app_info_mch_no IS '商户编号索引';
-
---
--- Name: idx_mch_channel_merchant_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_mch_channel_merchant_mch_no ON public.mch_channel_merchant USING btree (mch_no);
-
---
--- Name: INDEX idx_mch_channel_merchant_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_mch_channel_merchant_mch_no IS '通道商户按商户编号检索';
 
 --
 -- Name: idx_mch_credential_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -21577,6 +21605,18 @@ CREATE INDEX idx_pay_alloc_order_mch_create_time ON public.pay_alloc_order USING
 COMMENT ON INDEX public.idx_pay_alloc_order_mch_create_time IS '商户维度按创建时间检索';
 
 --
+-- Name: idx_pay_alloc_order_out_alloc; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_alloc_order_out_alloc ON public.pay_alloc_order USING btree (out_alloc_no);
+
+--
+-- Name: INDEX idx_pay_alloc_order_out_alloc; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_alloc_order_out_alloc IS '外部分账单号反查';
+
+--
 -- Name: idx_pay_alloc_order_status_time; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21661,18 +21701,6 @@ CREATE INDEX idx_pay_callback_record_mch_no ON public.pay_callback_record USING 
 COMMENT ON INDEX public.idx_pay_callback_record_mch_no IS '商户编号关联查询';
 
 --
--- Name: idx_pay_callback_record_out_trade_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_callback_record_out_trade_no ON public.pay_callback_record USING btree (out_trade_no);
-
---
--- Name: INDEX idx_pay_callback_record_out_trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_callback_record_out_trade_no IS '按商户订单号查询回调';
-
---
 -- Name: idx_pay_callback_record_product; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21685,58 +21713,10 @@ CREATE INDEX idx_pay_callback_record_product ON public.pay_callback_record USING
 COMMENT ON INDEX public.idx_pay_callback_record_product IS '按支付产品筛选';
 
 --
--- Name: idx_pay_callback_record_trade_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_callback_record_trade_no ON public.pay_callback_record USING btree (trade_no);
-
---
--- Name: INDEX idx_pay_callback_record_trade_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_callback_record_trade_no IS '按平台交易号查询回调';
-
---
--- Name: idx_pay_channel_terminal_channel_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_channel_terminal_channel_mch_no ON public.pay_channel_terminal USING btree (channel_mch_no);
-
---
--- Name: INDEX idx_pay_channel_terminal_channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_channel_terminal_channel_mch_no IS '按通道商户号查询终端';
-
---
--- Name: idx_pay_channel_terminal_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_channel_terminal_mch_no ON public.pay_channel_terminal USING btree (mch_no);
-
---
--- Name: INDEX idx_pay_channel_terminal_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_channel_terminal_mch_no IS '商户编号关联查询';
-
---
--- Name: idx_pay_channel_terminal_status; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_channel_terminal_status ON public.pay_channel_terminal USING btree (status);
-
---
--- Name: INDEX idx_pay_channel_terminal_status; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_channel_terminal_status IS '状态筛选';
-
---
 -- Name: idx_pay_easy_pay_refund_order_out_trade_no; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_pay_easy_pay_refund_order_out_trade_no ON public.pay_easy_pay_refund_order USING btree (out_trade_no);
+CREATE INDEX idx_pay_easy_pay_refund_order_out_trade_no ON public.easy_pay_refund_order USING btree (out_trade_no);
 
 --
 -- Name: INDEX idx_pay_easy_pay_refund_order_out_trade_no; Type: COMMENT; Schema: public; Owner: -
@@ -21748,7 +21728,7 @@ COMMENT ON INDEX public.idx_pay_easy_pay_refund_order_out_trade_no IS '按商户
 -- Name: idx_pay_easy_pay_refund_order_refund_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_pay_easy_pay_refund_order_refund_id ON public.pay_easy_pay_refund_order USING btree (refund_id);
+CREATE INDEX idx_pay_easy_pay_refund_order_refund_id ON public.easy_pay_refund_order USING btree (refund_id);
 
 --
 -- Name: INDEX idx_pay_easy_pay_refund_order_refund_id; Type: COMMENT; Schema: public; Owner: -
@@ -21760,7 +21740,7 @@ COMMENT ON INDEX public.idx_pay_easy_pay_refund_order_refund_id IS '按平台退
 -- Name: idx_pay_easy_pay_refund_order_refund_no; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_pay_easy_pay_refund_order_refund_no ON public.pay_easy_pay_refund_order USING btree (refund_no);
+CREATE INDEX idx_pay_easy_pay_refund_order_refund_no ON public.easy_pay_refund_order USING btree (refund_no);
 
 --
 -- Name: INDEX idx_pay_easy_pay_refund_order_refund_no; Type: COMMENT; Schema: public; Owner: -
@@ -21793,6 +21773,18 @@ CREATE INDEX idx_pay_fund_flow_mch_time ON public.pay_fund_flow USING btree (mch
 COMMENT ON INDEX public.idx_pay_fund_flow_mch_time IS '商户维度时间段流水查询';
 
 --
+-- Name: idx_pay_gateway_order_status_expired; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_gateway_order_status_expired ON public.pay_gateway_order USING btree (status, expired_time) WHERE (deleted = false);
+
+--
+-- Name: INDEX idx_pay_gateway_order_status_expired; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_gateway_order_status_expired IS '超时关单扫描';
+
+--
 -- Name: idx_pay_gateway_pay_env_config_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21815,6 +21807,42 @@ CREATE UNIQUE INDEX idx_pay_md_product_code ON public.pay_md_product USING btree
 --
 
 COMMENT ON INDEX public.idx_pay_md_product_code IS '产品编码唯一索引';
+
+--
+-- Name: idx_pay_refund_order_mch_finish; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_refund_order_mch_finish ON public.pay_refund_order USING btree (mch_no, finish_time);
+
+--
+-- Name: INDEX idx_pay_refund_order_mch_finish; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_refund_order_mch_finish IS '商户退款完成时间统计';
+
+--
+-- Name: idx_pay_refund_order_out_refund_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_refund_order_out_refund_no ON public.pay_refund_order USING btree (out_refund_no);
+
+--
+-- Name: INDEX idx_pay_refund_order_out_refund_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_refund_order_out_refund_no IS '外部退款单号反查';
+
+--
+-- Name: idx_pay_refund_order_relation_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_refund_order_relation_no ON public.pay_refund_order USING btree (relation_order_no);
+
+--
+-- Name: INDEX idx_pay_refund_order_relation_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_refund_order_relation_no IS '回调关联单号反查';
 
 --
 -- Name: idx_pay_risk_hit_create_time; Type: INDEX; Schema: public; Owner: -
@@ -21865,66 +21893,6 @@ CREATE INDEX idx_pay_risk_hit_trade_no ON public.pay_risk_hit USING btree (trade
 COMMENT ON INDEX public.idx_pay_risk_hit_trade_no IS '按交易号查询风控命中';
 
 --
--- Name: idx_pay_terminal_channel_bind_channel; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_terminal_channel_bind_channel ON public.pay_terminal_channel_bind USING btree (channel_terminal_id);
-
---
--- Name: INDEX idx_pay_terminal_channel_bind_channel; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_terminal_channel_bind_channel IS '按通道终端 ID 查询绑定';
-
---
--- Name: idx_pay_terminal_channel_bind_mch; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_terminal_channel_bind_mch ON public.pay_terminal_channel_bind USING btree (mch_no);
-
---
--- Name: INDEX idx_pay_terminal_channel_bind_mch; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_terminal_channel_bind_mch IS '商户编号关联查询';
-
---
--- Name: idx_pay_terminal_channel_bind_system; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_terminal_channel_bind_system ON public.pay_terminal_channel_bind USING btree (system_terminal_no);
-
---
--- Name: INDEX idx_pay_terminal_channel_bind_system; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_terminal_channel_bind_system IS '按系统终端号查询绑定';
-
---
--- Name: idx_pay_terminal_device_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_terminal_device_mch_no ON public.pay_terminal_device USING btree (mch_no);
-
---
--- Name: INDEX idx_pay_terminal_device_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_terminal_device_mch_no IS '商户编号关联查询';
-
---
--- Name: idx_pay_terminal_device_store_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_terminal_device_store_no ON public.pay_terminal_device USING btree (store_no);
-
---
--- Name: INDEX idx_pay_terminal_device_store_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_terminal_device_store_no IS '按门店号查询设备';
-
---
 -- Name: idx_pay_trade_container; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21961,6 +21929,18 @@ CREATE INDEX idx_pay_trade_mch_create_time ON public.pay_trade USING btree (mch_
 COMMENT ON INDEX public.idx_pay_trade_mch_create_time IS '商户维度按创建时间检索';
 
 --
+-- Name: idx_pay_trade_mch_pay_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_trade_mch_pay_time ON public.pay_trade USING btree (mch_no, pay_time);
+
+--
+-- Name: INDEX idx_pay_trade_mch_pay_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_trade_mch_pay_time IS '商户支付时间统计';
+
+--
 -- Name: idx_pay_trade_mch_store; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -21995,6 +21975,18 @@ CREATE INDEX idx_pay_trade_relation_order_no ON public.pay_trade USING btree (re
 --
 
 COMMENT ON INDEX public.idx_pay_trade_relation_order_no IS '按关联订单号查询交易';
+
+--
+-- Name: idx_pay_trade_status_close; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_trade_status_close ON public.pay_trade USING btree (status, close_time) WHERE (deleted = false);
+
+--
+-- Name: INDEX idx_pay_trade_status_close; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_trade_status_close IS '关单纠正扫描';
 
 --
 -- Name: idx_pay_trade_status_create_time; Type: INDEX; Schema: public; Owner: -
@@ -22105,6 +22097,30 @@ CREATE INDEX idx_pay_transfer_trade_mch ON public.pay_transfer_trade USING btree
 COMMENT ON INDEX public.idx_pay_transfer_trade_mch IS '按商户编号+创建时间查询';
 
 --
+-- Name: idx_pay_transfer_trade_out_transfer; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_transfer_trade_out_transfer ON public.pay_transfer_trade USING btree (out_transfer_no);
+
+--
+-- Name: INDEX idx_pay_transfer_trade_out_transfer; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_transfer_trade_out_transfer IS '外部转账单号反查';
+
+--
+-- Name: idx_pay_transfer_trade_relation; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_transfer_trade_relation ON public.pay_transfer_trade USING btree (relation_no);
+
+--
+-- Name: INDEX idx_pay_transfer_trade_relation; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_transfer_trade_relation IS '回调关联单号反查';
+
+--
 -- Name: idx_pay_transfer_trade_status_time; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -22115,54 +22131,6 @@ CREATE INDEX idx_pay_transfer_trade_status_time ON public.pay_transfer_trade USI
 --
 
 COMMENT ON INDEX public.idx_pay_transfer_trade_status_time IS '按状态+创建时间窗口扫描';
-
---
--- Name: idx_pay_virtual_device_batch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_virtual_device_batch_no ON public.pay_virtual_device USING btree (batch_no);
-
---
--- Name: INDEX idx_pay_virtual_device_batch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_virtual_device_batch_no IS '批次号索引';
-
---
--- Name: idx_pay_virtual_device_mch_app; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_virtual_device_mch_app ON public.pay_virtual_device USING btree (mch_no, app_id);
-
---
--- Name: INDEX idx_pay_virtual_device_mch_app; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_app IS '按商户+应用查询播报打印设备';
-
---
--- Name: idx_pay_virtual_device_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_virtual_device_mch_no ON public.pay_virtual_device USING btree (mch_no);
-
---
--- Name: INDEX idx_pay_virtual_device_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_no IS '按商户编号查询设备';
-
---
--- Name: idx_pay_virtual_device_mch_store; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_pay_virtual_device_mch_store ON public.pay_virtual_device USING btree (mch_no, store_no);
-
---
--- Name: INDEX idx_pay_virtual_device_mch_store; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_store IS '按商户+门店查询设备';
 
 --
 -- Name: idx_refund_order_app_biz; Type: INDEX; Schema: public; Owner: -
@@ -22201,18 +22169,6 @@ CREATE INDEX idx_refund_order_mch_store ON public.pay_refund_order USING btree (
 COMMENT ON INDEX public.idx_refund_order_mch_store IS '按商户+门店维度查询';
 
 --
--- Name: idx_refund_order_order_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_refund_order_order_no ON public.pay_refund_order USING btree (trade_no);
-
---
--- Name: INDEX idx_refund_order_order_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_refund_order_order_no IS '按支付订单号查询退款';
-
---
 -- Name: idx_refund_order_status_create_time; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -22235,6 +22191,18 @@ CREATE INDEX idx_starter_audit_unipay_log_mch_time ON public.starter_audit_unipa
 --
 
 COMMENT ON INDEX public.idx_starter_audit_unipay_log_mch_time IS '按商户编号+时间倒序查询审计日志';
+
+--
+-- Name: idx_starter_audit_unipay_log_req_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_starter_audit_unipay_log_req_id ON public.starter_audit_unipay_log USING btree (req_id);
+
+--
+-- Name: INDEX idx_starter_audit_unipay_log_req_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_starter_audit_unipay_log_req_id IS '请求号精确查询';
 
 --
 -- Name: idx_starter_audit_unipay_log_success_time; Type: INDEX; Schema: public; Owner: -
@@ -22579,6 +22547,18 @@ CREATE UNIQUE INDEX uk_cpcn_direct_key_cmchno_sandbox ON public.cpcn_direct_key_
 COMMENT ON INDEX public.uk_cpcn_direct_key_cmchno_sandbox IS '同一通道商户同一环境密钥唯一';
 
 --
+-- Name: uk_device_mch_app_config_app; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_device_mch_app_config_app ON public.device_mch_app_config USING btree (app_id) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_device_mch_app_config_app; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_device_mch_app_config_app IS '一应用一行设备联动配置';
+
+--
 -- Name: uk_device_qr_code_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -22589,6 +22569,54 @@ CREATE UNIQUE INDEX uk_device_qr_code_code ON public.device_qr_code USING btree 
 --
 
 COMMENT ON INDEX public.uk_device_qr_code_code IS '二维码设备编码唯一';
+
+--
+-- Name: uk_device_terminal_channel_bind; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_device_terminal_channel_bind ON public.device_terminal_channel_bind USING btree (system_terminal_no, channel_terminal_id) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_device_terminal_channel_bind; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_device_terminal_channel_bind IS '系统终端+通道终端绑定唯一';
+
+--
+-- Name: uk_device_terminal_store_default; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_device_terminal_store_default ON public.device_terminal USING btree (store_no) WHERE ((default_terminal = true) AND (deleted = false));
+
+--
+-- Name: INDEX uk_device_terminal_store_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_device_terminal_store_default IS '同一门店至多一个默认终端';
+
+--
+-- Name: uk_device_terminal_terminal_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_device_terminal_terminal_no ON public.device_terminal USING btree (terminal_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_device_terminal_terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_device_terminal_terminal_no IS '终端号唯一';
+
+--
+-- Name: uk_device_virtual_device_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_device_virtual_device_no ON public.device_virtual USING btree (device_no) WHERE ((deleted = false) AND (device_no IS NOT NULL));
+
+--
+-- Name: INDEX uk_device_virtual_device_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_device_virtual_device_no IS '设备号唯一';
 
 --
 -- Name: uk_dougong_isv_cmchno; Type: INDEX; Schema: public; Owner: -
@@ -22738,7 +22766,7 @@ COMMENT ON INDEX public.uk_dy_platform_app_dy_app_id IS '抖音平台 AppID 唯�
 -- Name: uk_easy_pay_config_app_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_easy_pay_config_app_id ON public.pay_easy_pay_config USING btree (app_id) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_easy_pay_config_app_id ON public.easy_pay_config USING btree (app_id) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_easy_pay_config_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -22750,7 +22778,7 @@ COMMENT ON INDEX public.uk_easy_pay_config_app_id IS '同一应用配置唯一';
 -- Name: uk_easy_pay_config_pid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_easy_pay_config_pid ON public.pay_easy_pay_config USING btree (pid) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_easy_pay_config_pid ON public.easy_pay_config USING btree (pid) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_easy_pay_config_pid; Type: COMMENT; Schema: public; Owner: -
@@ -22762,7 +22790,7 @@ COMMENT ON INDEX public.uk_easy_pay_config_pid IS '同一易支付商户号配�
 -- Name: uk_easy_pay_credential_app_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_easy_pay_credential_app_id ON public.pay_easy_pay_credential USING btree (app_id) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_easy_pay_credential_app_id ON public.easy_pay_credential USING btree (app_id) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_easy_pay_credential_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -22774,7 +22802,7 @@ COMMENT ON INDEX public.uk_easy_pay_credential_app_id IS '同一应用凭证唯�
 -- Name: uk_easy_pay_credential_pid; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_easy_pay_credential_pid ON public.pay_easy_pay_credential USING btree (pid) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_easy_pay_credential_pid ON public.easy_pay_credential USING btree (pid) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_easy_pay_credential_pid; Type: COMMENT; Schema: public; Owner: -
@@ -22810,7 +22838,7 @@ COMMENT ON INDEX public.uk_easy_pay_key_mch_pid IS '同一商户下易支付商�
 -- Name: uk_easy_pay_order_app_out; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_easy_pay_order_app_out ON public.pay_easy_pay_order USING btree (app_id, out_trade_no) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_easy_pay_order_app_out ON public.easy_pay_order USING btree (app_id, out_trade_no) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_easy_pay_order_app_out; Type: COMMENT; Schema: public; Owner: -
@@ -23035,6 +23063,12 @@ CREATE UNIQUE INDEX uk_iam_role_code ON public.iam_role USING btree (code) WHERE
 COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一';
 
 --
+-- Name: uk_iam_social_config_source; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_social_config_source ON public.iam_social_login_config USING btree (source) WHERE (deleted = false);
+
+--
 -- Name: INDEX uk_iam_social_config_source; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -23245,18 +23279,6 @@ CREATE UNIQUE INDEX uk_mch_app_info_default ON public.mch_app_info USING btree (
 COMMENT ON INDEX public.uk_mch_app_info_default IS '每商户仅一个默认应用';
 
 --
--- Name: uk_mch_channel_merchant_channel_mch; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mch_channel_merchant_channel_mch ON public.mch_channel_merchant USING btree (channel_mch_no) WHERE (deleted = false);
-
---
--- Name: INDEX uk_mch_channel_merchant_channel_mch; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mch_channel_merchant_channel_mch IS '通道商户号全局唯一';
-
---
 -- Name: uk_mch_channel_merchant_mch_channel; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23353,18 +23375,6 @@ CREATE UNIQUE INDEX uk_mock_alloc_receiver ON public.mock_alloc_receiver USING b
 COMMENT ON INDEX public.uk_mock_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
--- Name: uk_mock_direct_credential_cmchno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_direct_credential_cmchno ON public.mock_direct_credential USING btree (channel_mch_no) WHERE (deleted = false);
-
---
--- Name: INDEX uk_mock_direct_credential_cmchno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_direct_credential_cmchno IS '通道商户号唯一';
-
---
 -- Name: uk_mock_isv_channel_merchant_channel_mch; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23377,18 +23387,6 @@ CREATE UNIQUE INDEX uk_mock_isv_channel_merchant_channel_mch ON public.mock_isv_
 COMMENT ON INDEX public.uk_mock_isv_channel_merchant_channel_mch IS '通道商户号唯一';
 
 --
--- Name: uk_mock_isv_credential_isvno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_isv_credential_isvno ON public.mock_isv_credential USING btree (isv_no) WHERE (deleted = false);
-
---
--- Name: INDEX uk_mock_isv_credential_isvno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_isv_credential_isvno IS '服务商编号唯一';
-
---
 -- Name: uk_mock_isv_info_isvno; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23399,6 +23397,18 @@ CREATE UNIQUE INDEX uk_mock_isv_info_isvno ON public.mock_isv_info USING btree (
 --
 
 COMMENT ON INDEX public.uk_mock_isv_info_isvno IS '服务商编号唯一';
+
+--
+-- Name: uk_mock_pay_credential_cmchno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mock_pay_credential_cmchno ON public.mock_pay_credential USING btree (channel_mch_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_mock_pay_credential_cmchno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mock_pay_credential_cmchno IS '通道商户号唯一';
 
 --
 -- Name: uk_normal_order_mch_biz; Type: INDEX; Schema: public; Owner: -
@@ -23527,18 +23537,6 @@ CREATE UNIQUE INDEX uk_pay_gateway_pay_env ON public.pay_gateway_pay_client_env 
 COMMENT ON INDEX public.uk_pay_gateway_pay_env IS '同一配置+客户端环境+支付形态唯一';
 
 --
--- Name: uk_pay_mch_app_device_config_app; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_pay_mch_app_device_config_app ON public.pay_mch_app_device_config USING btree (app_id) WHERE (deleted = false);
-
---
--- Name: INDEX uk_pay_mch_app_device_config_app; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_pay_mch_app_device_config_app IS '一应用一行设备联动配置';
-
---
 -- Name: uk_pay_md_capability_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23647,42 +23645,6 @@ CREATE UNIQUE INDEX uk_pay_route_scene_config_method ON public.pay_route_scene_c
 COMMENT ON INDEX public.uk_pay_route_scene_config_method IS '同一策略下支付方式唯一';
 
 --
--- Name: uk_pay_terminal_channel_bind; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_pay_terminal_channel_bind ON public.pay_terminal_channel_bind USING btree (system_terminal_no, channel_terminal_id) WHERE (deleted = false);
-
---
--- Name: INDEX uk_pay_terminal_channel_bind; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_pay_terminal_channel_bind IS '系统终端+通道终端绑定唯一';
-
---
--- Name: uk_pay_terminal_device_store_default; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_pay_terminal_device_store_default ON public.pay_terminal_device USING btree (store_no) WHERE ((default_terminal = true) AND (deleted = false));
-
---
--- Name: INDEX uk_pay_terminal_device_store_default; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_pay_terminal_device_store_default IS '同一门店至多一个默认终端';
-
---
--- Name: uk_pay_terminal_device_terminal_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_pay_terminal_device_terminal_no ON public.pay_terminal_device USING btree (terminal_no) WHERE (deleted = false);
-
---
--- Name: INDEX uk_pay_terminal_device_terminal_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_pay_terminal_device_terminal_no IS '终端号唯一';
-
---
 -- Name: uk_pay_trade_trade_no; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23693,6 +23655,18 @@ CREATE UNIQUE INDEX uk_pay_trade_trade_no ON public.pay_trade USING btree (trade
 --
 
 COMMENT ON INDEX public.uk_pay_trade_trade_no IS '平台交易号唯一';
+
+--
+-- Name: uk_pay_transfer_order_alipay_mch_biz; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_transfer_order_alipay_mch_biz ON public.pay_transfer_order_alipay USING btree (mch_no, biz_transfer_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_pay_transfer_order_alipay_mch_biz; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_transfer_order_alipay_mch_biz IS '同一商户转账单号唯一';
 
 --
 -- Name: uk_pay_transfer_order_alipay_no; Type: INDEX; Schema: public; Owner: -
@@ -23707,6 +23681,18 @@ CREATE UNIQUE INDEX uk_pay_transfer_order_alipay_no ON public.pay_transfer_order
 COMMENT ON INDEX public.uk_pay_transfer_order_alipay_no IS '平台转账单号唯一';
 
 --
+-- Name: uk_pay_transfer_order_douyin_mch_biz; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_transfer_order_douyin_mch_biz ON public.pay_transfer_order_douyin USING btree (mch_no, biz_transfer_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_pay_transfer_order_douyin_mch_biz; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_transfer_order_douyin_mch_biz IS '同一商户转账单号唯一';
+
+--
 -- Name: uk_pay_transfer_order_douyin_no; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23717,6 +23703,18 @@ CREATE UNIQUE INDEX uk_pay_transfer_order_douyin_no ON public.pay_transfer_order
 --
 
 COMMENT ON INDEX public.uk_pay_transfer_order_douyin_no IS '平台转账单号唯一';
+
+--
+-- Name: uk_pay_transfer_order_wechat_mch_biz; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_transfer_order_wechat_mch_biz ON public.pay_transfer_order_wechat USING btree (mch_no, biz_transfer_no) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_pay_transfer_order_wechat_mch_biz; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_transfer_order_wechat_mch_biz IS '同一商户转账单号唯一';
 
 --
 -- Name: uk_pay_transfer_order_wechat_no; Type: INDEX; Schema: public; Owner: -
@@ -23741,18 +23739,6 @@ CREATE UNIQUE INDEX uk_pay_transfer_trade_no ON public.pay_transfer_trade USING 
 --
 
 COMMENT ON INDEX public.uk_pay_transfer_trade_no IS '平台转账交易号唯一';
-
---
--- Name: uk_pay_virtual_device_device_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_pay_virtual_device_device_no ON public.pay_virtual_device USING btree (device_no) WHERE ((deleted = false) AND (device_no IS NOT NULL));
-
---
--- Name: INDEX uk_pay_virtual_device_device_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_pay_virtual_device_device_no IS '设备号唯一';
 
 --
 -- Name: uk_refund_order_mch_biz; Type: INDEX; Schema: public; Owner: -
@@ -23926,7 +23912,7 @@ COMMENT ON INDEX public.uk_system_sensitive_word_word IS '敏感词唯一';
 -- Name: uk_term_bind_channel_terminal; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_term_bind_channel_terminal ON public.pay_terminal_channel_bind USING btree (channel_terminal_id) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_term_bind_channel_terminal ON public.device_terminal_channel_bind USING btree (channel_terminal_id) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_term_bind_channel_terminal; Type: COMMENT; Schema: public; Owner: -
@@ -23938,7 +23924,7 @@ COMMENT ON INDEX public.uk_term_bind_channel_terminal IS '一条通道终端只�
 -- Name: uk_term_bind_sys_chmch_type; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_term_bind_sys_chmch_type ON public.pay_terminal_channel_bind USING btree (system_terminal_no, channel_mch_no, type) WHERE (deleted = false);
+CREATE UNIQUE INDEX uk_term_bind_sys_chmch_type ON public.device_terminal_channel_bind USING btree (system_terminal_no, channel_mch_no, type) WHERE (deleted = false);
 
 --
 -- Name: INDEX uk_term_bind_sys_chmch_type; Type: COMMENT; Schema: public; Owner: -

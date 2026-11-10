@@ -368,14 +368,14 @@ export function buildChannels(gen, ctx) {
   // ===== mock 网关双向签名凭证 =====
   // 没有这两行，装完扫码会在签名阶段失败；明文 PEM 由 TypeHandler 透传，运行时仍可正常读。
   // 全局单行主键固定 1（MockChannelCredentialManager.SINGLETON_ID），不能落演示 ID 段。
-  gen.add('mock_channel_credential', {
+  gen.add('mock_gateway_credential', {
     ...base(1),
     merchant_private_key: MOCK_MERCHANT_PRIVATE_KEY,
     platform_public_key: MOCK_PLATFORM_PUBLIC_KEY,
   })
   // 直连产品按通道商户号取商户级凭证；gateway_base_url 留空（NULL）回落子应用 yml 配置，
   // 写死会把部署环境钉死在本机 127.0.0.1:10400（容器编排里该地址指向容器自身）。
-  gen.add('mock_direct_credential', {
+  gen.add('mock_pay_credential', {
     ...base(idCfg(31)),
     channel_mch_no: ANCHORS.mockChannelMchNo,
     merchant_private_key: MOCK_MERCHANT_PRIVATE_KEY,
@@ -1021,17 +1021,17 @@ BEGIN
     IF n < 100 THEN RAISE EXCEPTION '[演示数据校验] 通知任务数异常: %（预期 ≥ 100）', n; END IF;
 
     -- 10. mock 全局凭证两段 PEM 非空（主键固定 1，缺行/空值扫码即签名失败）
-    SELECT count(*) INTO n FROM public.mock_channel_credential
+    SELECT count(*) INTO n FROM public.mock_gateway_credential
      WHERE id = 1 AND deleted = false
        AND COALESCE(merchant_private_key, '') <> '' AND COALESCE(platform_public_key, '') <> '';
     IF n <> 1 THEN RAISE EXCEPTION '[演示数据校验] mock 全局凭证（id=1）缺失或 PEM 为空'; END IF;
 
     -- 11. mock 直连凭证两段 PEM 非空且网关地址留空（回落子应用 yml，避免钉死本机地址）
-    SELECT count(*) INTO n FROM public.mock_direct_credential
+    SELECT count(*) INTO n FROM public.mock_pay_credential
      WHERE channel_mch_no = '${ANCHORS.mockChannelMchNo}' AND deleted = false
        AND COALESCE(merchant_private_key, '') <> '' AND COALESCE(platform_public_key, '') <> '';
     IF n <> 1 THEN RAISE EXCEPTION '[演示数据校验] mock 直连凭证 ${ANCHORS.mockChannelMchNo} 缺失或 PEM 为空'; END IF;
-    SELECT count(*) INTO n FROM public.mock_direct_credential
+    SELECT count(*) INTO n FROM public.mock_pay_credential
      WHERE channel_mch_no = '${ANCHORS.mockChannelMchNo}' AND deleted = false
        AND gateway_base_url IS NOT NULL;
     IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] mock 直连凭证 gateway_base_url 应留空（当前非空）'; END IF;
