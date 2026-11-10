@@ -31,6 +31,9 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "是否启用")
     private boolean enabled;
 
+    /// 是否已对接上线(true=通道策略已实连; false=规划中, 前端灰显且不提供启停/配置入口)
+    private boolean online;
+
     @Schema(description = "产品介绍")
     private String description;
 

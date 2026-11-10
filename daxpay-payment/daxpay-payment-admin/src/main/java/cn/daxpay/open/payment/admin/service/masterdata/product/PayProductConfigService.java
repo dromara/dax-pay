@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Objects;
 
@@ -39,9 +38,6 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayProductConfigService {
-
-    /// 已声明产品策略但未实际打通、按「规划中」展示的预留产品(盛付通服务商线未实连, 实连后移除)
-    private static final Set<String> RESERVED_PRODUCTS = Set.of(ProductEnum.SHENG_ISV.getCode());
 
     private final PayProductConfigManager payProductConfigManager;
 
@@ -133,6 +129,8 @@ public class PayProductConfigService {
     @EventListener(ApplicationReadyEvent.class)
     @Transactional(rollbackFor = Exception.class)
     public void checkSandboxOnStartup() {
+        // 先补齐仅沙箱产品的配置行, 再按全局开关对齐
+        ensureSandboxOnlyConfigs();
         if (platformConfigProperties.isSandboxEnabled()) {
             log.warn("⚠️ 沙箱环境已全局启用 (daxpay.platform.config.sandbox-enabled=true) → 当前为测试/开发环境, 切勿用于生产部署");
             return;
@@ -167,7 +165,7 @@ public class PayProductConfigService {
 
         AbsProductStrategy strategy = resolveStrategy(payProduct.getCode());
         // online = 通道策略存在且非预留产品(预留/无策略一律视为规划中)
-        result.setOnline(strategy != null && !RESERVED_PRODUCTS.contains(payProduct.getCode()));
+        result.setOnline(strategy != null && !ProductEnum.isReserved(payProduct.getCode()));
         if (Objects.nonNull(strategy)) {
             result.setSandboxSupport(strategy.isSandbox());
             result.setSandboxOnly(strategy.isSandboxOnly());
@@ -196,6 +194,34 @@ public class PayProductConfigService {
         config.setActiveEnv(isSandboxOnly(product) ? PayEnvEnum.SANDBOX.getCode() : PayEnvEnum.PROD.getCode());
         payProductConfigManager.save(config);
         return config;
+    }
+
+    /// 补齐「仅沙箱产品」的配置行并纠正为沙箱生效
+    ///
+    /// pay_md_product_config 缺行时各读取方按生产环境处理(卡片页 activeEnv=prod / 路由 isSandboxActive=false),
+    /// 与仅沙箱产品「恒沙箱」语义冲突: 卡片不显示沙箱金框, 且其通道商户(创建时固定 sandbox=true)
+    /// 会在路由环境一致性校验处被判为环境不匹配。故启动时按策略层声明补齐/纠正, 幂等。
+    private void ensureSandboxOnlyConfigs() {
+        List<AbsProductStrategy> sandboxOnlyStrategies = PaymentStrategyFactory.createGroup(AbsProductStrategy.class)
+                .stream()
+                .filter(AbsProductStrategy::isSandboxOnly)
+                .toList();
+        for (AbsProductStrategy strategy : sandboxOnlyStrategies) {
+            String product = strategy.getProduct().getCode();
+            PayProductConfig config = payProductConfigManager.findByProduct(product).orElse(null);
+            if (Objects.isNull(config)) {
+                // 新建行默认即 sandbox(见 createDefaultConfig)
+                createDefaultConfig(product);
+                // 缺行期间可能已被读侧缓存为 false, 需失效
+                cacheManager.getCache("payment:product-sandbox").evict(product);
+                log.info("仅沙箱产品[{}]缺少产品配置行, 已补齐(activeEnv=sandbox)", product);
+            } else if (!PayEnvEnum.SANDBOX.getCode().equals(config.getActiveEnv())) {
+                config.setActiveEnv(PayEnvEnum.SANDBOX.getCode());
+                payProductConfigManager.updateById(config);
+                cacheManager.getCache("payment:product-sandbox").evict(product);
+                log.info("仅沙箱产品[{}]配置行环境非沙箱, 已纠正为 sandbox", product);
+            }
+        }
     }
 
     /// 是否为仅沙箱产品(模拟通道等): 生效环境恒为 sandbox, 不允许切换到生产

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Set;
 
 /// # 支付产品枚举
 ///
@@ -166,6 +167,9 @@ public enum ProductEnum implements I18nSupport {
 
     private final String code;
 
+    /// 预留产品编码: 已声明产品策略但通道尚未实连, 前端按「规划中」展示(实连后从此集合移除)
+    private static final Set<String> RESERVED_CODES = Set.of(SHENG_ISV.getCode());
+
     /// 翻译 key 前缀
     @Override
     public String getI18nPrefix() {
@@ -265,6 +269,11 @@ public enum ProductEnum implements I18nSupport {
             // 模拟通道: 一通道双产品(直连 mock_pay / 服务商 mock_isv)
             case MOCK_PAY, MOCK_ISV -> ChannelEnum.MOCK.getCode();
         };
+    }
+
+    /// 是否为预留(规划中)产品
+    public static boolean isReserved(String code) {
+        return RESERVED_CODES.contains(code);
     }
 
     /// 根据编码获取枚举

@@ -217,6 +217,8 @@ public class PayProductService {
                 .setTerminal(strategy.isTerminal())
                 .setSandbox(strategy.isSandbox())
                 .setSandboxOnly(strategy.isSandboxOnly())
+                // 策略存在且非预留产品才算已对接上线, 无策略的产品默认 false(规划中)
+                .setOnline(!ProductEnum.isReserved(strategy.getProduct().getCode()))
                 .setApiCallMode(strategy.getApiCallMode().getCode())
                 .setPayIdType(strategy.getPayIdType().getCode());
     }
