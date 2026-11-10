@@ -1,14 +1,14 @@
 -- ============================================================================
--- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-09T03:52:26.466Z
+-- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-10T05:04:44.903Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432
--- 内容: [1] 表结构 169 张表（建表 / 主键 / 索引 / 注释）
+-- 内容: [1] 表结构 168 张表（建表 / 主键 / 索引 / 注释）
 -- 用法: 空库先执行本文件，再执行 data.sql（纯净版）或 data-demo.sql（演示版，阶段 B）
 -- 说明: 只建表不插数据；执行前库须为空，重复执行会主键冲突
 -- 警告: 构建产物，禁止手编；改表结构改 dev 库后重跑脚本
 -- ============================================================================
 
 -- ============================================================================
--- [1] 表结构（169 张表：建表 / 主键 / 索引 / 注释）
+-- [1] 表结构（168 张表：建表 / 主键 / 索引 / 注释）
 -- ============================================================================
 
 --
@@ -23063,6 +23063,30 @@ CREATE UNIQUE INDEX uk_iam_role_code ON public.iam_role USING btree (code) WHERE
 COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一';
 
 --
+-- Name: uk_iam_role_code_role_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_role_code_role_code ON public.iam_role_code USING btree (role_id, code_id);
+
+--
+-- Name: INDEX uk_iam_role_code_role_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_role_code_role_code IS '角色权限码绑定唯一';
+
+--
+-- Name: uk_iam_role_menu_role_menu; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_role_menu_role_menu ON public.iam_role_menu USING btree (role_id, menu_id);
+
+--
+-- Name: INDEX uk_iam_role_menu_role_menu; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_role_menu_role_menu IS '角色菜单绑定唯一';
+
+--
 -- Name: uk_iam_social_config_source; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23097,6 +23121,18 @@ CREATE UNIQUE INDEX uk_iam_user_passkey_credential_id ON public.iam_user_passkey
 --
 
 COMMENT ON INDEX public.uk_iam_user_passkey_credential_id IS 'WebAuthn 凭据全局唯一';
+
+--
+-- Name: uk_iam_user_role_user; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_user_role_user ON public.iam_user_role USING btree (user_id);
+
+--
+-- Name: INDEX uk_iam_user_role_user; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_user_role_user IS '用户单角色唯一';
 
 --
 -- Name: uk_iam_user_social_source_open_id; Type: INDEX; Schema: public; Owner: -

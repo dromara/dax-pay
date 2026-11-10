@@ -100,6 +100,16 @@ public class UserRoleService {
         if (userInfos.stream().anyMatch(UserInfo::isAdministrator)) {
             throw new ValidationFailedException("error.iam.role.administratorRoleAssignDenied");
         }
+        // 主体管理员拒改角色(与单条 [#saveAssign] 同口径, 批量入口不得绕过)
+        for (UserInfo userInfo : userInfos) {
+            subjectAdminGuardHooks.forEach(hook -> {
+                String subject = hook.findSubjectAdmin(userInfo.getId());
+                if (subject != null) {
+                    // 权限: 主体管理员角色固定
+                    throw new ValidationFailedException("error.iam.role.subjectAdminRoleFixed", subject);
+                }
+            });
+        }
         // 校验用户与角色的终端一致性
         for (UserInfo userInfo : userInfos) {
             this.validateUserRoleTerminalConsistency(userInfo.getId(), roleId);

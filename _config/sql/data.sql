@@ -1,5 +1,5 @@
 -- ============================================================================
--- data.sql — DaxPay 纯净版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-09T03:52:26.466Z
+-- data.sql — DaxPay 纯净版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-10T05:04:44.903Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432
 -- 内容: [2] 纯净种子数据（已脱敏）  [3] 菜单种子   —— 不含表结构
 -- 用法: 先执行 table.sql，再执行本文件
@@ -3411,9 +3411,12 @@ INSERT INTO public.base_province (code, name) VALUES ('65', '新疆维吾尔自�
 
 INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000001, '用户协议', 'DaxPay 用户服务协议', 'USER_AGREEMENT', 'WEB', true, 'zh-CN', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
 INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000002, '隐私政策', 'DaxPay 隐私政策', 'PRIVACY_POLICY', 'WEB', true, 'zh-CN', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
-
 INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000003, '用户协议', 'DaxPay 用户服务协议', 'USER_AGREEMENT', 'MINIAPP', true, 'zh-CN', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
 INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000004, '隐私政策', 'DaxPay 隐私政策', 'PRIVACY_POLICY', 'MINIAPP', true, 'zh-CN', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000011, '用户协议', 'DaxPay 用户服务协议', 'USER_AGREEMENT', 'APP', true, 'zh-CN', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000012, '隐私政策', 'DaxPay 隐私政策', 'PRIVACY_POLICY', 'APP', true, 'zh-CN', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000013, '第三方信息共享清单', 'DaxPay 第三方信息共享清单', 'THIRD_PARTY_INFO', 'WEB', true, 'zh-CN', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol (id, name, show_name, type, client_type, default_protocol, default_language, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000014, '未成年人隐私说明', 'DaxPay 未成年人隐私说明', 'CHILDREN_POLICY', 'WEB', true, 'zh-CN', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
 
 --
 -- Data for Name: base_user_protocol_item; Type: TABLE DATA; Schema: public; Owner: -
@@ -3586,7 +3589,6 @@ INSERT INTO public.base_user_protocol_version (id, protocol_id, language, versio
 <p>本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。</p>
 <h2>七、隐私政策变更</h2>
 <p>本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。</p>', 'MARKDOWN', 'PUBLISHED', '2026-10-05 00:00:00+00', '平台默认隐私政策模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
-
 INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000103, 2091000000000000003, 'zh-CN', 1, 'v1.0', 'DaxPay 用户服务协议', '## 一、协议的接受
 
 欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。
@@ -4076,6 +4078,576 @@ The Platform may revise this Privacy Policy from time to time. The updated polic
 <p>The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.</p>
 <h2>7. Changes to this Privacy Policy</h2>
 <p>The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-09 00:00:00+00', 'Web 端隐私政策英文模板', 1, '2026-11-09 00:00:00+00', 1, '2026-11-09 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000111, 2091000000000000011, 'zh-CN', 1, 'v1.0', 'DaxPay 用户服务协议', '## 一、协议的接受
+
+欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。
+
+## 二、服务说明
+
+本平台为商户及运营管理人员提供支付交易管理、资金结算、订单查询、数据统计及相关增值服务。具体服务内容以本平台实际提供的为准。本平台保留对服务内容进行调整、升级或终止的权利。
+
+## 三、用户账号
+
+1. 您应使用真实、准确的信息注册和管理账号，并对账号及密码的安全负全部责任。
+2. 您不得将账号转让、出借给第三方使用，由此产生的一切责任由您自行承担。
+3. 如发现账号存在安全隐患或被未经授权使用，应立即通知本平台。
+
+## 四、用户行为规范
+
+您承诺不利用本平台从事下列行为：
+
+1. 违反国家法律法规的行为；
+2. 侵犯他人合法权益的行为；
+3. 虚假交易、洗钱、套现等违规支付行为；
+4. 破坏本平台系统安全或干扰正常运行的行为；
+5. 其他损害本平台或第三方权益的行为。
+
+## 五、知识产权
+
+本平台的所有内容，包括但不限于文字、图片、软件、界面设计、程序代码等，其知识产权均归本平台所有。未经书面授权，您不得复制、转载、修改或将其用于其他商业用途。
+
+## 六、免责声明
+
+1. 因不可抗力、系统维护、网络故障等原因导致服务中断，本平台不承担责任。
+2. 本平台不对交易数据的完整性和准确性作出绝对保证，您应及时核对相关信息。
+3. 对于您因违反本协议或法律法规而产生的损失，本平台不承担责任。
+
+## 七、协议的变更
+
+本平台有权根据法律法规及业务发展需要修改本协议，修改后的协议将在本平台公布。您继续使用服务即视为接受修改后的协议；如不同意，您应停止使用本平台服务。
+
+## 八、适用法律与争议解决
+
+本协议的订立、执行和解释适用中华人民共和国法律。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均可向本平台所在地有管辖权的人民法院提起诉讼。', '<h2>一、协议的接受</h2>
+<p>欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。</p>
+<h2>二、服务说明</h2>
+<p>本平台为商户及运营管理人员提供支付交易管理、资金结算、订单查询、数据统计及相关增值服务。具体服务内容以本平台实际提供的为准。本平台保留对服务内容进行调整、升级或终止的权利。</p>
+<h2>三、用户账号</h2>
+<ol>
+<li>您应使用真实、准确的信息注册和管理账号，并对账号及密码的安全负全部责任。</li>
+<li>您不得将账号转让、出借给第三方使用，由此产生的一切责任由您自行承担。</li>
+<li>如发现账号存在安全隐患或被未经授权使用，应立即通知本平台。</li>
+</ol>
+<h2>四、用户行为规范</h2>
+<p>您承诺不利用本平台从事下列行为：</p>
+<ol>
+<li>违反国家法律法规的行为；</li>
+<li>侵犯他人合法权益的行为；</li>
+<li>虚假交易、洗钱、套现等违规支付行为；</li>
+<li>破坏本平台系统安全或干扰正常运行的行为；</li>
+<li>其他损害本平台或第三方权益的行为。</li>
+</ol>
+<h2>五、知识产权</h2>
+<p>本平台的所有内容，包括但不限于文字、图片、软件、界面设计、程序代码等，其知识产权均归本平台所有。未经书面授权，您不得复制、转载、修改或将其用于其他商业用途。</p>
+<h2>六、免责声明</h2>
+<ol>
+<li>因不可抗力、系统维护、网络故障等原因导致服务中断，本平台不承担责任。</li>
+<li>本平台不对交易数据的完整性和准确性作出绝对保证，您应及时核对相关信息。</li>
+<li>对于您因违反本协议或法律法规而产生的损失，本平台不承担责任。</li>
+</ol>
+<h2>七、协议的变更</h2>
+<p>本平台有权根据法律法规及业务发展需要修改本协议，修改后的协议将在本平台公布。您继续使用服务即视为接受修改后的协议；如不同意，您应停止使用本平台服务。</p>
+<h2>八、适用法律与争议解决</h2>
+<p>本协议的订立、执行和解释适用中华人民共和国法律。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均可向本平台所在地有管辖权的人民法院提起诉讼。</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'App 端用户服务协议模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000112, 2091000000000000011, 'en-US', 1, 'v1.0', 'DaxPay Terms of Service', '## 1. Acceptance of Terms
+
+Welcome to the DaxPay Payment Management Platform ("the Platform"). Please read and fully understand all terms of this agreement before using the Platform''s services. By clicking "Agree" or using the Platform''s services, you acknowledge that you have read and accepted all terms of this agreement, which constitutes a legally binding contract between you and the Platform.
+
+## 2. Service Description
+
+The Platform provides merchants and operators with payment transaction management, fund settlement, order inquiry, data statistics, and related value-added services. The specific services are subject to the Platform''s actual offerings. The Platform reserves the right to adjust, upgrade, or terminate services.
+
+## 3. User Account
+
+1. You shall register and manage your account with true and accurate information, and you are solely responsible for the security of your account and password.
+2. You shall not transfer or lend your account to any third party. You shall bear all responsibilities arising therefrom.
+3. If you discover any security risk or unauthorized use of your account, you shall notify the Platform immediately.
+
+## 4. User Conduct
+
+You agree not to use the Platform to engage in the following:
+
+1. Acts that violate applicable laws and regulations;
+2. Acts that infringe upon the lawful rights of others;
+3. Fraudulent transactions, money laundering, cash-out, or other illicit payment activities;
+4. Acts that compromise the Platform''s system security or interfere with its normal operation;
+5. Other acts that harm the rights of the Platform or any third party.
+
+## 5. Intellectual Property
+
+All content on the Platform, including but not limited to text, images, software, interface design, and source code, is owned by the Platform. Without written authorization, you may not copy, reproduce, modify, or use it for other commercial purposes.
+
+## 6. Disclaimer
+
+1. The Platform is not liable for service interruptions caused by force majeure, system maintenance, or network failures.
+2. The Platform does not guarantee the absolute completeness or accuracy of transaction data. You shall verify relevant information in a timely manner.
+3. The Platform is not liable for any losses arising from your breach of this agreement or applicable laws.
+
+## 7. Changes to the Agreement
+
+The Platform reserves the right to modify this agreement in accordance with laws, regulations, and business development. The modified agreement will be published on the Platform. Your continued use of the services constitutes acceptance of the modified agreement; if you disagree, you shall cease using the Platform''s services.
+
+## 8. Governing Law and Dispute Resolution
+
+The formation, performance, and interpretation of this agreement shall be governed by the laws of the People''s Republic of China. Disputes arising from this agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may bring a lawsuit before a people''s court with jurisdiction at the Platform''s location.', '<h2>1. Acceptance of Terms</h2>
+<p>Welcome to the DaxPay Payment Management Platform ("the Platform"). Please read and fully understand all terms of this agreement before using the Platform''s services. By clicking "Agree" or using the Platform''s services, you acknowledge that you have read and accepted all terms of this agreement, which constitutes a legally binding contract between you and the Platform.</p>
+<h2>2. Service Description</h2>
+<p>The Platform provides merchants and operators with payment transaction management, fund settlement, order inquiry, data statistics, and related value-added services. The specific services are subject to the Platform''s actual offerings. The Platform reserves the right to adjust, upgrade, or terminate services.</p>
+<h2>3. User Account</h2>
+<ol>
+<li>You shall register and manage your account with true and accurate information, and you are solely responsible for the security of your account and password.</li>
+<li>You shall not transfer or lend your account to any third party. You shall bear all responsibilities arising therefrom.</li>
+<li>If you discover any security risk or unauthorized use of your account, you shall notify the Platform immediately.</li>
+</ol>
+<h2>4. User Conduct</h2>
+<p>You agree not to use the Platform to engage in the following:</p>
+<ol>
+<li>Acts that violate applicable laws and regulations;</li>
+<li>Acts that infringe upon the lawful rights of others;</li>
+<li>Fraudulent transactions, money laundering, cash-out, or other illicit payment activities;</li>
+<li>Acts that compromise the Platform''s system security or interfere with its normal operation;</li>
+<li>Other acts that harm the rights of the Platform or any third party.</li>
+</ol>
+<h2>5. Intellectual Property</h2>
+<p>All content on the Platform, including but not limited to text, images, software, interface design, and source code, is owned by the Platform. Without written authorization, you may not copy, reproduce, modify, or use it for other commercial purposes.</p>
+<h2>6. Disclaimer</h2>
+<ol>
+<li>The Platform is not liable for service interruptions caused by force majeure, system maintenance, or network failures.</li>
+<li>The Platform does not guarantee the absolute completeness or accuracy of transaction data. You shall verify relevant information in a timely manner.</li>
+<li>The Platform is not liable for any losses arising from your breach of this agreement or applicable laws.</li>
+</ol>
+<h2>7. Changes to the Agreement</h2>
+<p>The Platform reserves the right to modify this agreement in accordance with laws, regulations, and business development. The modified agreement will be published on the Platform. Your continued use of the services constitutes acceptance of the modified agreement; if you disagree, you shall cease using the Platform''s services.</p>
+<h2>8. Governing Law and Dispute Resolution</h2>
+<p>The formation, performance, and interpretation of this agreement shall be governed by the laws of the People''s Republic of China. Disputes arising from this agreement shall first be resolved through friendly negotiation; if negotiation fails, either party may bring a lawsuit before a people''s court with jurisdiction at the Platform''s location.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'English template of the App terms of service', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000113, 2091000000000000012, 'zh-CN', 1, 'v1.0', 'DaxPay 隐私政策', 'DaxPay（以下简称"本平台"）高度重视用户隐私保护。本隐私政策说明本平台在您使用服务时如何收集、使用、共享和保护您的个人信息。请您仔细阅读本政策，使用本平台服务即表示您同意本政策所述内容。
+
+## 一、信息收集
+
+本平台在您使用服务过程中可能收集以下信息：
+
+1. 账号信息：用户名、密码（加密存储）、角色信息；
+2. 交易信息：订单数据、交易记录、资金流水；
+3. 设备信息：设备标识、操作系统、网络状态；
+4. 日志信息：登录时间、操作日志、访问记录。
+
+## 二、信息使用
+
+收集的信息将用于：
+
+1. 提供支付管理与交易服务；
+2. 身份验证与安全保障；
+3. 数据统计与业务分析；
+4. 风险控制与反欺诈；
+5. 法律法规要求或监管需要。
+
+## 三、信息共享
+
+本平台不会向第三方出售您的个人信息。在以下情形下，本平台可能共享您的信息：
+
+1. 获得您的明确同意；
+2. 根据法律法规或有权机关的要求；
+3. 与合作支付通道完成交易（仅限必要信息）；
+4. 为维护本平台合法权益。
+
+## 四、信息安全
+
+本平台采取行业通行的安全措施（包括数据加密、访问控制、安全审计等）保护您的信息安全。但请注意，互联网传输并非绝对安全，本平台不能保证信息传输的绝对安全性。
+
+## 五、用户权利
+
+您对个人信息享有以下权利：
+
+1. 查询、更正个人信息；
+2. 删除个人信息或注销账号；
+3. 撤回授权同意；
+4. 投诉举报。
+
+行使上述权利请联系本平台客服。
+
+## 六、未成年人保护
+
+本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。
+
+## 七、隐私政策变更
+
+本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。', '<p>DaxPay（以下简称"本平台"）高度重视用户隐私保护。本隐私政策说明本平台在您使用服务时如何收集、使用、共享和保护您的个人信息。请您仔细阅读本政策，使用本平台服务即表示您同意本政策所述内容。</p>
+<h2>一、信息收集</h2>
+<p>本平台在您使用服务过程中可能收集以下信息：</p>
+<ol>
+<li>账号信息：用户名、密码（加密存储）、角色信息；</li>
+<li>交易信息：订单数据、交易记录、资金流水；</li>
+<li>设备信息：设备标识、操作系统、网络状态；</li>
+<li>日志信息：登录时间、操作日志、访问记录。</li>
+</ol>
+<h2>二、信息使用</h2>
+<p>收集的信息将用于：</p>
+<ol>
+<li>提供支付管理与交易服务；</li>
+<li>身份验证与安全保障；</li>
+<li>数据统计与业务分析；</li>
+<li>风险控制与反欺诈；</li>
+<li>法律法规要求或监管需要。</li>
+</ol>
+<h2>三、信息共享</h2>
+<p>本平台不会向第三方出售您的个人信息。在以下情形下，本平台可能共享您的信息：</p>
+<ol>
+<li>获得您的明确同意；</li>
+<li>根据法律法规或有权机关的要求；</li>
+<li>与合作支付通道完成交易（仅限必要信息）；</li>
+<li>为维护本平台合法权益。</li>
+</ol>
+<h2>四、信息安全</h2>
+<p>本平台采取行业通行的安全措施（包括数据加密、访问控制、安全审计等）保护您的信息安全。但请注意，互联网传输并非绝对安全，本平台不能保证信息传输的绝对安全性。</p>
+<h2>五、用户权利</h2>
+<p>您对个人信息享有以下权利：</p>
+<ol>
+<li>查询、更正个人信息；</li>
+<li>删除个人信息或注销账号；</li>
+<li>撤回授权同意；</li>
+<li>投诉举报。</li>
+</ol>
+<p>行使上述权利请联系本平台客服。</p>
+<h2>六、未成年人保护</h2>
+<p>本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。</p>
+<h2>七、隐私政策变更</h2>
+<p>本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'App 端隐私政策模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000114, 2091000000000000012, 'en-US', 1, 'v1.0', 'DaxPay Privacy Policy', 'DaxPay ("the Platform") takes user privacy seriously. This Privacy Policy explains how the Platform collects, uses, shares, and protects your personal information when you use our services. Please read this policy carefully. Using the Platform''s services indicates your agreement with this policy.
+
+## 1. Information Collection
+
+The Platform may collect the following information when you use our services:
+
+1. Account information: username, password (encrypted), role information;
+2. Transaction information: order data, transaction records, fund flow;
+3. Device information: device identifier, operating system, network status;
+4. Log information: login time, operation logs, access records.
+
+## 2. Information Use
+
+The collected information will be used for:
+
+1. Providing payment management and transaction services;
+2. Identity verification and security;
+3. Data statistics and business analysis;
+4. Risk control and anti-fraud;
+5. Legal or regulatory requirements.
+
+## 3. Information Sharing
+
+The Platform will not sell your personal information to third parties. Under the following circumstances, the Platform may share your information:
+
+1. With your explicit consent;
+2. As required by laws, regulations, or competent authorities;
+3. With partner payment channels to complete transactions (only necessary information);
+4. To protect the Platform''s lawful rights.
+
+## 4. Information Security
+
+The Platform adopts industry-standard security measures (including data encryption, access control, and security audits) to protect your information. However, please note that internet transmission is not absolutely secure, and the Platform cannot guarantee absolute security of information transmission.
+
+## 5. User Rights
+
+You have the following rights regarding your personal information:
+
+1. Access and correct your personal information;
+2. Delete your personal information or deactivate your account;
+3. Withdraw your consent;
+4. File complaints or reports.
+
+To exercise these rights, please contact the Platform''s customer service.
+
+## 6. Protection of Minors
+
+The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.
+
+## 7. Changes to this Privacy Policy
+
+The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.', '<p>DaxPay ("the Platform") takes user privacy seriously. This Privacy Policy explains how the Platform collects, uses, shares, and protects your personal information when you use our services. Please read this policy carefully. Using the Platform''s services indicates your agreement with this policy.</p>
+<h2>1. Information Collection</h2>
+<p>The Platform may collect the following information when you use our services:</p>
+<ol>
+<li>Account information: username, password (encrypted), role information;</li>
+<li>Transaction information: order data, transaction records, fund flow;</li>
+<li>Device information: device identifier, operating system, network status;</li>
+<li>Log information: login time, operation logs, access records.</li>
+</ol>
+<h2>2. Information Use</h2>
+<p>The collected information will be used for:</p>
+<ol>
+<li>Providing payment management and transaction services;</li>
+<li>Identity verification and security;</li>
+<li>Data statistics and business analysis;</li>
+<li>Risk control and anti-fraud;</li>
+<li>Legal or regulatory requirements.</li>
+</ol>
+<h2>3. Information Sharing</h2>
+<p>The Platform will not sell your personal information to third parties. Under the following circumstances, the Platform may share your information:</p>
+<ol>
+<li>With your explicit consent;</li>
+<li>As required by laws, regulations, or competent authorities;</li>
+<li>With partner payment channels to complete transactions (only necessary information);</li>
+<li>To protect the Platform''s lawful rights.</li>
+</ol>
+<h2>4. Information Security</h2>
+<p>The Platform adopts industry-standard security measures (including data encryption, access control, and security audits) to protect your information. However, please note that internet transmission is not absolutely secure, and the Platform cannot guarantee absolute security of information transmission.</p>
+<h2>5. User Rights</h2>
+<p>You have the following rights regarding your personal information:</p>
+<ol>
+<li>Access and correct your personal information;</li>
+<li>Delete your personal information or deactivate your account;</li>
+<li>Withdraw your consent;</li>
+<li>File complaints or reports.</li>
+</ol>
+<p>To exercise these rights, please contact the Platform''s customer service.</p>
+<h2>6. Protection of Minors</h2>
+<p>The Platform does not provide services to minors. If you are a minor, please use the Platform under the guidance of a guardian and ensure you have obtained the guardian''s consent.</p>
+<h2>7. Changes to this Privacy Policy</h2>
+<p>The Platform may revise this Privacy Policy from time to time. The updated policy will be published on the Platform. Significant changes will be communicated to you via notifications.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'English template of the App privacy policy', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000115, 2091000000000000013, 'zh-CN', 1, 'v1.0', 'DaxPay 第三方信息共享清单', 'DaxPay（以下简称“本平台”）根据适用法律法规的要求制定本第三方信息共享清单，向您说明本平台对外共享个人信息的情形与范围。本清单是《DaxPay 隐私政策》的组成部分，请您与隐私政策一并阅读。
+
+## 一、共享的基本原则
+
+1. 基于正当、合法、必要的原则，仅共享实现服务目的所必需的个人信息；
+2. 事先获得您的授权同意或符合法律法规规定的其他情形；
+3. 与信息接收方约定处理目的、处理方式、个人信息种类和保护措施，并对其处理活动进行监督。
+
+## 二、支付通道服务商
+
+1. 共享对象：微信支付、支付宝、银联等持牌支付机构；
+2. 共享内容：订单号、交易金额、商户编号、支付时间等交易必要信息；
+3. 共享目的：完成支付交易、资金结算与对账；
+4. 共享方式：因业务功能所必需，经加密接口传输。
+
+## 三、短信与消息通知服务商
+
+1. 共享对象：本平台合作的短信、消息推送服务商；
+2. 共享内容：手机号码、验证码内容、通知文案；
+3. 共享目的：向商户及用户发送登录验证、交易与安全通知；
+4. 共享方式：因业务功能所必需，经加密接口传输。
+
+## 四、云服务与安全服务商
+
+1. 共享对象：本平台合作的云基础设施与安全服务提供商；
+2. 共享内容：网络配置、安全防护所需的必要技术信息；
+3. 共享目的：保障系统稳定运行与信息安全；
+4. 共享方式：因系统运行所必需，在受控环境内处理。
+
+## 五、法律法规规定的情形
+
+1. 根据法律法规、司法机关或有权机关的强制要求；
+2. 为订立、履行合同所必需；
+3. 为维护本平台或第三方的合法权益所必需。
+
+## 六、清单的更新
+
+本平台可能根据业务变化适时更新本清单，更新后将在本平台公布。如共享目的、方式或范围发生重大变化，本平台将以适当方式告知您并再次取得您的同意。', '<p>DaxPay（以下简称“本平台”）根据适用法律法规的要求制定本第三方信息共享清单，向您说明本平台对外共享个人信息的情形与范围。本清单是《DaxPay 隐私政策》的组成部分，请您与隐私政策一并阅读。</p>
+<h2>一、共享的基本原则</h2>
+<ol>
+<li>基于正当、合法、必要的原则，仅共享实现服务目的所必需的个人信息；</li>
+<li>事先获得您的授权同意或符合法律法规规定的其他情形；</li>
+<li>与信息接收方约定处理目的、处理方式、个人信息种类和保护措施，并对其处理活动进行监督。</li>
+</ol>
+<h2>二、支付通道服务商</h2>
+<ol>
+<li>共享对象：微信支付、支付宝、银联等持牌支付机构；</li>
+<li>共享内容：订单号、交易金额、商户编号、支付时间等交易必要信息；</li>
+<li>共享目的：完成支付交易、资金结算与对账；</li>
+<li>共享方式：因业务功能所必需，经加密接口传输。</li>
+</ol>
+<h2>三、短信与消息通知服务商</h2>
+<ol>
+<li>共享对象：本平台合作的短信、消息推送服务商；</li>
+<li>共享内容：手机号码、验证码内容、通知文案；</li>
+<li>共享目的：向商户及用户发送登录验证、交易与安全通知；</li>
+<li>共享方式：因业务功能所必需，经加密接口传输。</li>
+</ol>
+<h2>四、云服务与安全服务商</h2>
+<ol>
+<li>共享对象：本平台合作的云基础设施与安全服务提供商；</li>
+<li>共享内容：网络配置、安全防护所需的必要技术信息；</li>
+<li>共享目的：保障系统稳定运行与信息安全；</li>
+<li>共享方式：因系统运行所必需，在受控环境内处理。</li>
+</ol>
+<h2>五、法律法规规定的情形</h2>
+<ol>
+<li>根据法律法规、司法机关或有权机关的强制要求；</li>
+<li>为订立、履行合同所必需；</li>
+<li>为维护本平台或第三方的合法权益所必需。</li>
+</ol>
+<h2>六、清单的更新</h2>
+<p>本平台可能根据业务变化适时更新本清单，更新后将在本平台公布。如共享目的、方式或范围发生重大变化，本平台将以适当方式告知您并再次取得您的同意。</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'Web 端第三方信息共享清单模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000116, 2091000000000000013, 'en-US', 1, 'v1.0', 'DaxPay Third-Party Information Sharing List', 'DaxPay ("the Platform") publishes this Third-Party Information Sharing List in accordance with applicable laws and regulations to explain the circumstances and scope in which the Platform shares personal information with third parties. This list forms an integral part of the DaxPay Privacy Policy and should be read together with it.
+
+## 1. Basic Principles of Sharing
+
+1. Personal information is shared only to the extent necessary for the service purpose, based on legitimate, lawful, and necessary grounds;
+2. Your prior consent is obtained, unless otherwise provided by laws and regulations;
+3. The Platform agrees with recipients on the processing purpose, processing method, categories of personal information, and protection measures, and supervises their processing activities.
+
+## 2. Payment Channel Providers
+
+1. Recipients: licensed payment institutions such as WeChat Pay, Alipay, and UnionPay;
+2. Information shared: order numbers, transaction amounts, merchant identifiers, payment time, and other information necessary for transactions;
+3. Purpose: completing payment transactions, fund settlement, and reconciliation;
+4. Method: necessary for the business function, transmitted via encrypted interfaces.
+
+## 3. SMS and Messaging Service Providers
+
+1. Recipients: SMS and push notification service providers cooperating with the Platform;
+2. Information shared: mobile phone numbers, verification code content, and notification text;
+3. Purpose: sending login verification, transaction, and security notifications to merchants and users;
+4. Method: necessary for the business function, transmitted via encrypted interfaces.
+
+## 4. Cloud and Security Service Providers
+
+1. Recipients: cloud infrastructure and security service providers cooperating with the Platform;
+2. Information shared: network configurations and necessary technical information for security protection;
+3. Purpose: ensuring stable system operation and information security;
+4. Method: necessary for system operation, processed within a controlled environment.
+
+## 5. Circumstances Required by Laws and Regulations
+
+1. Mandatory requirements of laws and regulations, judicial authorities, or competent authorities;
+2. Necessary for the conclusion or performance of a contract;
+3. Necessary to protect the lawful rights and interests of the Platform or third parties.
+
+## 6. Updates to This List
+
+The Platform may update this list from time to time according to business changes, and the updated list will be published on the Platform. If there are significant changes to the purpose, method, or scope of sharing, the Platform will inform you in an appropriate manner and obtain your consent again.', '<p>DaxPay ("the Platform") publishes this Third-Party Information Sharing List in accordance with applicable laws and regulations to explain the circumstances and scope in which the Platform shares personal information with third parties. This list forms an integral part of the DaxPay Privacy Policy and should be read together with it.</p>
+<h2>1. Basic Principles of Sharing</h2>
+<ol>
+<li>Personal information is shared only to the extent necessary for the service purpose, based on legitimate, lawful, and necessary grounds;</li>
+<li>Your prior consent is obtained, unless otherwise provided by laws and regulations;</li>
+<li>The Platform agrees with recipients on the processing purpose, processing method, categories of personal information, and protection measures, and supervises their processing activities.</li>
+</ol>
+<h2>2. Payment Channel Providers</h2>
+<ol>
+<li>Recipients: licensed payment institutions such as WeChat Pay, Alipay, and UnionPay;</li>
+<li>Information shared: order numbers, transaction amounts, merchant identifiers, payment time, and other information necessary for transactions;</li>
+<li>Purpose: completing payment transactions, fund settlement, and reconciliation;</li>
+<li>Method: necessary for the business function, transmitted via encrypted interfaces.</li>
+</ol>
+<h2>3. SMS and Messaging Service Providers</h2>
+<ol>
+<li>Recipients: SMS and push notification service providers cooperating with the Platform;</li>
+<li>Information shared: mobile phone numbers, verification code content, and notification text;</li>
+<li>Purpose: sending login verification, transaction, and security notifications to merchants and users;</li>
+<li>Method: necessary for the business function, transmitted via encrypted interfaces.</li>
+</ol>
+<h2>4. Cloud and Security Service Providers</h2>
+<ol>
+<li>Recipients: cloud infrastructure and security service providers cooperating with the Platform;</li>
+<li>Information shared: network configurations and necessary technical information for security protection;</li>
+<li>Purpose: ensuring stable system operation and information security;</li>
+<li>Method: necessary for system operation, processed within a controlled environment.</li>
+</ol>
+<h2>5. Circumstances Required by Laws and Regulations</h2>
+<ol>
+<li>Mandatory requirements of laws and regulations, judicial authorities, or competent authorities;</li>
+<li>Necessary for the conclusion or performance of a contract;</li>
+<li>Necessary to protect the lawful rights and interests of the Platform or third parties.</li>
+</ol>
+<h2>6. Updates to This List</h2>
+<p>The Platform may update this list from time to time according to business changes, and the updated list will be published on the Platform. If there are significant changes to the purpose, method, or scope of sharing, the Platform will inform you in an appropriate manner and obtain your consent again.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'English template of the third-party information sharing list', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000117, 2091000000000000014, 'zh-CN', 1, 'v1.0', 'DaxPay 未成年人隐私说明', 'DaxPay（以下简称“本平台”）高度重视未成年人个人信息的保护。本说明依据适用法律法规制定，是《DaxPay 隐私政策》的组成部分，向您说明本平台处理未成年人个人信息的原则、方式与保护措施。
+
+## 一、适用范围
+
+本说明适用于未满十八周岁的未成年人。本平台面向商户及运营管理人员提供服务，不以未成年人为目标用户；如未成年人确需使用本平台服务，应在监护人指导下进行。
+
+## 二、监护人同意
+
+1. 未成年人使用本平台服务前，应由其监护人阅读并同意本说明及《DaxPay 隐私政策》；
+2. 监护人有权拒绝、撤回同意或要求删除未成年人的个人信息；
+3. 本平台发现未经监护人同意处理未成年人个人信息的，将尽快删除相关信息。
+
+## 三、信息的收集与使用
+
+1. 本平台仅收集实现服务目的所必需的未成年人个人信息；
+2. 不会将未成年人个人信息用于个性化推荐或营销目的；
+3. 不会公开未成年人个人信息，或向不必要的第三方提供。
+
+## 四、信息保护措施
+
+本平台采取加密传输、访问控制、安全审计等技术与制度措施保护未成年人个人信息，防止信息泄露、篡改、丢失。发生或可能发生信息安全事件的，本平台将及时启动应急预案并告知监护人。
+
+## 五、监护人权利
+
+监护人有权查询、更正、删除未成年人个人信息，并可投诉举报。行使上述权利请联系本平台客服，本平台将及时处理并反馈。
+
+## 六、说明的更新
+
+本平台可能适时修订本说明，更新后将在本平台公布。重大变更将通过适当方式告知监护人。', '<p>DaxPay（以下简称“本平台”）高度重视未成年人个人信息的保护。本说明依据适用法律法规制定，是《DaxPay 隐私政策》的组成部分，向您说明本平台处理未成年人个人信息的原则、方式与保护措施。</p>
+<h2>一、适用范围</h2>
+<p>本说明适用于未满十八周岁的未成年人。本平台面向商户及运营管理人员提供服务，不以未成年人为目标用户；如未成年人确需使用本平台服务，应在监护人指导下进行。</p>
+<h2>二、监护人同意</h2>
+<ol>
+<li>未成年人使用本平台服务前，应由其监护人阅读并同意本说明及《DaxPay 隐私政策》；</li>
+<li>监护人有权拒绝、撤回同意或要求删除未成年人的个人信息；</li>
+<li>本平台发现未经监护人同意处理未成年人个人信息的，将尽快删除相关信息。</li>
+</ol>
+<h2>三、信息的收集与使用</h2>
+<ol>
+<li>本平台仅收集实现服务目的所必需的未成年人个人信息；</li>
+<li>不会将未成年人个人信息用于个性化推荐或营销目的；</li>
+<li>不会公开未成年人个人信息，或向不必要的第三方提供。</li>
+</ol>
+<h2>四、信息保护措施</h2>
+<p>本平台采取加密传输、访问控制、安全审计等技术与制度措施保护未成年人个人信息，防止信息泄露、篡改、丢失。发生或可能发生信息安全事件的，本平台将及时启动应急预案并告知监护人。</p>
+<h2>五、监护人权利</h2>
+<p>监护人有权查询、更正、删除未成年人个人信息，并可投诉举报。行使上述权利请联系本平台客服，本平台将及时处理并反馈。</p>
+<h2>六、说明的更新</h2>
+<p>本平台可能适时修订本说明，更新后将在本平台公布。重大变更将通过适当方式告知监护人。</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'Web 端未成年人隐私说明模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version (id, protocol_id, language, version_no, version_label, title, content, content_html, content_format, status, effective_time, summary, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2091000000000000118, 2091000000000000014, 'en-US', 1, 'v1.0', 'DaxPay Children''s Privacy Statement', 'DaxPay ("the Platform") attaches great importance to the protection of personal information of minors. This statement is formulated in accordance with applicable laws and regulations and forms an integral part of the DaxPay Privacy Policy. It explains the principles, methods, and protection measures adopted by the Platform for processing personal information of minors.
+
+## 1. Scope of Application
+
+This statement applies to minors under the age of eighteen. The Platform serves merchants and operations management personnel and does not target minors as users. If a minor does need to use the services of the Platform, such use should take place under the guidance of a guardian.
+
+## 2. Guardian Consent
+
+1. Before a minor uses the services of the Platform, the guardian should read and agree to this statement and the DaxPay Privacy Policy;
+2. The guardian has the right to refuse or withdraw consent, or to request deletion of the personal information of the minor;
+3. If the Platform discovers that personal information of a minor is processed without guardian consent, it will delete the relevant information as soon as possible.
+
+## 3. Collection and Use of Information
+
+1. The Platform collects only the personal information of minors that is necessary for the service purpose;
+2. Such information will not be used for personalized recommendations or marketing purposes;
+3. Such information will not be made public or shared with unnecessary third parties.
+
+## 4. Information Protection Measures
+
+The Platform adopts technical and institutional measures such as encrypted transmission, access control, and security audits to protect the personal information of minors from leakage, tampering, and loss. In the event of an actual or potential information security incident, the Platform will promptly activate its contingency plan and inform the guardian.
+
+## 5. Guardian Rights
+
+Guardians have the right to query, correct, and delete the personal information of minors, and to file complaints and reports. To exercise these rights, please contact the customer service of the Platform, which will process and respond promptly.
+
+## 6. Updates to This Statement
+
+The Platform may revise this statement from time to time, and the updated version will be published on the Platform. Significant changes will be communicated to guardians in an appropriate manner.', '<p>DaxPay ("the Platform") attaches great importance to the protection of personal information of minors. This statement is formulated in accordance with applicable laws and regulations and forms an integral part of the DaxPay Privacy Policy. It explains the principles, methods, and protection measures adopted by the Platform for processing personal information of minors.</p>
+<h2>1. Scope of Application</h2>
+<p>This statement applies to minors under the age of eighteen. The Platform serves merchants and operations management personnel and does not target minors as users. If a minor does need to use the services of the Platform, such use should take place under the guidance of a guardian.</p>
+<h2>2. Guardian Consent</h2>
+<ol>
+<li>Before a minor uses the services of the Platform, the guardian should read and agree to this statement and the DaxPay Privacy Policy;</li>
+<li>The guardian has the right to refuse or withdraw consent, or to request deletion of the personal information of the minor;</li>
+<li>If the Platform discovers that personal information of a minor is processed without guardian consent, it will delete the relevant information as soon as possible.</li>
+</ol>
+<h2>3. Collection and Use of Information</h2>
+<ol>
+<li>The Platform collects only the personal information of minors that is necessary for the service purpose;</li>
+<li>Such information will not be used for personalized recommendations or marketing purposes;</li>
+<li>Such information will not be made public or shared with unnecessary third parties.</li>
+</ol>
+<h2>4. Information Protection Measures</h2>
+<p>The Platform adopts technical and institutional measures such as encrypted transmission, access control, and security audits to protect the personal information of minors from leakage, tampering, and loss. In the event of an actual or potential information security incident, the Platform will promptly activate its contingency plan and inform the guardian.</p>
+<h2>5. Guardian Rights</h2>
+<p>Guardians have the right to query, correct, and delete the personal information of minors, and to file complaints and reports. To exercise these rights, please contact the customer service of the Platform, which will process and respond promptly.</p>
+<h2>6. Updates to This Statement</h2>
+<p>The Platform may revise this statement from time to time, and the updated version will be published on the Platform. Significant changes will be communicated to guardians in an appropriate manner.</p>', 'MARKDOWN', 'PUBLISHED', '2026-11-10 00:00:00+00', 'English template of the children''s privacy statement', 1, '2026-11-10 00:00:00+00', 1, '2026-11-10 00:00:00+00', 0, false);
 
 --
 -- Data for Name: iam_perm_code; Type: TABLE DATA; Schema: public; Owner: -
@@ -4129,7 +4701,6 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2083000000000000007, 'trade:fund-flow:export', 'trade:fund-flow', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund-flow:export');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000002001, 'device:virtual:view', 'device:virtual', true, '虚拟设备查看权限码(与 @PermCode 注解一致, 固定ID种子)', 1, 1, 0, false, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'perm.device:virtual:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000002002, 'device:virtual:manage', 'device:virtual', true, '虚拟设备管理权限码(与 @PermCode 注解一致, 固定ID种子)', 1, 1, 0, false, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'perm.device:virtual:manage');
-INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072990657125986304, 'merchant:notify-config:view', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 3, true, '2026-07-03 10:27:41.619775+00', '2026-11-07 03:14:09.181558+00', 'perm.merchant:notify-config:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000002010, 'merchant:log:login:view', 'merchant:log:login', true, '商户端登录日志查看权限码(固定ID种子)', 1, 1, 0, false, '2026-11-09 00:00:00+00', '2026-11-09 00:00:00+00', 'perm.merchant:log:login:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000002011, 'merchant:log:operate:view', 'merchant:log:operate', true, '商户端操作日志查看权限码(固定ID种子)', 1, 1, 0, false, '2026-11-09 00:00:00+00', '2026-11-09 00:00:00+00', 'perm.merchant:log:operate:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2078479091642855424, 'develop:gateway:sign', 'develop:gateway', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.379702+00', '2026-07-18 13:56:46.383702+00', 'perm.develop:gateway:sign');
@@ -4140,7 +4711,6 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075452238553292800, 'device:qrcode:view', 'device:qrcode', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075452238557487104, 'iam:social:manage', 'iam:social', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:social:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075452238561681408, 'iam:social:view', 'iam:social', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.368793+00', '2026-07-15 03:59:23.683738+00', 'perm.iam:social:view');
-INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2085254519598546944, 'payment:risk:mch-config:manage', 'payment:risk:mch-config', true, NULL, 1, 1, 0, true, '2026-08-06 06:39:54.28434+00', '2026-09-08 10:13:38.591783+00', 'perm.payment:risk:mch-config:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2082124980798255104, 'payment:douyin:mch-app:manage', 'payment:douyin:mch-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.093134+00', '2026-07-28 15:24:14.099644+00', 'perm.payment:douyin:mch-app:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2082124981007970304, 'payment:douyin:mch-app:view', 'payment:douyin:mch-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.140188+00', '2026-07-28 15:24:14.140188+00', 'perm.payment:douyin:mch-app:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2082124981007970305, 'payment:douyin:platform-app:manage', 'payment:douyin:platform-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.140188+00', '2026-07-28 15:24:14.140188+00', 'perm.payment:douyin:platform-app:manage');
@@ -4152,7 +4722,6 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2082124981016358913, 'plugin:easypay-refund:view', 'plugin:easypay-refund', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.142188+00', '2026-07-28 15:24:14.142188+00', 'perm.plugin:easypay-refund:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2093325653469454336, 'iam:lock:unlock', 'iam:lock', true, NULL, 1, 1, 0, false, '2026-08-28 13:11:42.554226+00', '2026-08-28 13:11:42.554226+00', 'perm.iam:lock:unlock');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2093325653503008768, 'iam:lock:view', 'iam:lock', true, NULL, 1, 1, 0, false, '2026-08-28 13:11:42.562766+00', '2026-08-28 13:11:42.562766+00', 'perm.iam:lock:view');
-INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2085254519619518464, 'payment:risk:mch-config:view', 'payment:risk:mch-config', true, NULL, 1, 1, 0, true, '2026-08-06 06:39:54.289335+00', '2026-09-08 10:13:38.606507+00', 'perm.payment:risk:mch-config:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000000557, 'system:notify:mail-template:view', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000000558, 'system:notify:mail-template:manage', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2079866296000000559, 'system:notify:mail-template:test', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:test');
@@ -4210,8 +4779,6 @@ INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2070862265073209344, 'system:security-config:manage', 'system:security-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713487+00', 'perm.system:security-config:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2070862265073209345, 'system:security-config:view', 'system:security-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713992+00', 'perm.system:security-config:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072377871723388929, 'trade:fund:manage', 'trade:fund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.194097+00', '2026-07-15 03:59:23.713992+00', 'perm.trade:fund:manage');
-INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2070862265031266305, 'payment:platform:provider:manage', 'payment:platform:provider', true, '由 @PermCode 扫描同步生成', 1, 1, 1, true, '2026-06-27 13:30:13.400113+00', '2026-11-05 08:37:02.889821+00', 'perm.payment:platform:provider:manage');
-INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072990657067266048, 'merchant:notify-config:manage', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 3, true, '2026-07-03 10:27:41.608254+00', '2026-11-07 03:14:09.181558+00', 'perm.merchant:notify-config:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2072377871727583232, 'trade:fund:view', 'trade:fund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.195094+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:fund:view');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075769305903063040, 'trade:gateway-order:manage', 'trade:gateway-order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-11 02:29:03.113055+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:manage');
 INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key) VALUES (2075769305903063041, 'trade:gateway-order:view', 'trade:gateway-order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-11 02:29:03.113565+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:view');
@@ -5267,10 +5834,10 @@ INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, ico
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91701, 91700, NULL, 'merchant', 'menu.plugin.easypay', 'lucide:plug', false, false, NULL, '/plugin/easypay', '/plugin/easypay/order', 1, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-07-26 02:00:00+00', '2026-07-26 02:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91702, 91701, 'plugin:easypay-order', 'merchant', 'menu.plugin.easypay.order', 'lucide:credit-card', false, false, '/plugin/easypay/EasyPayOrderList', '/plugin/easypay/order', NULL, 1, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-07-26 02:00:00+00', '2026-07-26 02:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91703, 91701, 'plugin:easypay-refund', 'merchant', 'menu.plugin.easypay.refund', 'lucide:undo-2', false, false, '/plugin/easypay/EasyPayRefundOrderList', '/plugin/easypay/refund-order', NULL, 2, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-07-26 02:00:00+00', '2026-07-26 02:00:00+00', false);
-INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91810, NULL, NULL, 'merchant', 'menu.system', 'lucide:sliders-horizontal', false, false, NULL, '/system', '/log', 0, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-11-09 00:00:00+00', '2026-11-09 00:00:00+00', false);
-INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91800, 91810, NULL, 'merchant', 'menu.log', 'lucide:file-text', false, false, NULL, '/log', '/log/login', 1, false, false, 0, 1, 2, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-11-09 00:00:00+00', '2026-11-09 00:00:00+00', false);
+INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91800, 91810, NULL, 'merchant', 'menu.log', 'lucide:file-text', false, false, NULL, '/log', '/log/login', 1, false, false, 0, 1, 2, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-11-09 00:00:00+00', '2026-11-09 06:55:43.455768+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91801, 91800, 'merchant:log:login', 'merchant', 'menu.log.login', 'lucide:log-in', false, false, '/system/log/login/LoginLogList', '/log/login', NULL, 1, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-11-09 00:00:00+00', '2026-11-09 00:00:00+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91802, 91800, 'merchant:log:operate', 'merchant', 'menu.log.operate', 'lucide:activity', false, false, '/system/log/operate/OperateLogList', '/log/operate', NULL, 2, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-11-09 00:00:00+00', '2026-11-09 00:00:00+00', false);
+INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (91810, NULL, NULL, 'merchant', 'menu.system', 'lucide:sliders-horizontal', false, false, NULL, '/system', '/log', 0, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, '2026-11-09 00:00:00+00', '2026-11-09 09:03:32.154262+00', false);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (900001, 304, 'iam:social', 'admin', 'menu.system.config.thirdPlatform', 'lucide:share-2', false, false, '/system/config/third-platform/ThirdPlatform', '/system/config/third-platform', NULL, 5, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-13 02:15:41.505142+00', true);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (3040101, 304, 'system:security-config', 'admin', 'menu.system.security.system', 'lucide:lock', false, false, '/system/config/security/SystemSecurityConfig', '/system/config/security/system', NULL, 2, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-07-16 07:31:19.446929+00', '2026-08-27 09:32:24.889475+00', true);
 INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time, query_sync) VALUES (3040201, 30402, 'system:oss-config', 'admin', 'menu.system.config.platform', NULL, true, false, NULL, NULL, NULL, 1, false, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00', false);
@@ -5458,6 +6025,7 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098298729817903
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2083360959840325632, 2, 91420);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2080835059550670848, 2, 91421);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098298729817903105, 2, 91422);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2077568468000030001, 2, 91431);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000091432, 2, 91432);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2080641499102658560, 2, 91501);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2080921659299221504, 2, 91600);
@@ -5469,10 +6037,10 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2081221795145486
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2081221795359395840, 2, 91701);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2081221795363590144, 2, 91702);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2081221795363590145, 2, 91703);
-INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000091810, 2, 91810);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000091800, 2, 91800);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000091801, 2, 91801);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000091802, 2, 91802);
+INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (1000000091810, 2, 91810);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091001, 3, 91001);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091002, 3, 91002);
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (3000091003, 3, 91003);
