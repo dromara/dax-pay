@@ -40,8 +40,8 @@ public class UserInfoStatusCheckImpl implements UserInfoStatusCheck {
         if (userDetail.isAdmin()) {
             return;
         }
-        //  判断用户是否被禁用
-        if (Objects.equals(userDetail.getStatus(), UserStatusEnum.BAN)){
+        // 判断用户是否被禁用(状态列为字符串码, 须与枚举 code 比较, 不能与枚举常量本身比)
+        if (UserStatusEnum.BAN.getCode().equals(userDetail.getStatus())) {
             // 认证: 该用户已被禁用
             throw new LoginFailureException("error.auth.userDisabled");
         }

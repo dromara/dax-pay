@@ -201,38 +201,52 @@ public class UserAdminService {
     /// 封禁用户
     ///
     /// 主体管理员(商户)不可封禁: 封禁会导致主体失管且其角色无法换绑他人, 统一在此拦截;
-    /// 内置超管不可封禁: 登录链对超管跳过状态检查, 封禁不产生实际拦截、只会造成"显示封禁却能登录"的矛盾态
+    /// 内置超管不可封禁: 登录链对超管跳过状态检查, 封禁不产生实际拦截、只会造成"显示封禁却能登录"的矛盾态;
+    /// 封禁同时踢全部在线会话, 已有 token 立即失效, 不等会话自然过期
+    @Transactional(rollbackFor = Exception.class)
     public void ban(Long userId) {
         this.checkNotSubjectAdmin(userId);
         this.checkNotAdministrator(userId, "error.iam.user.administratorBanDenied");
         userInfoManager.setUpStatus(userId, UserStatusEnum.BAN.getCode());
+        this.kickoutAfterCommit(List.of(userId));
     }
 
     /// 批量封禁用户
+    ///
+    /// 语义同 [#ban]: 校验全部通过后才落库, 踢线同样覆盖全部目标用户
+    @Transactional(rollbackFor = Exception.class)
     public void banBatch(List<Long> userIds) {
         userIds.forEach(userId -> {
             this.checkNotSubjectAdmin(userId);
             this.checkNotAdministrator(userId, "error.iam.user.administratorBanDenied");
         });
         userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.BAN.getCode());
+        this.kickoutAfterCommit(userIds);
     }
 
     /// 锁定用户
     ///
-    /// 与封禁同口径: 主体管理员/内置超管不可锁定
+    /// 与封禁同口径: 主体管理员/内置超管不可锁定;
+    /// 锁定同时踢全部在线会话, 解锁后用户重新登录
+    @Transactional(rollbackFor = Exception.class)
     public void lock(Long userId) {
         this.checkNotSubjectAdmin(userId);
         this.checkNotAdministrator(userId, "error.iam.user.administratorLockDenied");
         userInfoManager.setUpStatus(userId, UserStatusEnum.LOCK.getCode());
+        this.kickoutAfterCommit(List.of(userId));
     }
 
     /// 批量锁定用户
+    ///
+    /// 语义同 [#lock]: 校验全部通过后才落库, 踢线同样覆盖全部目标用户
+    @Transactional(rollbackFor = Exception.class)
     public void lockBatch(List<Long> userIds) {
         userIds.forEach(userId -> {
             this.checkNotSubjectAdmin(userId);
             this.checkNotAdministrator(userId, "error.iam.user.administratorLockDenied");
         });
         userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.LOCK.getCode());
+        this.kickoutAfterCommit(userIds);
     }
 
     /// 校验目标用户不是内置超管, 是则拒绝
@@ -257,6 +271,19 @@ public class UserAdminService {
         });
     }
 
+    /// 注册事务提交后批量踢线回调
+    ///
+    /// 封禁/锁定共用: 状态落库与踢线同批生效, 已有 token 立即失效;
+    /// 注册在 afterCommit 而非事务内执行, 避免事务回滚时误踢(与重置密码/注销同纪律)。
+    private void kickoutAfterCommit(List<Long> userIds) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                userIds.forEach(onlineUserService::kickoutAllSessions);
+            }
+        });
+    }
+
     /// 解锁用户
     ///
     /// 双清: 同时清除账号状态锁([UserInfo#getStatus] 置 NORMAL)与登录重试锁定
@@ -269,6 +296,10 @@ public class UserAdminService {
     }
 
     /// 批量解锁用户: 语义同 [#unlock], 双清两种锁
+    ///
+    /// 显式开事务: 自调用 [#unlock] 不经代理, 其方法上的 @Transactional 不生效,
+    /// 外层无事务时整批部分失败会留下半解锁状态; 外层开事务后内层两步 UPDATE 原子生效。
+    @Transactional(rollbackFor = Exception.class)
     public void unlockBatch(List<Long> userIds) {
         for (Long userId : userIds) {
             this.unlock(userId);

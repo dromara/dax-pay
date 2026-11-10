@@ -37,6 +37,11 @@ public class LoginRetryService {
 
     /// 登录前检查
     public void checkBeforeLogin(UserDetail userDetail) {
+        // 封禁态给出明确提示, 其余非正常态(如管理端锁定)保持通用状态异常文案
+        if (UserStatusEnum.BAN.getCode().equals(userDetail.getStatus())) {
+            // 认证: 该用户已被禁用
+            throw new LoginFailureException(userDetail.getAccount(), "error.auth.userDisabled");
+        }
         if (!UserStatusEnum.NORMAL.getCode().equals(userDetail.getStatus())) {
             // 认证: 用户状态异常
             throw new LoginFailureException(userDetail.getAccount(), "error.auth.userStatusError");
