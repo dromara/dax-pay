@@ -186,6 +186,15 @@ public class UserAdminService {
         if (Objects.isNull(result)) {
             throw new UserInfoNotExistsException();
         }
+        // 回填角色(单角色模型, 与分页同口径): roleName 存 i18nKey 由前端翻译, roleCode 兜底;
+        // 内置超管无 user_role 记录, 两项保持为空
+        UserRole userRole = userRoleManager.findOneByUser(id);
+        if (Objects.nonNull(userRole)) {
+            roleManager.findById(userRole.getRoleId()).ifPresent(role -> {
+                result.setRoleName(role.getI18nKey());
+                result.setRoleCode(role.getCode());
+            });
+        }
         return result;
     }
 

@@ -37,4 +37,9 @@ public class AppAdminRefundOrderService {
     public RefundOrderResult sync(Long id) {
         return refundOrderAdminService.sync(id);
     }
+
+    /// 手动关闭异常退款单(仅PROGRESS且创建超7天)
+    public RefundOrderResult manualClose(Long id) {
+        return refundOrderAdminService.manualClose(id);
+    }
 }

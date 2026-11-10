@@ -1,8 +1,11 @@
 package cn.daxpay.open.payment.app.admin.controller.trade;
 
 import cn.daxpay.open.payment.admin.service.trade.TransferAdminService;
+import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
 import cn.daxpay.open.payment.trade.transfer.param.TransferTradeQuery;
+import cn.daxpay.open.payment.trade.transfer.result.TransferCreateResult;
 import cn.daxpay.open.payment.trade.transfer.result.TransferTradeResult;
+import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferConfirmUrlService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -11,18 +14,20 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 转账单(小程序管理端)
 ///
-/// 小程序管理端转账单镜像, 对应 admin 版 [TransferAdminController]。仅镜像转账记录查询与同步/关闭操作,
-/// 业务编排委托 [TransferAdminService]。
+/// 小程序管理端转账单镜像, 对应 admin 版 [TransferAdminController]。镜像转账记录查询、发起转账(运营端代发)
+/// 与同步/关闭操作, 业务编排委托 [TransferAdminService]。
 @PermCode(menuCode = PermCodes.Trade.Transfer.MENU)
 @Validated
 @Tag(name = "转账单(小程序管理端)")
@@ -32,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppAdminTransferController {
 
     private final TransferAdminService transferAdminService;
+    private final TransferConfirmUrlService transferConfirmUrlService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "小程序管理端-转账记录分页(跨通道)")
@@ -46,6 +52,32 @@ public class AppAdminTransferController {
     public Result<TransferTradeResult> tradeFindById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(transferAdminService.tradeFindById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "小程序管理端-发起微信转账(运营端代发, 传 mchNo; FAIL 单复用原单号即重试)")
+    @PostMapping("/wechat/create")
+    public Result<TransferCreateResult> wechatCreate(@Valid @RequestBody TransferParam param) {
+        String transferNo = transferAdminService.create("wechat", param);
+        // 生成确认收款链接(供商户发给收款人在微信内打开)
+        String confirmUrl = transferConfirmUrlService.buildConfirmUrl(transferNo);
+        return Res.ok(new TransferCreateResult().setTransferNo(transferNo).setConfirmUrl(confirmUrl));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "小程序管理端-发起支付宝转账(运营端代发, 传 mchNo; FAIL 单复用原单号即重试)")
+    @PostMapping("/alipay/create")
+    public Result<Void> alipayCreate(@Valid @RequestBody TransferParam param) {
+        transferAdminService.create("alipay", param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "小程序管理端-发起抖音转账(运营端代发, 传 mchNo; FAIL 单复用原单号即重试)")
+    @PostMapping("/douyin/create")
+    public Result<Void> douyinCreate(@Valid @RequestBody TransferParam param) {
+        transferAdminService.create("douyin", param);
+        return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

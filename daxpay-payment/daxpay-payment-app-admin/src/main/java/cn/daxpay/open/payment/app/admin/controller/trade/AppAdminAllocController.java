@@ -1,7 +1,10 @@
 package cn.daxpay.open.payment.app.admin.controller.trade;
 
 import cn.daxpay.open.payment.admin.service.trade.AllocAdminService;
+import cn.daxpay.open.payment.trade.alloc.param.AllocFinishParam;
 import cn.daxpay.open.payment.trade.alloc.param.AllocOrderQuery;
+import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
+import cn.daxpay.open.payment.trade.alloc.result.AllocCreateResult;
 import cn.daxpay.open.payment.trade.alloc.result.AllocDetailResult;
 import cn.daxpay.open.payment.trade.alloc.result.AllocOrderResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -12,19 +15,21 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 分账订单(小程序管理端)
 ///
 /// 小程序管理端分账订单镜像, 对应 admin 版 [AllocAdminController]。跨商户查询(传 mchNo 过滤),
-/// 不做发起分账, 业务编排委托 [AllocAdminService]。
+/// 可代商户发起分账与分账完结, 业务编排委托 [AllocAdminService]。
 @PermCode(menuCode = PermCodes.Trade.Alloc.MENU)
 @Validated
 @Tag(name = "分账订单(小程序管理端)")
@@ -56,6 +61,20 @@ public class AppAdminAllocController {
     public Result<java.util.List<AllocDetailResult>> details(
             @NotBlank(message = "{validation.field.allocNo.notBlank}") String allocNo) {
         return Res.ok(allocAdminService.details(allocNo));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "小程序管理端-发起分账(运营端代发, 传 mchNo)")
+    @PostMapping("/create")
+    public Result<AllocCreateResult> create(@Valid @RequestBody AllocParam param) {
+        return Res.ok(allocAdminService.create(param));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "小程序管理端-发起分账完结(运营端代发, 多次分账收尾)")
+    @PostMapping("/finish")
+    public Result<AllocCreateResult> finish(@Valid @RequestBody AllocFinishParam param) {
+        return Res.ok(allocAdminService.finish(param));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

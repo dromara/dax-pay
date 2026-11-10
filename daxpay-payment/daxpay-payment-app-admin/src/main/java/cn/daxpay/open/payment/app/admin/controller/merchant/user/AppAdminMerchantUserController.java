@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantUserParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserQuery;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserResetPwdBatchParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserResetPwdParam;
+import cn.daxpay.open.payment.merchant.result.info.MerchantUserDetailResult;
 import cn.daxpay.open.payment.merchant.result.info.MerchantUserResult;
 import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -50,6 +51,13 @@ public class AppAdminMerchantUserController {
     @GetMapping("/get")
     public Result<UserInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(merchantUserService.findById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询商户用户详情(含归属商户/角色/登录与密码安全信息)")
+    @GetMapping("/get-detail")
+    public Result<MerchantUserDetailResult> findDetail(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(merchantUserService.findDetail(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

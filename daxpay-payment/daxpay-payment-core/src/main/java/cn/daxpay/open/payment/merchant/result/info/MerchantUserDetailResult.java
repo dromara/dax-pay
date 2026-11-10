@@ -14,6 +14,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MerchantUserDetailResult extends UserWholeInfoResult {
 
+    /// 商户号
+    private String mchNo;
+
+    /// 商户名称
+    private String mchName;
+
     /// 角色名称(单角色模型, 未分配时为空)
     private String roleName;
 

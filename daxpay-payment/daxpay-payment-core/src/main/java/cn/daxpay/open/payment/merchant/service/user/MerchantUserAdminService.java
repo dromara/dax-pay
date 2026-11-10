@@ -141,11 +141,17 @@ public class MerchantUserAdminService {
     /// 查询用户详情(含角色与登录/密码安全信息)
     ///
     /// 委托 iam 侧 [UserAdminService#findDetail] 联查 UserInfo + UserExpandInfo + UserPasswordSecurity,
-    /// 再补充单角色信息; 不直接暴露 iam 详情端点是为了把权限码挂在本域菜单下。
+    /// 再补充归属商户与单角色信息; 不直接暴露 iam 详情端点是为了把权限码挂在本域菜单下。
     public MerchantUserDetailResult findDetail(Long userId) {
-        this.checkMerchantUser(userId);
+        MerchantUser merchantUser = this.findMerchantUser(userId);
         MerchantUserDetailResult result = new MerchantUserDetailResult();
         BeanUtil.copyProperties(userAdminService.findDetail(userId), result);
+        // 主体管理员标识以商户用户关联表为准: iam_user_info.administrator 是内置超管标志, 商户用户恒 false
+        result.setAdministrator(merchantUser.isAdministrator());
+        // 归属商户(运营端跨商户排查时用于定位, 商户端与上下文一致)
+        result.setMchNo(merchantUser.getMchNo());
+        merchantInfoManager.findByMchNo(merchantUser.getMchNo())
+                .ifPresent(merchantInfo -> result.setMchName(merchantInfo.getMchName()));
         // 单角色模型: 回填角色名称与编码
         RoleResult role = userRoleService.findRolesByUser(userId);
         if (role != null) {
@@ -402,12 +408,18 @@ public class MerchantUserAdminService {
         }
     }
 
-    /// 校验用户是否属于商户, 商户端同时校验归属当前商户
-    private void checkMerchantUser(Long userId) {
+    /// 查询商户用户关联(不存在或不属于当前商户时抛异常)
+    private MerchantUser findMerchantUser(Long userId) {
         MerchantUser merchantUser = merchantUserManager.findByUserId(userId)
                 // 商户: 商户用户关联关系不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
         this.checkBelongCurrentMerchant(merchantUser);
+        return merchantUser;
+    }
+
+    /// 校验用户是否属于商户, 商户端同时校验归属当前商户
+    private void checkMerchantUser(Long userId) {
+        this.findMerchantUser(userId);
     }
 
     /// 批量校验用户是否属于商户, 商户端同时校验归属当前商户

@@ -3,7 +3,9 @@ package cn.daxpay.open.payment.app.admin.controller.merchant.channel;
 import cn.daxpay.open.payment.app.admin.service.merchant.channel.AppAdminChannelMerchantService;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
+import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantReferenceResult;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
+import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantReferenceService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -33,6 +35,9 @@ public class AppAdminChannelMerchantController {
 
     private final AppAdminChannelMerchantService channelMerchantService;
 
+    // Web 端同款引用明细服务, reference-detail 镜像端点直接复用
+    private final ChannelMerchantReferenceService channelMerchantReferenceService;
+
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
@@ -45,6 +50,13 @@ public class AppAdminChannelMerchantController {
     @GetMapping("/get")
     public Result<ChannelMerchantResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(channelMerchantService.findById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "引用明细查询(按应用分组, 停用/删除影响面提示用)")
+    @GetMapping("/reference-detail")
+    public Result<ChannelMerchantReferenceResult> referenceDetail(@NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
+        return Res.ok(channelMerchantReferenceService.referenceDetail(channelMchNo));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
