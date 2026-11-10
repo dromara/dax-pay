@@ -27,6 +27,8 @@ public class MerchantCredentialService {
     private final PlatformConfigProperties platformConfigProperties;
 
     /// 根据商户号查询（配置态，租户内；运营端由 ignoreTable 放开）
+    ///
+    /// 无记录时自动建空行(有写副作用); 仅需判断配置状态的只读场景请直接用 manager 查询 + [#isConfigured]
     public MerchantCredentialResult findByMchNo(String mchNo) {
         // 展示用: 配置可能是 yml 引号跨行折成的单行(换行变空格)或面板注入的纯 Base64, 统一归一为标准 PEM
         String publicKey = RsaSignUtil.normalizePublicKeyPem(platformConfigProperties.getKeyConfig().getPublicKey());
@@ -38,9 +40,9 @@ public class MerchantCredentialService {
             var credential = new MerchantCredential();
             credential.setMchNo(mchNo);
             credentialManager.save(credential);
-            return credential.toResult().setPlatformPublicKey(publicKey);
+            return this.buildResult(credential, publicKey);
         }
-        return credentialOptional.get().toResult().setPlatformPublicKey(publicKey);
+        return this.buildResult(credentialOptional.get(), publicKey);
     }
 
     /// 更新
@@ -58,5 +60,31 @@ public class MerchantCredentialService {
         }
         MerchantCredentialConvert.CONVERT.copy(param, credential);
         credentialManager.updateById(credential);
+    }
+
+    /// 凭证是否已配置完整: 记录存在且商户公钥、通信密钥均非空
+    ///
+    /// 凭证配置页状态、运营端商户工作台磁贴、配置检查器 `MchCredentialChecker` 共用此口径, 防漂移
+    public static boolean isConfigured(MerchantCredential credential) {
+        return isPublicKeyConfigured(credential) && isSecretKeyConfigured(credential);
+    }
+
+    /// 商户公钥是否已配置(记录不存在视为未配置)
+    public static boolean isPublicKeyConfigured(MerchantCredential credential) {
+        return credential != null && StrUtil.isNotBlank(credential.getPublicKey());
+    }
+
+    /// 通信密钥是否已配置(记录不存在视为未配置)
+    public static boolean isSecretKeyConfigured(MerchantCredential credential) {
+        return credential != null && StrUtil.isNotBlank(credential.getSecretKey());
+    }
+
+    /// 组装查询结果: 实体同名字段(含 lastModifiedTime)经 Convert 映射, 再补平台公钥与配置状态
+    private MerchantCredentialResult buildResult(MerchantCredential credential, String platformPublicKey) {
+        return credential.toResult()
+                .setPlatformPublicKey(platformPublicKey)
+                .setPublicKeyConfigured(isPublicKeyConfigured(credential))
+                .setSecretKeyConfigured(isSecretKeyConfigured(credential))
+                .setCredentialConfigured(isConfigured(credential));
     }
 }

@@ -10,6 +10,7 @@ import lombok.experimental.Accessors;
 /// 计数口径一律存量总数: 只过滤逻辑删除, 不按启用/状态过滤;
 /// 用户为商户与用户的关联关系表(无逻辑删除字段), 行数即用户数, 含停用账号。
 /// 字段刻意用 Integer 而非 Long, 规避全局 Long→字符串序列化契约(同设备计数口径)。
+/// 另附对接凭证配置状态(字段级, 供「接入配置」磁贴 tooltip 列缺失明细), 口径同凭证配置页。
 @Data
 @Accessors(chain = true)
 @Schema(title = "商户工作台基础计数")
@@ -34,4 +35,16 @@ public class AdminMchBaseCountResult {
     /// 名下域名校验文件数(平台级校验文件不计入)
     @Schema(description = "名下域名校验文件数")
     private Integer wxVerifyCount;
+
+    /// 对接凭证是否已配置完整(商户公钥与通信密钥均非空)
+    @Schema(description = "对接凭证是否已配置完整")
+    private boolean credentialConfigured;
+
+    /// 商户公钥是否已配置
+    @Schema(description = "商户公钥是否已配置")
+    private boolean publicKeyConfigured;
+
+    /// 通信密钥是否已配置
+    @Schema(description = "通信密钥是否已配置")
+    private boolean secretKeyConfigured;
 }
