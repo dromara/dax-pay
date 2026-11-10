@@ -18,7 +18,7 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_easy_pay_credential")
+@TableName("easy_pay_credential")
 public class EasyPayCredential extends MchBaseEntity implements ToResult<EasyPayCredentialResult> {
 
     /// 易支付商户号 pid

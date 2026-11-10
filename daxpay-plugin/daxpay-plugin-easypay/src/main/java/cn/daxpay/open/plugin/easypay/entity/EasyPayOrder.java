@@ -18,7 +18,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_easy_pay_order")
+@TableName("easy_pay_order")
 public class EasyPayOrder extends MchBaseEntity implements ToResult<EasyPayOrderResult> {
 
     /// 关联内核容器 ID（NormalPayOrder.id）

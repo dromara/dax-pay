@@ -20,7 +20,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_easy_pay_refund_order")
+@TableName("easy_pay_refund_order")
 public class EasyPayRefundOrder extends MchBaseEntity implements ToResult<EasyPayRefundOrderResult> {
 
     /// 关联内核退款单 ID（RefundOrder.id）

@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_easy_pay_config")
+@TableName("easy_pay_config")
 public class EasyPayConfig extends MchBaseEntity implements ToResult<EasyPayConfigResult> {
 
     /// 易支付商户号
