@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.app.admin.controller.device;
 
 import cn.daxpay.open.payment.admin.param.device.TerminalDeviceParam;
 import cn.daxpay.open.payment.admin.service.device.TerminalDeviceAdminService;
+import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
@@ -107,6 +108,14 @@ public class AppAdminTerminalDeviceController {
     @PostMapping("/clear-default")
     public Result<Void> clearDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         terminalDeviceAdminService.clearDefault(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "小程序管理端-批量绑定门店")
+    @PostMapping("/bind-store-batch")
+    public Result<Void> bindStoreBatch(@RequestBody @Validated TerminalBindStoreParam param) {
+        terminalDeviceAdminService.bindStoreBatch(param);
         return Res.ok();
     }
 }
