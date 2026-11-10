@@ -20,10 +20,13 @@ import java.util.Optional;
 
 /// # 支付终端校验与解析服务
 ///
-/// 下单上送系统终端号时的两道处理(宽松策略):
+/// 下单上送系统终端号时的校验与解析(宽松策略):
 /// - 校验: 终端号不存在/不属于当前商户/已停用 → 一律拦截下单(传错号属配置错误, 放行会静默丢失终端维度);
 /// - 解析: 通道路由落定后按绑定关系解析通道侧终端号(登记状态=已报送且通道终端号非空的第一条),
-///   解析不到返回 null 不拦截(宽松策略, 按无报备继续), 只有校验失败才拦截。
+///   解析不到返回 null 不拦截(宽松策略, 按无报备继续), 只有校验失败才拦截;
+/// - 差异化参数: 已报送终端的报备扩展参数原文(extra JSON)可经 [#resolveChannelExtra] 解析,
+///   供通道支付链路读取终端级编号(如拉卡拉门店编号 storeId), 语义移植自 plus 的
+///   resolvedChannelExtra 编排层回填。
 ///
 /// 未上送终端号但携带门店号的订单, 先按门店默认终端([#resolveDefaultTerminalNo])回落补齐;
 /// 既无终端号也无默认终端时放行(存量客户端不传号零影响)。
@@ -78,16 +81,7 @@ public class TerminalResolveService {
         if (StrUtil.isBlank(channelMchNo)) {
             return null;
         }
-        // 绑定关系冗余列单表定位 → 关联通道终端中已报送且通道终端号有效的第一条
-        List<DeviceTerminalChannelBind> binds =
-                terminalChannelBindManager.findBySystemTerminalNoAndChannelMchNo(systemTerminalNo, channelMchNo);
-        Optional<DeviceChannelTerminal> submitted = binds.stream()
-                .map(DeviceTerminalChannelBind::getChannelTerminalId)
-                .map(channelTerminalManager::findById)
-                .flatMap(Optional::stream)
-                .filter(t -> ChannelTerminalStatusEnum.SUBMIT.getCode().equals(t.getStatus()))
-                .filter(t -> StrUtil.isNotBlank(t.getOutTerminalNo()))
-                .findFirst();
+        Optional<DeviceChannelTerminal> submitted = this.findSubmitted(systemTerminalNo, channelMchNo);
         if (submitted.isEmpty()) {
             // 宽松策略: 解析不到不拦截, 记告警便于排查终端配置
             log.warn("通道侧终端号解析失败(按无报备继续): systemTerminalNo={}, channelMchNo={}",
@@ -95,5 +89,33 @@ public class TerminalResolveService {
             return null;
         }
         return submitted.get().getOutTerminalNo();
+    }
+
+    /// 解析已报送通道终端的报备差异化参数原文(extra JSON), 宽松策略
+    ///
+    /// 供通道支付链路读取终端级编号(如拉卡拉门店编号 storeId), 语义移植自 plus 版
+    /// [TerminalInfo#getResolvedChannelExtra] 的编排层回填(open 解析方法拆分、不持有
+    /// [TerminalInfo], 由通道侧按系统终端号现查); 查不到返回 null, 不拦截支付。
+    public String resolveChannelExtra(String systemTerminalNo, String channelMchNo) {
+        if (StrUtil.isBlank(channelMchNo)) {
+            return null;
+        }
+        return this.findSubmitted(systemTerminalNo, channelMchNo)
+                .map(DeviceChannelTerminal::getExtra)
+                .orElse(null);
+    }
+
+    /// 定位已报送且通道侧终端号有效的报备记录(取第一条)
+    private Optional<DeviceChannelTerminal> findSubmitted(String systemTerminalNo, String channelMchNo) {
+        // 绑定关系冗余列单表定位 → 关联通道终端中已报送且通道终端号有效的第一条
+        List<DeviceTerminalChannelBind> binds =
+                terminalChannelBindManager.findBySystemTerminalNoAndChannelMchNo(systemTerminalNo, channelMchNo);
+        return binds.stream()
+                .map(DeviceTerminalChannelBind::getChannelTerminalId)
+                .map(channelTerminalManager::findById)
+                .flatMap(Optional::stream)
+                .filter(t -> ChannelTerminalStatusEnum.SUBMIT.getCode().equals(t.getStatus()))
+                .filter(t -> StrUtil.isNotBlank(t.getOutTerminalNo()))
+                .findFirst();
     }
 }

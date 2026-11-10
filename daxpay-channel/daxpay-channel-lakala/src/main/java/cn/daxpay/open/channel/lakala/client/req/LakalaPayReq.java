@@ -47,6 +47,9 @@ public class LakalaPayReq {
     /// 客户端IP
     private String clientIp;
 
+    /// 门店编号(终端报备差异化参数优先, 回退凭证配置; 支付宝收单上送, 空则不上送)
+    private String storeId;
+
     /// 异步通知地址
     private String notifyUrl;
 

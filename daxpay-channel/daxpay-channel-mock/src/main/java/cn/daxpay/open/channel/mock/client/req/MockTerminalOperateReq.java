@@ -4,9 +4,11 @@ import cn.daxpay.open.channel.mock.client.credential.MockSdkCredential;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Map;
+
 /// # Mock 终端报备操作请求(主应用侧)
 ///
-/// 与 mock 子应用 `channel.req.MockTerminalOperateReq` 镜像(差异: open 侧无 extra 扩展参数)。
+/// 与 mock 子应用 `channel.req.MockTerminalOperateReq` 镜像, 字段一字不差(人工维护双份)。
 /// register/cancel/sync 三端点共用; 注销/同步优先按 outTerminalNo 定位,
 /// 未携带时按 channelMchNo + systemTerminalNo + type 三元组定位。
 @Data
@@ -27,4 +29,7 @@ public class MockTerminalOperateReq {
 
     /// 通道侧终端号(注销/同步定位用; 报备时为空)
     private String outTerminalNo;
+
+    /// 通道差异化报备参数(演练字段, 原样透传子应用留痕)
+    private Map<String, Object> extra;
 }

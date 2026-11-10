@@ -7,9 +7,11 @@ import cn.daxpay.open.channel.lakala.client.enums.LakalaPayMethod;
 import cn.daxpay.open.channel.lakala.client.req.LakalaPayReq;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaPayResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.device.terminal.service.TerminalResolveService;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -18,6 +20,8 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,7 @@ public class LakalaPayService {
 
     private final LakalaChannelClient lakalaChannelClient;
     private final PlatformUrlConfigService platformUrlConfigService;
+    private final TerminalResolveService terminalResolveService;
 
     /// 执行拉卡拉支付
     ///
@@ -64,6 +69,8 @@ public class LakalaPayService {
         req.setChannelAppId(payParam.getChannelAppId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
+        // 门店编号(支付宝收单条件必填): 终端报备差异化参数优先, 回退通道商户凭证配置
+        req.setStoreId(this.resolveStoreId(payParam, credential));
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
@@ -93,6 +100,42 @@ public class LakalaPayService {
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/lakala/pay",
                 base, order.getMchNo(), channelMchNo);
+    }
+
+    /// 解析门店编号 storeId: 终端报备差异化参数优先, 回退通道商户凭证配置
+    ///
+    /// 终端级 extra(如 `{"storeId":"..."}`)命中时优先上送; 未配置/解析失败回退凭证级
+    /// [LakalaSdkCredential#getStoreId](存量行为不变); 解析异常仅告警, 不阻断支付。
+    private String resolveStoreId(NormalPayParam payParam, LakalaSdkCredential credential) {
+        String storeId = this.resolveExtraStoreId(payParam);
+        if (StrUtil.isNotBlank(storeId)) {
+            return storeId;
+        }
+        // 回退: 通道商户凭证级门店编号
+        return credential.getStoreId();
+    }
+
+    /// 从终端报备差异化参数(JSON 原文)解析门店编号 storeId, 解析失败或缺失返回 null
+    private String resolveExtraStoreId(NormalPayParam payParam) {
+        TerminalInfo terminal = payParam.getTerminal();
+        if (terminal == null) {
+            return null;
+        }
+        // 编排层回填的报备参数原文优先, 未回填时按系统终端号现查已报送终端
+        String extra = terminal.getResolvedChannelExtra();
+        if (StrUtil.isBlank(extra) && StrUtil.isNotBlank(terminal.getTerminalNo())) {
+            extra = terminalResolveService.resolveChannelExtra(terminal.getTerminalNo(), payParam.getChannelMchNo());
+        }
+        if (StrUtil.isBlank(extra)) {
+            return null;
+        }
+        try {
+            JSONObject json = JSONUtil.parseObj(extra);
+            return StrUtil.blankToDefault(json.getStr("storeId"), null);
+        } catch (Exception e) {
+            log.warn("终端报备差异化参数解析 storeId 失败, 回退凭证配置: extra={}", extra, e);
+            return null;
+        }
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 拉卡拉三要素

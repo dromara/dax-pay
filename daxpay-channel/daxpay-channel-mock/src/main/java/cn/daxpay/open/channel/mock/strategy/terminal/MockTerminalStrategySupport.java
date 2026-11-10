@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.mock.strategy.terminal;
 
 import cn.daxpay.open.channel.mock.service.MockTerminalService;
+import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
 import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy;
@@ -30,6 +31,15 @@ public abstract class MockTerminalStrategySupport extends AbsChannelTerminalStra
     @Override
     public List<String> getTerminalTypes() {
         return List.of("common", "wechat", "alipay", "union");
+    }
+
+    /// mock 报备演练扩展字段(运营端结构化表单展示, 原样透传子应用台账留痕)
+    @Override
+    public List<TerminalExtraField> getExtraFields() {
+        return List.of(
+                TerminalExtraField.input("sn", "设备序列号", "演练字段, 子应用原样留痕"),
+                TerminalExtraField.input("deviceType", "设备类型", "如 POS / 扫码枪 / 云音箱"),
+                TerminalExtraField.textarea("address", "安装地址", "演练字段, 子应用原样留痕"));
     }
 
     /// 报备: 转发 mock 子应用终端注册, 成功回写 submit 与通道侧终端号

@@ -6,10 +6,13 @@ import cn.daxpay.open.channel.mock.client.resp.MockTerminalOperateResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
 import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 /// # Mock 通道终端报备业务服务
 ///
@@ -69,13 +72,23 @@ public class MockTerminalService {
                 resp == null ? null : resp.getDeviceNo());
     }
 
-    /// 组装转发请求: 凭证按产品装配 + 台账归属/报送类型/系统终端号/终端号
+    /// 组装转发请求: 凭证按产品装配 + 台账归属/报送类型/系统终端号/终端号/扩展参数
     private MockTerminalOperateReq buildReq(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return new MockTerminalOperateReq()
                 .setCredential(mockCredentialSupport.build(terminal.getProduct(), terminal.getChannelMchNo()))
                 .setChannelMchNo(terminal.getChannelMchNo())
                 .setType(terminal.getType())
                 .setSystemTerminalNo(systemTerminalNo)
-                .setOutTerminalNo(terminal.getOutTerminalNo());
+                .setOutTerminalNo(terminal.getOutTerminalNo())
+                .setExtra(this.parseExtra(terminal.getExtra()));
+    }
+
+    /// extra JSON → 参数 Map(空安全, 与 Adapay/HKRT 终端策略同构)
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> parseExtra(String extra) {
+        if (extra == null || extra.isBlank()) {
+            return Map.of();
+        }
+        return JacksonUtil.toBean(extra, Map.class);
     }
 }
