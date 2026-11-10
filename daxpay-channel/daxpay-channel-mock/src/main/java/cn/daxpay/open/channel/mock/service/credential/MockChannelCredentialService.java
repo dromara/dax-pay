@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.mock.service.credential;
 
 import cn.daxpay.open.channel.mock.convert.credential.MockChannelCredentialConvert;
 import cn.daxpay.open.channel.mock.dao.credential.MockChannelCredentialManager;
-import cn.daxpay.open.channel.mock.entity.credential.MockChannelCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockGatewayCredential;
 import cn.daxpay.open.channel.mock.param.credential.MockChannelCredentialParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -18,13 +18,13 @@ import org.springframework.transaction.annotation.Transactional;
 /// 全局单行配置(id 固定 1)的 get-or-init / 空值合并保存:
 /// - 查询不存在则插空行(返回后由前端脱敏回显, 空行即「未配置」态);
 /// - 保存时空值不覆盖(密钥留空保留原值, 见 [MockChannelCredentialConvert#copy]);
-/// - 两字段(商户私钥/平台公钥)均非空才算已配置(见实体 [MockChannelCredential#toResult]),
+/// - 两字段(商户私钥/平台公钥)均非空才算已配置(见实体 [MockGatewayCredential#toResult]),
 ///   装配链经 [#getRequiredConfigured] fail-fast。
 ///
 /// 密钥与模拟网关侧成对一致, 口径见工作区 mock 网关协议契约文档。
-/// 直连产品按商户级密钥装配([cn.daxpay.open.channel.mock.service.credential.MockDirectCredentialService]),
-/// 服务商产品按服务商级密钥装配([cn.daxpay.open.channel.mock.service.credential.MockIsvCredentialService]),
-/// 全局单行是其未配置时的回落兜底(也服务无通道商户号场景)。
+/// 多服务商模式取消后全局仅此一份接入密钥: 直连产品(mock_pay)仍需商户级密钥
+/// ([cn.daxpay.open.channel.mock.service.credential.MockDirectCredentialService]),
+/// 服务商产品(mock_isv)与无通道商户号场景直接使用本全局单行。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,13 +34,13 @@ public class MockChannelCredentialService {
 
     /// 查询单行配置(不存在则初始化空行)
     @Transactional(rollbackFor = Exception.class)
-    public MockChannelCredential getOrInit() {
+    public MockGatewayCredential getOrInit() {
         var existing = mockChannelCredentialManager.findSingleton();
         if (existing.isPresent()) {
             return existing.get();
         }
         // 单行表 id 固定 1(父类 @Setter 非链式, 单独赋值)
-        var config = new MockChannelCredential();
+        var config = new MockGatewayCredential();
         config.setId(MockChannelCredentialManager.SINGLETON_ID);
         try {
             mockChannelCredentialManager.save(config);
@@ -62,11 +62,11 @@ public class MockChannelCredentialService {
         mockChannelCredentialManager.updateById(config);
     }
 
-    /// 查询已配置完整的网关密钥(服务商级未配置回落时的兜底, 两字段任一为空即 fail-fast)
+    /// 查询已配置完整的全局网关密钥(两字段任一为空即 fail-fast)
     ///
-    /// 服务商产品(mock_isv)在服务商级两件套不齐时回落本全局单行;
-    /// 全局也未配置时支付链路直接报错, 避免把空密钥下发给子应用。
-    public MockChannelCredential getRequiredConfigured() {
+    /// 服务商产品(mock_isv)与无通道商户号场景直接使用本全局单行;
+    /// 未配置时支付链路直接报错, 避免把空密钥下发给子应用。
+    public MockGatewayCredential getRequiredConfigured() {
         var config = this.getOrInit();
         if (StrUtil.isBlank(config.getMerchantPrivateKey()) || StrUtil.isBlank(config.getPlatformPublicKey())) {
             // 模拟通道接入密钥未配置, 请先在运营端完成配置

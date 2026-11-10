@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "Kênh mô phỏng: người nhận loại số thương gia phải điền tên đầy đủ của thương gia",
   "allocReceiverNotMockProduct": "Thương gia kênh không thuộc kênh mô phỏng, không thể quản lý người nhận tại đây",
   "isvNotExist": "Không tìm thấy nhà cung cấp dịch vụ mô phỏng: {0}",
-  "isvBindingNotExist": "Không tìm thấy liên kết thương gia kênh của nhà cung cấp dịch vụ mô phỏng: {0}",
-  "isvOfChannelMerchantNotExist": "Nhà cung cấp dịch vụ mô phỏng mà thương gia kênh thuộc về không tồn tại: {0}",
-  "isvDisabled": "Nhà cung cấp dịch vụ mô phỏng trực thuộc đã bị tắt, không thể tạo thương gia kênh",
-  "isvHasChannelMerchant": "Nhà cung cấp dịch vụ mô phỏng này vẫn còn thương gia kênh, không thể xóa: {0}",
-  "isvCredentialSaveFailed": "Lưu khóa truy cập nhà cung cấp dịch vụ mô phỏng thất bại: {0}",
+  "isvNoExists": "Mã nhà cung cấp dịch vụ mô phỏng đã tồn tại: {0}",
+  "isvNoRequired": "Mã nhà cung cấp dịch vụ mô phỏng không được để trống",
   "isvPayDisabled": "Nhà cung cấp dịch vụ mô phỏng [{0}] đã đóng thanh toán, không thể khởi tạo thanh toán mới",
   "globalCredentialNotConfigured": "Khóa truy cập kênh mô phỏng chưa được cấu hình, vui lòng hoàn tất cấu hình ở phía vận hành trước"
 }

@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.merchant.service.cashier;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.merchant.param.cashier.MchCashierOrderStatusParam;
 import cn.daxpay.open.payment.merchant.param.cashier.MchCashierPayParam;
 import cn.daxpay.open.payment.merchant.result.cashier.MchCashierPayResult;
@@ -212,7 +212,7 @@ public class MchCashierPayService {
         }
         String storeNo = mchStoreInfoService.resolveStoreNo(mchNo, param.getStoreNo());
         return terminalDeviceManager.findDefaultByStoreNo(mchNo, storeNo)
-                .map(TerminalDevice::getTerminalNo)
+                .map(DeviceTerminal::getTerminalNo)
                 .orElse(null);
     }
 

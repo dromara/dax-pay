@@ -1,7 +1,7 @@
 package cn.daxpay.open.device.virtual.client.service;
 
 import cn.daxpay.open.device.linkage.dao.MchAppDeviceConfigManager;
-import cn.daxpay.open.device.linkage.entity.MchAppDeviceConfig;
+import cn.daxpay.open.device.linkage.entity.DeviceMchAppConfig;
 import cn.daxpay.open.device.print.driver.escpos.EscPosCompiler;
 import cn.daxpay.open.device.print.service.PrintPushService;
 import cn.daxpay.open.device.print.support.TestPrintPreviewResult;
@@ -20,7 +20,7 @@ import cn.daxpay.open.device.virtual.client.result.VirtualDevicePrintPreviewResu
 import cn.daxpay.open.device.virtual.client.result.VirtualDeviceReprintResult;
 import cn.daxpay.open.device.virtual.client.enums.DeviceClientStatusEnum;
 import cn.daxpay.open.device.virtual.dao.VirtualDeviceManager;
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
@@ -45,7 +45,7 @@ import java.time.Duration;
 /// # 虚拟设备自助服务(激活/回执心跳)
 ///
 /// 服务 APP 免登录公共端点(`/client/device/audio/**`):
-/// 虚拟设备为独立台账(pay_virtual_device), 激活/回执按设备号单表定位。
+/// 虚拟设备为独立台账(device_virtual), 激活/回执按设备号单表定位。
 ///
 /// 开源版单因子激活(拍板: 砍激活码体系): APP 凭「设备码(SN)」激活(服务器地址由 APP 编译期内置),
 /// 下发凭证六件套; 设备号唯一准入凭据已接受(拍板 12),
@@ -109,7 +109,7 @@ public class VirtualDeviceClientService {
         // IP/SN 两维限流(分钟窗口, 防设备号撞库)
         checkActivateRateLimit("ip:" + clientIp, ACTIVATE_IP_LIMIT);
         checkActivateRateLimit("sn:" + param.getSn(), ACTIVATE_SN_LIMIT);
-        VirtualDevice device = virtualDeviceManager.findByDeviceNo(param.getSn())
+        DeviceVirtual device = virtualDeviceManager.findByDeviceNo(param.getSn())
                 .orElseThrow(VirtualDeviceClientService::activateFail);
         if (!Boolean.TRUE.equals(device.getEnable())) {
             // 设备: 设备已停用, 请联系平台运营
@@ -148,7 +148,7 @@ public class VirtualDeviceClientService {
     /// 解绑会清空 secret, 删除后设备行不可见, 旧凭证下一次心跳即落到该分支。
     /// 时间窗超限抛错(提示校准设备时间); nonce 重复抛错(重放拒绝, 不返回 revoked 防误踢真设备)。
     public VirtualDeviceAckResult ack(VirtualDeviceAckParam param) {
-        VirtualDevice device = virtualDeviceManager.findByDeviceNo(param.getDeviceNo()).orElse(null);
+        DeviceVirtual device = virtualDeviceManager.findByDeviceNo(param.getDeviceNo()).orElse(null);
         if (device == null || StrUtil.isBlank(device.getSecret())) {
             return revoked();
         }
@@ -229,7 +229,7 @@ public class VirtualDeviceClientService {
     /// 验签失败统一模糊文案(不暴露设备是否存在), 设备维度限流兜底防刷。
     public VirtualDeviceReprintResult reprint(VirtualDeviceReprintParam param) {
         checkReprintRateLimit(param.getDeviceNo());
-        VirtualDevice device = virtualDeviceManager.findByDeviceNo(param.getDeviceNo()).orElse(null);
+        DeviceVirtual device = virtualDeviceManager.findByDeviceNo(param.getDeviceNo()).orElse(null);
         if (device == null || StrUtil.isBlank(device.getSecret())) {
             throw reprintFail();
         }
@@ -289,7 +289,7 @@ public class VirtualDeviceClientService {
     /// 验签/防重放与回执同口径(签名原料多拼 paperWidth), 验签失败统一模糊文案。
     public VirtualDevicePrintPreviewResult previewPrint(VirtualDevicePrintPreviewParam param) {
         checkPreviewRateLimit(param.getDeviceNo());
-        VirtualDevice device = virtualDeviceManager.findByDeviceNo(param.getDeviceNo()).orElse(null);
+        DeviceVirtual device = virtualDeviceManager.findByDeviceNo(param.getDeviceNo()).orElse(null);
         if (device == null || StrUtil.isBlank(device.getSecret())) {
             throw previewFail();
         }
@@ -335,7 +335,7 @@ public class VirtualDeviceClientService {
         }
         try {
             return mchAppDeviceConfigManager.findByAppIdNotTenant(appId)
-                    .map(MchAppDeviceConfig::getTemplateCode)
+                    .map(DeviceMchAppConfig::getTemplateCode)
                     .orElse(null);
         } catch (Exception e) {
             // 设备: 应用联动配置查询失败, 按未配置处理(回落内置版式)

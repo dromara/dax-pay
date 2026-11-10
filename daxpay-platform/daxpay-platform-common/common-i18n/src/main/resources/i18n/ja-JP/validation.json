@@ -608,7 +608,8 @@
       "notBlank": "Huifu 販売者番号を空白にすることはできません"
     },
     "isvNo": {
-      "notBlank": "サービス事業者番号は必須です"
+      "notBlank": "サービス事業者番号は必須です",
+      "size": "サービスプロバイダー番号は32文字を超えられません"
     },
     "sandAppId": {
       "notBlank": "Sand appIdは必須です"

@@ -57,7 +57,7 @@ import cn.daxpay.open.payment.strategy.device.MerchantDeleteDeviceHook;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.trade.notice.dao.MchNoticeTaskManager;
 import cn.daxpay.open.payment.trade.notice.entity.MchNoticeTask;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
@@ -264,7 +264,7 @@ public class MerchantAdminService {
                 && merchantDeleteDeviceHook.countBoundByMchNo(mchNo) > 0;
         if (virtualDeviceBound
                 || deviceQrCodeManager.existedByField(DeviceQrCode::getMchNo, mchNo)
-                || terminalDeviceManager.existedByField(TerminalDevice::getMchNo, mchNo)) {
+                || terminalDeviceManager.existedByField(DeviceTerminal::getMchNo, mchNo)) {
             // 商户: 商户名下存在绑定设备，请先解绑或处置设备后删除
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.hasBoundDevice");
         }

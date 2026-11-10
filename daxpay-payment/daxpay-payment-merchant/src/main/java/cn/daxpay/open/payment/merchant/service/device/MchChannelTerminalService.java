@@ -4,8 +4,8 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalBindParam;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalSaveParam;
@@ -63,8 +63,8 @@ public class MchChannelTerminalService {
     }
 
     /// 校验通道终端归属当前商户; 不存在与不属于当前商户统一报"不存在"
-    private ChannelTerminal requireOwnedChannelTerminal(Long id) {
-        ChannelTerminal entity = channelTerminalManager.findById(id)
+    private DeviceChannelTerminal requireOwnedChannelTerminal(Long id) {
+        DeviceChannelTerminal entity = channelTerminalManager.findById(id)
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(entity.getMchNo(), requireMchNo())) {
@@ -75,8 +75,8 @@ public class MchChannelTerminalService {
     }
 
     /// 校验系统终端归属当前商户; 不存在与不属于当前商户统一报"不存在"
-    private TerminalDevice requireOwnedSystemTerminal(String terminalNo) {
-        TerminalDevice entity = terminalDeviceManager.findByTerminalNo(terminalNo)
+    private DeviceTerminal requireOwnedSystemTerminal(String terminalNo) {
+        DeviceTerminal entity = terminalDeviceManager.findByTerminalNo(terminalNo)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (!Objects.equals(entity.getMchNo(), requireMchNo())) {

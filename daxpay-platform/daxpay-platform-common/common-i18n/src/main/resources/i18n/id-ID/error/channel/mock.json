@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "Saluran simulasi: penerima bertipe nomor pedagang wajib mengisi nama lengkap pedagang",
   "allocReceiverNotMockProduct": "Pedagang saluran tidak termasuk saluran simulasi, penerima tidak dapat dikelola di sini",
   "isvNotExist": "Penyedia layanan simulasi tidak ditemukan: {0}",
-  "isvBindingNotExist": "Ikatan pedagang saluran penyedia layanan simulasi tidak ditemukan: {0}",
-  "isvOfChannelMerchantNotExist": "Penyedia layanan simulasi milik pedagang saluran tidak ditemukan: {0}",
-  "isvDisabled": "Penyedia layanan simulasi terkait telah dinonaktifkan, tidak dapat membuat pedagang saluran",
-  "isvHasChannelMerchant": "Penyedia layanan simulasi ini masih memiliki pedagang saluran, tidak dapat dihapus: {0}",
-  "isvCredentialSaveFailed": "Gagal menyimpan kunci akses penyedia layanan simulasi: {0}",
+  "isvNoExists": "Nomor penyedia layanan simulasi sudah ada: {0}",
+  "isvNoRequired": "Nomor penyedia layanan simulasi tidak boleh kosong",
   "isvPayDisabled": "Penyedia layanan simulasi [{0}] telah menutup pembayaran, tidak dapat memulai pembayaran baru",
   "globalCredentialNotConfigured": "Kunci akses saluran simulasi belum dikonfigurasi, silakan selesaikan konfigurasi di sisi operasi terlebih dahulu"
 }

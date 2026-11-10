@@ -7,9 +7,10 @@ import lombok.experimental.Accessors;
 
 /// # Mock 模拟通道商户创建参数
 ///
-/// 直连单产品(mock_pay)建档形态: 纯本地登记——商户档案由运营在模拟通道控制台自行创建,
-/// 此处登记其通道商户号, 不调用模拟通道任何接口(模拟通道为独立通道, 主应用侧无对接接口)。
-/// 直连商户级接入密钥由密钥端点后置维护, 故创建参数无凭证字段。
+/// 直连(mock_pay)与服务商(mock_isv)共用建档形态: 纯本地登记——商户档案由运营在模拟通道控制台
+/// 自行创建, 此处登记其通道商户号, 不调用模拟通道任何接口(模拟通道为独立通道, 主应用侧无对接接口)。
+/// mock_isv 由 Service 额外写一行服务商归属绑定(归属恒为全局唯一模拟服务商);
+/// 接入密钥统一为全局单份, 故创建参数无凭证字段。
 /// 沙箱标记不走参数: 模拟通道仅 DEV 装配、天然属联调/演示语义, 创建时固定为沙箱商户(见 Service)。
 @Data
 @Accessors(chain = true)
@@ -31,8 +32,8 @@ public class MockChannelMerchantCreateParam {
     @NotBlank(message = "{validation.field.channelMerchantName.notBlank}")
     private String channelMerchantName;
 
-    /// 所属支付产品(mock_pay)
-    @Schema(description = "所属支付产品")
+    /// 所属支付产品(mock_pay 直连 / mock_isv 服务商)
+    @Schema(description = "所属支付产品(mock_pay/mock_isv)")
     @NotBlank(message = "{validation.field.product.notBlank}")
     private String product;
 }

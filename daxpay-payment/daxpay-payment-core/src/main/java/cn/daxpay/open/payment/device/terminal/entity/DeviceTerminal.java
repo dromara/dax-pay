@@ -21,8 +21,8 @@ import lombok.experimental.FieldNameConstants;
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@TableName("pay_terminal_device")
-public class TerminalDevice extends MchBaseEntity implements ToResult<TerminalDeviceResult> {
+@TableName("device_terminal")
+public class DeviceTerminal extends MchBaseEntity implements ToResult<TerminalDeviceResult> {
 
     /// 系统终端编码(平台生成, 创建后不可改)
     @TableField(updateStrategy = FieldStrategy.NEVER)

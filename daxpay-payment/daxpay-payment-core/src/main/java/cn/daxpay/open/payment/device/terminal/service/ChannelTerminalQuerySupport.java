@@ -3,9 +3,9 @@ package cn.daxpay.open.payment.device.terminal.service;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
@@ -48,7 +48,7 @@ public class ChannelTerminalQuerySupport {
     /// 详情查询(含字典翻译与已绑定系统终端回填)
     public ChannelTerminalResult findById(Long id) {
         ChannelTerminalResult result = channelTerminalManager.findById(id)
-                .map(ChannelTerminal::toResult)
+                .map(DeviceChannelTerminal::toResult)
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         fillSystemTerminals(List.of(result));
@@ -69,30 +69,30 @@ public class ChannelTerminalQuerySupport {
             return;
         }
         // 按通道终端分组绑定关系
-        Map<Long, List<TerminalChannelBind>> bindGroup = terminalChannelBindManager.findByChannelTerminalIds(ids).stream()
-                .collect(Collectors.groupingBy(TerminalChannelBind::getChannelTerminalId));
+        Map<Long, List<DeviceTerminalChannelBind>> bindGroup = terminalChannelBindManager.findByChannelTerminalIds(ids).stream()
+                .collect(Collectors.groupingBy(DeviceTerminalChannelBind::getChannelTerminalId));
         if (bindGroup.isEmpty()) {
             return;
         }
         // 批量查系统终端并按编码索引
         List<String> terminalNos = bindGroup.values().stream()
                 .flatMap(List::stream)
-                .map(TerminalChannelBind::getSystemTerminalNo)
+                .map(DeviceTerminalChannelBind::getSystemTerminalNo)
                 .distinct()
                 .toList();
         Map<String, TerminalDeviceResult> deviceMap = terminalDeviceManager.lambdaQuery()
-                .in(TerminalDevice::getTerminalNo, terminalNos)
+                .in(DeviceTerminal::getTerminalNo, terminalNos)
                 .list()
                 .stream()
-                .map(TerminalDevice::toResult)
+                .map(DeviceTerminal::toResult)
                 .collect(Collectors.toMap(TerminalDeviceResult::getTerminalNo, r -> r, (a, b) -> a));
         for (ChannelTerminalResult result : results) {
-            List<TerminalChannelBind> binds = bindGroup.get(result.getId());
+            List<DeviceTerminalChannelBind> binds = bindGroup.get(result.getId());
             if (Objects.isNull(binds)) {
                 continue;
             }
             List<TerminalDeviceResult> systemTerminals = binds.stream()
-                    .map(TerminalChannelBind::getSystemTerminalNo)
+                    .map(DeviceTerminalChannelBind::getSystemTerminalNo)
                     .map(deviceMap::get)
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());

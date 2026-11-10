@@ -6,7 +6,7 @@ import lombok.Data;
 ///
 /// 模拟网关协议凭证: 业务字段(sandbox/isvNo) + 网关接入密钥(全局一套或主体级独立一套)。
 /// 与通道子应用 one 侧 `cn.daxpay.open.channel.mock.config.MockSdkCredential` 字段镜像, 经 JSON 传输。
-/// 密钥存 DB(全局单行 mock_channel_credential / 直连商户行 mock_direct_credential /
+/// 密钥存 DB(全局单行 mock_gateway_credential / 直连商户行 mock_pay_credential /
 /// 服务商行 mock_isv_credential), 由 [cn.daxpay.open.channel.mock.service.MockCredentialSupport]
 /// 在产出凭证时统一注入:
 /// 直连产品(mock_pay)下按通道商户号取商户级两件套(商户私钥+平台公钥)齐时整行下发

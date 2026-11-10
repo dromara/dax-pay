@@ -3,7 +3,7 @@ package cn.daxpay.open.device.comm;
 import cn.daxpay.open.device.enums.DeviceTypeEnum;
 import cn.daxpay.open.device.enums.DeviceVendorEnum;
 import cn.daxpay.open.device.print.PrintTerminal;
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -57,7 +57,7 @@ public class DeviceCommand {
     /// 虚拟设备支付成功(播报打印一体: 恒附带小票)
     ///
     /// 虚拟设备为独立产品线([DeviceTypeEnum#VIRTUAL]), 厂商恒为内置 virtual, 无厂商配置行。
-    public static DeviceCommand paySuccess(VirtualDevice device, DeviceNotifyPayload payload) {
+    public static DeviceCommand paySuccess(DeviceVirtual device, DeviceNotifyPayload payload) {
         return base(device.getDeviceNo(), DeviceVendorEnum.VIRTUAL.getCode(), DeviceTypeEnum.VIRTUAL, device.getSecret())
                 .setType(Type.PAY_SUCCESS)
                 .setPayload(payload)
@@ -66,7 +66,7 @@ public class DeviceCommand {
     }
 
     /// 虚拟设备试播(固定金额语音验证, 无小票渲染)
-    public static DeviceCommand test(VirtualDevice device) {
+    public static DeviceCommand test(DeviceVirtual device) {
         return base(device.getDeviceNo(), DeviceVendorEnum.VIRTUAL.getCode(), DeviceTypeEnum.VIRTUAL, device.getSecret())
                 .setType(Type.TEST)
                 .setTerminal(device);

@@ -3,7 +3,7 @@ package cn.daxpay.open.device.virtual.service;
 import cn.daxpay.open.device.virtual.client.service.VirtualDevicePushClient;
 import cn.daxpay.open.device.virtual.client.service.VirtualOnlineTracker;
 import cn.daxpay.open.device.virtual.dao.VirtualDeviceManager;
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class VirtualDeviceCredentialService {
     }
 
     /// 台账凭证回收(已持有实体的场景)
-    public void revoke(List<VirtualDevice> devices, String reason) {
+    public void revoke(List<DeviceVirtual> devices, String reason) {
         devices.stream()
                 .filter(device -> StrUtil.isNotBlank(device.getSecret()))
                 .forEach(device -> {
@@ -50,7 +50,7 @@ public class VirtualDeviceCredentialService {
     }
 
     /// 删除设备后清在线 ZSET 残留成员(常规路径解绑时已清, 此处防御残留)
-    public void onDeleted(VirtualDevice entity) {
+    public void onDeleted(DeviceVirtual entity) {
         virtualOnlineTracker.removeOnline(entity.getDeviceNo());
     }
 }

@@ -22,8 +22,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "mock_channel_credential", autoResultMap = true)
-public class MockChannelCredential extends MpBaseEntity implements ToResult<MockChannelCredentialResult> {
+@TableName(value = "mock_gateway_credential", autoResultMap = true)
+public class MockGatewayCredential extends MpBaseEntity implements ToResult<MockChannelCredentialResult> {
 
     /// 商户私钥(PEM PKCS#8 多行原文, 加密存储; 请求签名用, 与网关侧商户公钥成对)
     @TableField(typeHandler = DataEncryptTypeHandler.class)

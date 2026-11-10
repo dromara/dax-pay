@@ -1,7 +1,7 @@
 package cn.daxpay.open.device.linkage.service;
 
 import cn.daxpay.open.device.linkage.dao.MchAppDeviceConfigManager;
-import cn.daxpay.open.device.linkage.entity.MchAppDeviceConfig;
+import cn.daxpay.open.device.linkage.entity.DeviceMchAppConfig;
 import cn.daxpay.open.device.linkage.param.AppSimpleConfigParam;
 import cn.daxpay.open.device.linkage.result.AppSimpleConfigResult;
 import cn.daxpay.open.device.print.template.PrintTemplateConstants;
@@ -34,7 +34,7 @@ public class AppDeviceConfigService {
     /// 聚合查询(行不存在=播报开/打印开/standard 默认派生, 不落库)
     public AppSimpleConfigResult getSimpleConfig(String appId) {
         MchAppInfo app = requireApp(appId);
-        MchAppDeviceConfig config = mchAppDeviceConfigManager.findByAppIdNotTenant(appId).orElse(null);
+        DeviceMchAppConfig config = mchAppDeviceConfigManager.findByAppIdNotTenant(appId).orElse(null);
         return new AppSimpleConfigResult()
                 .setAppId(appId)
                 .setMchNo(app.getMchNo())
@@ -61,7 +61,7 @@ public class AppDeviceConfigService {
             // 打印: 打印版式不存在: {0}
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.print.templateNotFound", code);
         }
-        MchAppDeviceConfig config = new MchAppDeviceConfig()
+        DeviceMchAppConfig config = new DeviceMchAppConfig()
                 .setAppId(appId)
                 .setBroadcastEnable(broadcastEnable)
                 .setPrintEnable(printEnable)

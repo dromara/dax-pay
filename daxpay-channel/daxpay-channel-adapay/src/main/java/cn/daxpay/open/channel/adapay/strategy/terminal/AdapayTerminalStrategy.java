@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.adapay.service.direct.AdapayDirectConfigAssembler;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
@@ -60,7 +60,7 @@ public class AdapayTerminalStrategy extends AbsChannelTerminalStrategy {
 
     /// 报备: 设备注册 device.add, 成功回写状态 submit 与回传 device_id
     @Override
-    public TerminalOperateResult submit(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult submit(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<AdapayTerminalOperateResp> result = adapayChannelClient.terminalRegister(this.buildReq(terminal));
         if (result.getCode() != 0) {
             return TerminalOperateResult.fail(result.getMsg());
@@ -71,7 +71,7 @@ public class AdapayTerminalStrategy extends AbsChannelTerminalStrategy {
 
     /// 注销: 设备注销 device.cancel, 成功状态 logged
     @Override
-    public TerminalOperateResult cancel(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult cancel(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<Void> result = adapayChannelClient.terminalCancel(this.buildReq(terminal));
         if (result.getCode() != 0) {
             return TerminalOperateResult.fail(result.getMsg());
@@ -86,7 +86,7 @@ public class AdapayTerminalStrategy extends AbsChannelTerminalStrategy {
     }
 
     /// 组装转发请求: 直连凭证 + 报送类型(pay_way 映射) + extra 业务字段
-    private AdapayTerminalOperateReq buildReq(ChannelTerminal terminal) {
+    private AdapayTerminalOperateReq buildReq(DeviceChannelTerminal terminal) {
         return new AdapayTerminalOperateReq()
                 .setCredential(adapayDirectConfigAssembler.buildConfig(
                         terminal.getMchNo(), terminal.getChannelMchNo(), null))

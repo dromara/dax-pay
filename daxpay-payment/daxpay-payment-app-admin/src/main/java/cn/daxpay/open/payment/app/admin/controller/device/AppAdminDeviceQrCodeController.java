@@ -9,8 +9,10 @@ import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeAllocWarningResul
 import cn.daxpay.open.payment.admin.service.device.DeviceQrCodeAdminService;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -18,6 +20,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -128,6 +132,15 @@ public class AppAdminDeviceQrCodeController {
     @GetMapping("/page")
     public Result<PageResult<DeviceQrCodeResult>> page(PageParam pageParam, DeviceQrCodeQuery query) {
         return Res.ok(deviceQrCodeAdminService.page(pageParam, query));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出支付码牌")
+    @OperateLog(title = "导出支付码牌", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, DeviceQrCodeQuery query,
+                       @RequestParam(required = false) String ids) {
+        deviceQrCodeAdminService.export(query, ids, response);
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

@@ -3,9 +3,9 @@ package cn.daxpay.open.payment.device.terminal.service;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -42,7 +42,7 @@ public class TerminalResolveService {
 
     /// 校验系统终端(存在性/归属/启用), 失败抛异常拦截下单
     public void validateTerminal(String terminalNo, String mchNo) {
-        TerminalDevice device = terminalDeviceManager.findByTerminalNo(terminalNo)
+        DeviceTerminal device = terminalDeviceManager.findByTerminalNo(terminalNo)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.device.terminal.notFound", terminalNo));
@@ -67,7 +67,7 @@ public class TerminalResolveService {
             return null;
         }
         return terminalDeviceManager.findDefaultByStoreNo(mchNo, storeNo)
-                .map(TerminalDevice::getTerminalNo)
+                .map(DeviceTerminal::getTerminalNo)
                 .orElse(null);
     }
 
@@ -79,10 +79,10 @@ public class TerminalResolveService {
             return null;
         }
         // 绑定关系冗余列单表定位 → 关联通道终端中已报送且通道终端号有效的第一条
-        List<TerminalChannelBind> binds =
+        List<DeviceTerminalChannelBind> binds =
                 terminalChannelBindManager.findBySystemTerminalNoAndChannelMchNo(systemTerminalNo, channelMchNo);
-        Optional<ChannelTerminal> submitted = binds.stream()
-                .map(TerminalChannelBind::getChannelTerminalId)
+        Optional<DeviceChannelTerminal> submitted = binds.stream()
+                .map(DeviceTerminalChannelBind::getChannelTerminalId)
                 .map(channelTerminalManager::findById)
                 .flatMap(Optional::stream)
                 .filter(t -> ChannelTerminalStatusEnum.SUBMIT.getCode().equals(t.getStatus()))

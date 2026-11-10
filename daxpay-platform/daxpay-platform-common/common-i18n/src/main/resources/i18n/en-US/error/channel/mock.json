@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "Mock channel: the merchant full name is required for MERCHANT_ID receivers",
   "allocReceiverNotMockProduct": "The channel merchant does not belong to the mock channel and cannot maintain receivers here",
   "isvNotExist": "The mock ISV does not exist: {0}",
-  "isvBindingNotExist": "The mock ISV channel merchant binding does not exist: {0}",
-  "isvOfChannelMerchantNotExist": "The mock ISV owning this channel merchant does not exist: {0}",
-  "isvDisabled": "The owning mock ISV is disabled, cannot create a channel merchant",
-  "isvHasChannelMerchant": "The mock ISV still has channel merchants and cannot be deleted: {0}",
-  "isvCredentialSaveFailed": "Failed to save the mock ISV access key: {0}",
+  "isvNoExists": "The mock provider number already exists: {0}",
+  "isvNoRequired": "Mock provider number cannot be empty",
   "isvPayDisabled": "Payment is disabled for mock ISV [{0}], cannot initiate a new payment",
   "globalCredentialNotConfigured": "The mock channel access key is not configured, please complete the configuration first"
 }

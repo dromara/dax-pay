@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.mock.client.req.MockTerminalOperateReq;
 import cn.daxpay.open.channel.mock.client.resp.MockTerminalOperateResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class MockTerminalService {
     private final MockCredentialSupport mockCredentialSupport;
 
     /// 终端报备(mock 侧按三元组幂等, 重复报备返回原通道侧终端号)
-    public TerminalOperateResult submit(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult submit(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<MockTerminalOperateResp> result = mockChannelClient.terminalRegister(
                 this.buildReq(terminal, systemTerminalNo));
         if (result.getCode() != 0) {
@@ -45,7 +45,7 @@ public class MockTerminalService {
     }
 
     /// 终端注销(mock 侧置 CANCELLED, 已注销重复注销幂等)
-    public TerminalOperateResult cancel(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult cancel(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<Void> result = mockChannelClient.terminalCancel(this.buildReq(terminal, systemTerminalNo));
         if (result.getCode() != 0) {
             log.warn("模拟通道终端注销失败: channelMchNo={}, systemTerminalNo={}, msg={}",
@@ -56,7 +56,7 @@ public class MockTerminalService {
     }
 
     /// 终端同步(mock 侧回读当前通道侧终端号与状态)
-    public TerminalOperateResult sync(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult sync(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<MockTerminalOperateResp> result = mockChannelClient.terminalSync(
                 this.buildReq(terminal, systemTerminalNo));
         if (result.getCode() != 0) {
@@ -70,7 +70,7 @@ public class MockTerminalService {
     }
 
     /// 组装转发请求: 凭证按产品装配 + 台账归属/报送类型/系统终端号/终端号
-    private MockTerminalOperateReq buildReq(ChannelTerminal terminal, String systemTerminalNo) {
+    private MockTerminalOperateReq buildReq(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return new MockTerminalOperateReq()
                 .setCredential(mockCredentialSupport.build(terminal.getProduct(), terminal.getChannelMchNo()))
                 .setChannelMchNo(terminal.getChannelMchNo())

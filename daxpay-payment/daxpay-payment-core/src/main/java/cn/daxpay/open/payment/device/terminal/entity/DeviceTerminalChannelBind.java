@@ -18,8 +18,8 @@ import lombok.experimental.FieldNameConstants;
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@TableName("pay_terminal_channel_bind")
-public class TerminalChannelBind extends MchBaseEntity {
+@TableName("device_terminal_channel_bind")
+public class DeviceTerminalChannelBind extends MchBaseEntity {
 
     /// 系统终端编码
     @TableField(updateStrategy = FieldStrategy.NEVER)

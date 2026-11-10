@@ -1,6 +1,6 @@
 package cn.daxpay.open.channel.mock.convert.credential;
 
-import cn.daxpay.open.channel.mock.entity.credential.MockDirectCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockPayCredential;
 import cn.daxpay.open.channel.mock.param.credential.MockDirectCredentialParam;
 import cn.daxpay.open.channel.mock.result.credential.MockDirectCredentialResult;
 import org.mapstruct.BeanMapping;
@@ -22,9 +22,9 @@ public interface MockDirectCredentialConvert {
     @Mapping(source = "merchantPrivateKey", target = "merchantPrivateKeyMasked")
     @Mapping(source = "platformPublicKey", target = "platformPublicKeyMasked")
     @Mapping(source = "lastModifiedTime", target = "updateTime")
-    MockDirectCredentialResult toResult(MockDirectCredential entity);
+    MockDirectCredentialResult toResult(MockPayCredential entity);
 
     /// 保存参数到实体(空值不覆盖, 两段 PEM 为空时保留原值)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void copy(MockDirectCredentialParam param, @MappingTarget MockDirectCredential entity);
+    void copy(MockDirectCredentialParam param, @MappingTarget MockPayCredential entity);
 }

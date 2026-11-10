@@ -110,7 +110,7 @@ class MockIsvPayDualAppTest {
 
         newStrategy().doBeforePay(ctx);
 
-        verify(mockIsvPaymentSwitchService).assertPaymentEnabled(CHANNEL_MCH_NO);
+        verify(mockIsvPaymentSwitchService).assertPaymentEnabled();
         assertEquals(SUB_APP_ID, payParam.getChannelAppId(), "回填值应优先取 sub_appid");
         assertSame(pair, ctx.getChannelConfig(WxIsvAppPair.class), "双应用应缓存到上下文供 doPay 透传");
     }
@@ -123,7 +123,7 @@ class MockIsvPayDualAppTest {
 
         newStrategy().doBeforePay(ctx);
 
-        verify(mockIsvPaymentSwitchService).assertPaymentEnabled(CHANNEL_MCH_NO);
+        verify(mockIsvPaymentSwitchService).assertPaymentEnabled();
         verifyNoInteractions(wxAppFacade);
         assertNull(payParam.getChannelAppId());
         assertNull(ctx.getChannelConfig(WxIsvAppPair.class));

@@ -39,10 +39,14 @@ public class VirtualDeviceRuntimeService {
                 .toList();
     }
 
+    /// 当前在线设备号名单(列表按在线/离线切分用; 与展示判定同一窗口, 口径不分裂)
+    public List<String> loadOnlineDeviceNos() {
+        return virtualOnlineTracker.findOnlineDeviceNos();
+    }
+
     /// 运行态装载入参(设备号 + 台账节流落库的最近在线时间)
     public record RuntimeInput(String deviceNo, OffsetDateTime dbLastOnlineTime) {
     }
-
     /// 设备运行态(在线标记与最近在线时间)
     public record VirtualRuntime(boolean online, OffsetDateTime lastOnlineTime) {
     }

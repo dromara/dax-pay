@@ -6,11 +6,11 @@ import cn.daxpay.open.device.comm.DeviceCommand;
 import cn.daxpay.open.device.comm.DeviceNotifyPayload;
 import cn.daxpay.open.device.comm.DevicePaySuccessMessage;
 import cn.daxpay.open.device.linkage.dao.MchAppDeviceConfigManager;
-import cn.daxpay.open.device.linkage.entity.MchAppDeviceConfig;
+import cn.daxpay.open.device.linkage.entity.DeviceMchAppConfig;
 import cn.daxpay.open.device.print.service.PrintPushService;
 import cn.daxpay.open.device.virtual.client.service.VirtualDevicePushClient;
 import cn.daxpay.open.device.virtual.dao.VirtualDeviceManager;
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
@@ -41,7 +41,7 @@ import java.util.Set;
 /// - 无联动规则表/码牌条件惰性回查(开源版 NormalPayOrder 无 qrCode 字段), 开关只有应用级两布尔+版式代码;
 /// - 线上单静音保留一行来源判断, 映射见 [ONLINE_MUTE_SOURCES]。
 ///
-/// 开关求值: 读 `pay_mch_app_device_config`(行不存在=播+印默认开, 查询异常降级默认全开);
+/// 开关求值: 读 `device_mch_app_config`(行不存在=播+印默认开, 查询异常降级默认全开);
 /// broadcastEnable=false 该笔整条静默(不播不印), printEnable=false 只静默不印(消息不携带 printData)。
 /// 一次支付只下发一条 pay.success: 播报字段与平台渲染的 printData 同消息携带
 /// (独立打印消息会被 APP 当成二次播报)。
@@ -113,7 +113,7 @@ public class DevicePaySuccessConsumer {
             return;
         }
         // 应用级设备联动配置(行不存在=默认全开; 查询异常降级默认全开, 不因配置读取失败丢播报)
-        MchAppDeviceConfig config = findConfigQuietly(trade.getAppId());
+        DeviceMchAppConfig config = findConfigQuietly(trade.getAppId());
         boolean broadcastEnable = config == null || !Boolean.FALSE.equals(config.getBroadcastEnable());
         boolean printEnable = config == null || !Boolean.FALSE.equals(config.getPrintEnable());
         String templateCode = config == null ? null : config.getTemplateCode();
@@ -125,7 +125,7 @@ public class DevicePaySuccessConsumer {
         // 商户名下启用且已激活的虚拟设备(appId 过滤 + 门店匹配语义见 Manager 注释);
         // 门店严格匹配开(true)=门店订单只推绑定该门店的设备, 应用无配置行时取默认 false(并集)
         boolean storeStrict = config != null && Boolean.TRUE.equals(config.getStoreStrictMatch());
-        List<VirtualDevice> devices = virtualDeviceManager.findAllEnabledByMchNo(
+        List<DeviceVirtual> devices = virtualDeviceManager.findAllEnabledByMchNo(
                 app.getMchNo(), trade.getAppId(), trade.getStoreNo(), storeStrict);
         if (devices.isEmpty()) {
             return;
@@ -144,7 +144,7 @@ public class DevicePaySuccessConsumer {
                 .setOutBizNo(outBizNo)
                 .setStoreName(resolveStoreName(trade.getStoreNo()))
                 .setTemplateCode(templateCode);
-        for (VirtualDevice device : devices) {
+        for (DeviceVirtual device : devices) {
             // 两层开关 AND: 应用打印开关关 = 消息不携带 printData(只播报不打印)
             DeviceCommand command = DeviceCommand.paySuccess(device, payload);
             if (!printEnable) {
@@ -156,7 +156,7 @@ public class DevicePaySuccessConsumer {
     }
 
     /// 读应用联动配置, 任何异常降级为默认全开(旁路不因配置读取失败丢播报)
-    private MchAppDeviceConfig findConfigQuietly(String appId) {
+    private DeviceMchAppConfig findConfigQuietly(String appId) {
         try {
             return mchAppDeviceConfigManager.findByAppIdNotTenant(appId).orElse(null);
         } catch (Exception e) {

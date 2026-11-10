@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.mock.service.credential;
 
 import cn.daxpay.open.channel.mock.convert.credential.MockDirectCredentialConvert;
 import cn.daxpay.open.channel.mock.dao.credential.MockDirectCredentialManager;
-import cn.daxpay.open.channel.mock.entity.credential.MockDirectCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockPayCredential;
 import cn.daxpay.open.channel.mock.param.credential.MockDirectCredentialParam;
 import cn.daxpay.open.channel.mock.result.credential.MockDirectCredentialResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -45,8 +45,8 @@ public class MockDirectCredentialService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.channelMerchantNo.notBlank");
         }
-        MockDirectCredential existing = mockDirectCredentialManager.findByChannelMchNo(channelMchNo);
-        MockDirectCredential entity = existing != null ? existing : new MockDirectCredential();
+        MockPayCredential existing = mockDirectCredentialManager.findByChannelMchNo(channelMchNo);
+        MockPayCredential entity = existing != null ? existing : new MockPayCredential();
         entity.setChannelMchNo(channelMchNo);
         MockDirectCredentialConvert.CONVERT.copy(param, entity);
         if (existing != null) {
@@ -56,7 +56,7 @@ public class MockDirectCredentialService {
                 mockDirectCredentialManager.save(entity);
             } catch (DuplicateKeyException e) {
                 // 并发双插兜底: 唯一索引冲突说明他方已建行, 回查转覆盖更新
-                MockDirectCredential concurrent = mockDirectCredentialManager.findByChannelMchNo(channelMchNo);
+                MockPayCredential concurrent = mockDirectCredentialManager.findByChannelMchNo(channelMchNo);
                 if (concurrent == null) {
                     // 直连商户接入密钥保存失败
                     throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
@@ -72,7 +72,7 @@ public class MockDirectCredentialService {
 
     /// 查询脱敏视图(未保存过时仅 configured=false, 其余字段为空)
     public MockDirectCredentialResult getMasked(String channelMchNo) {
-        MockDirectCredential entity = this.findByChannelMchNoOrNull(channelMchNo);
+        MockPayCredential entity = this.findByChannelMchNoOrNull(channelMchNo);
         if (entity == null) {
             return new MockDirectCredentialResult().setChannelMchNo(channelMchNo).setConfigured(false);
         }
@@ -86,8 +86,8 @@ public class MockDirectCredentialService {
     }
 
     /// 装配链入口: 取「两件套齐」可整行下发的商户级配置(channelMchNo 空白/无行/任一 PEM 为空返回 null)
-    public MockDirectCredential findUsable(String channelMchNo) {
-        MockDirectCredential entity = this.findByChannelMchNoOrNull(channelMchNo);
+    public MockPayCredential findUsable(String channelMchNo) {
+        MockPayCredential entity = this.findByChannelMchNoOrNull(channelMchNo);
         if (entity == null || !this.isConfigured(entity)) {
             return null;
         }
@@ -95,13 +95,13 @@ public class MockDirectCredentialService {
     }
 
     /// 已配置口径: 商户私钥/平台公钥均非空(脱敏视图与装配分流共用, 防口径漂移; 主体级密钥已下线, 取钥按主体编号 key_owner_no)
-    private boolean isConfigured(MockDirectCredential entity) {
+    private boolean isConfigured(MockPayCredential entity) {
         return StrUtil.isNotBlank(entity.getMerchantPrivateKey())
                 && StrUtil.isNotBlank(entity.getPlatformPublicKey());
     }
 
     /// 按通道商户号查询(无行返回 null, channelMchNo 空白不查库)
-    private MockDirectCredential findByChannelMchNoOrNull(String channelMchNo) {
+    private MockPayCredential findByChannelMchNoOrNull(String channelMchNo) {
         if (StrUtil.isBlank(channelMchNo)) {
             return null;
         }

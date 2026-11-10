@@ -9,7 +9,7 @@ import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
@@ -149,7 +149,7 @@ public class ChannelMerchantService {
         payRouteBasicConfigManager.deleteByField(PayRouteBasicConfig::getChannelMchNo, channelMchNo);
         gatewayPayClientEnvManager.deleteByField(GatewayPayClientEnv::getChannelMchNo, channelMchNo);
         gatewayCashierItemManager.deleteByField(GatewayCashierItem::getChannelMchNo, channelMchNo);
-        channelTerminalManager.deleteByField(ChannelTerminal::getChannelMchNo, channelMchNo);
+        channelTerminalManager.deleteByField(DeviceChannelTerminal::getChannelMchNo, channelMchNo);
 
         // 3. 通道扩展表 + KeyConfig 清理（按 product 一对一,未实现策略的通道静默跳过）
         PaymentStrategyFactory.findOptionallyByProduct(mchInfo.getProduct(), ChannelMerchantCleanupStrategy.class)

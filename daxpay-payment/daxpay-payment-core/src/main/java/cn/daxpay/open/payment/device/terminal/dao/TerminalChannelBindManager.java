@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.device.terminal.dao;
 
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,82 +14,82 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class TerminalChannelBindManager extends BaseManager<TerminalChannelBindMapper, TerminalChannelBind> {
+public class TerminalChannelBindManager extends BaseManager<TerminalChannelBindMapper, DeviceTerminalChannelBind> {
 
     /// 是否已存在绑定
     public boolean existsBind(String systemTerminalNo, Long channelTerminalId) {
         return lambdaQuery()
-                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
-                .eq(TerminalChannelBind::getChannelTerminalId, channelTerminalId)
+                .eq(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(DeviceTerminalChannelBind::getChannelTerminalId, channelTerminalId)
                 .exists();
     }
 
     /// 查询唯一绑定
-    public Optional<TerminalChannelBind> findBind(String systemTerminalNo, Long channelTerminalId) {
+    public Optional<DeviceTerminalChannelBind> findBind(String systemTerminalNo, Long channelTerminalId) {
         return lambdaQuery()
-                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
-                .eq(TerminalChannelBind::getChannelTerminalId, channelTerminalId)
+                .eq(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(DeviceTerminalChannelBind::getChannelTerminalId, channelTerminalId)
                 .oneOpt();
     }
 
     /// 系统终端下的全部绑定
-    public List<TerminalChannelBind> findBySystemTerminalNo(String systemTerminalNo) {
+    public List<DeviceTerminalChannelBind> findBySystemTerminalNo(String systemTerminalNo) {
         return lambdaQuery()
-                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
                 .list();
     }
 
     /// 按多个系统终端号批量查询绑定关系(总览批量回填用, 避免 N+1)
-    public List<TerminalChannelBind> findBySystemTerminalNos(List<String> systemTerminalNos) {
+    public List<DeviceTerminalChannelBind> findBySystemTerminalNos(List<String> systemTerminalNos) {
         if (CollUtil.isEmpty(systemTerminalNos)) {
             return List.of();
         }
         return lambdaQuery()
-                .in(TerminalChannelBind::getSystemTerminalNo, systemTerminalNos)
+                .in(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNos)
                 .list();
     }
 
     /// 支付终端解析: 系统终端号 + 通道商户号 定位绑定(冗余列单表查, 免 join 通道终端)
-    public List<TerminalChannelBind> findBySystemTerminalNoAndChannelMchNo(String systemTerminalNo, String channelMchNo) {
+    public List<DeviceTerminalChannelBind> findBySystemTerminalNoAndChannelMchNo(String systemTerminalNo, String channelMchNo) {
         return lambdaQuery()
-                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
-                .eq(TerminalChannelBind::getChannelMchNo, channelMchNo)
+                .eq(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(DeviceTerminalChannelBind::getChannelMchNo, channelMchNo)
                 .list();
     }
 
     /// 通道终端下的全部绑定
-    public List<TerminalChannelBind> findByChannelTerminalId(Long channelTerminalId) {
+    public List<DeviceTerminalChannelBind> findByChannelTerminalId(Long channelTerminalId) {
         return lambdaQuery()
-                .eq(TerminalChannelBind::getChannelTerminalId, channelTerminalId)
+                .eq(DeviceTerminalChannelBind::getChannelTerminalId, channelTerminalId)
                 .list();
     }
 
     /// 批量查询通道终端下的绑定(列表填充用)
-    public List<TerminalChannelBind> findByChannelTerminalIds(List<Long> channelTerminalIds) {
+    public List<DeviceTerminalChannelBind> findByChannelTerminalIds(List<Long> channelTerminalIds) {
         return lambdaQuery()
-                .in(TerminalChannelBind::getChannelTerminalId, channelTerminalIds)
+                .in(DeviceTerminalChannelBind::getChannelTerminalId, channelTerminalIds)
                 .list();
     }
 
     /// 删除系统终端的全部绑定
     public void deleteBySystemTerminalNo(String systemTerminalNo) {
         lambdaUpdate()
-                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
                 .remove();
     }
 
     /// 删除通道终端的全部绑定
     public void deleteByChannelTerminalId(Long channelTerminalId) {
         lambdaUpdate()
-                .eq(TerminalChannelBind::getChannelTerminalId, channelTerminalId)
+                .eq(DeviceTerminalChannelBind::getChannelTerminalId, channelTerminalId)
                 .remove();
     }
 
     /// 删除单条绑定
     public void deleteBind(String systemTerminalNo, Long channelTerminalId) {
         lambdaUpdate()
-                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
-                .eq(TerminalChannelBind::getChannelTerminalId, channelTerminalId)
+                .eq(DeviceTerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(DeviceTerminalChannelBind::getChannelTerminalId, channelTerminalId)
                 .remove();
     }
 }

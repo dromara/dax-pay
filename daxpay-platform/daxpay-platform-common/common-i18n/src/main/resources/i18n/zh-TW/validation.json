@@ -608,7 +608,8 @@
       "notBlank": "匯付商戶號不可為空"
     },
     "isvNo": {
-      "notBlank": "服務商號不可為空"
+      "notBlank": "服務商號不可為空",
+      "size": "服務商編號不可超過32位"
     },
     "sandAppId": {
       "notBlank": "杉德 appId 不能為空"

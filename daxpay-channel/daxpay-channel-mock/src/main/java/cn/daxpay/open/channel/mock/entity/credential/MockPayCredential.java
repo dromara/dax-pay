@@ -25,8 +25,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "mock_direct_credential", autoResultMap = true)
-public class MockDirectCredential extends MpBaseEntity implements ToResult<MockDirectCredentialResult> {
+@TableName(value = "mock_pay_credential", autoResultMap = true)
+public class MockPayCredential extends MpBaseEntity implements ToResult<MockDirectCredentialResult> {
 
     /// 通道商户号(通用通道商户主表 channel_mch_no, 一通道商户一行)
     private String channelMchNo;

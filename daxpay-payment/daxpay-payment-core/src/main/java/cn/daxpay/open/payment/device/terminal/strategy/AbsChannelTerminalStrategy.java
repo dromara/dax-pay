@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.device.terminal.strategy;
 
 import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.strategy.PaymentStrategy;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
@@ -33,15 +33,15 @@ public abstract class AbsChannelTerminalStrategy implements PaymentStrategy {
     /// 报备(调通道 API, 成功回执带通道侧终端号)
     ///
     /// @param systemTerminalNo 报备锚点的系统终端号(编排层取绑定关系中的首个系统终端)
-    public abstract TerminalOperateResult submit(ChannelTerminal terminal, String systemTerminalNo);
+    public abstract TerminalOperateResult submit(DeviceChannelTerminal terminal, String systemTerminalNo);
 
     /// 注销(默认不支持)
-    public TerminalOperateResult cancel(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult cancel(DeviceChannelTerminal terminal, String systemTerminalNo) {
         throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.cancelUnsupported");
     }
 
     /// 同步状态(默认不支持)
-    public TerminalOperateResult sync(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult sync(DeviceChannelTerminal terminal, String systemTerminalNo) {
         throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.syncUnsupported");
     }
 

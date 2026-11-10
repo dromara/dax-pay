@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.mock.strategy.terminal;
 
 import cn.daxpay.open.channel.mock.service.MockTerminalService;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy;
 
 import java.util.List;
@@ -34,19 +34,19 @@ public abstract class MockTerminalStrategySupport extends AbsChannelTerminalStra
 
     /// 报备: 转发 mock 子应用终端注册, 成功回写 submit 与通道侧终端号
     @Override
-    public TerminalOperateResult submit(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult submit(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return mockTerminalService.submit(terminal, systemTerminalNo);
     }
 
     /// 注销: 转发 mock 子应用终端注销, 成功回写 logged
     @Override
-    public TerminalOperateResult cancel(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult cancel(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return mockTerminalService.cancel(terminal, systemTerminalNo);
     }
 
     /// 同步: 转发 mock 子应用终端状态回读, 成功回写 submit 与当前通道侧终端号
     @Override
-    public TerminalOperateResult sync(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult sync(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return mockTerminalService.sync(terminal, systemTerminalNo);
     }
 

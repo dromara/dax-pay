@@ -2,8 +2,8 @@ package cn.daxpay.open.payment.device.terminal.service;
 
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +36,7 @@ public class TerminalBindSupport {
     /// @return 绑定的系统终端号; 未绑定时返回 null
     public String findOwner(Long channelTerminalId) {
         return terminalChannelBindManager.findByChannelTerminalId(channelTerminalId).stream()
-                .map(TerminalChannelBind::getSystemTerminalNo)
+                .map(DeviceTerminalChannelBind::getSystemTerminalNo)
                 .findFirst()
                 .orElse(null);
     }
@@ -44,25 +44,25 @@ public class TerminalBindSupport {
     /// 同一系统终端在同一通道商户、同一报送类型下是否已有其它通道终端
     ///
     /// @param excludeChannelTerminalId 排除的通道终端主键(校验自身时排除)
-    public boolean hasTypeConflict(String systemTerminalNo, ChannelTerminal target, Long excludeChannelTerminalId) {
+    public boolean hasTypeConflict(String systemTerminalNo, DeviceChannelTerminal target, Long excludeChannelTerminalId) {
         List<Long> boundIds = terminalChannelBindManager.findBySystemTerminalNo(systemTerminalNo).stream()
-                .map(TerminalChannelBind::getChannelTerminalId)
+                .map(DeviceTerminalChannelBind::getChannelTerminalId)
                 .filter(id -> !Objects.equals(id, excludeChannelTerminalId))
                 .toList();
         if (boundIds.isEmpty()) {
             return false;
         }
         return channelTerminalManager.lambdaQuery()
-                .in(ChannelTerminal::getId, boundIds)
-                .eq(ChannelTerminal::getChannelMchNo, target.getChannelMchNo())
-                .eq(ChannelTerminal::getType, target.getType())
+                .in(DeviceChannelTerminal::getId, boundIds)
+                .eq(DeviceChannelTerminal::getChannelMchNo, target.getChannelMchNo())
+                .eq(DeviceChannelTerminal::getType, target.getType())
                 .exists();
     }
 
     /// 组装绑定关系(冗余通道商户号/通道编码/报送类型, 唯一校验与支付解析均可单表完成)
     /// 绑定行写入方均为运营端, mchNo 在此显式赋值(运营端写 MchBaseEntity 必须显式 setMchNo)
-    public TerminalChannelBind buildBind(String systemTerminalNo, ChannelTerminal channel) {
-        TerminalChannelBind bind = new TerminalChannelBind();
+    public DeviceTerminalChannelBind buildBind(String systemTerminalNo, DeviceChannelTerminal channel) {
+        DeviceTerminalChannelBind bind = new DeviceTerminalChannelBind();
         // 运营端写 MchBaseEntity 必须显式 setMchNo
         bind.setMchNo(channel.getMchNo());
         bind.setSystemTerminalNo(systemTerminalNo);

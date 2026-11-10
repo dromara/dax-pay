@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "모의 채널: 가맹점 번호 유형 수신자에는 가맹점 전체 이름이 필요합니다",
   "allocReceiverNotMockProduct": "이 채널 가맹점은 모의 채널이 아니므로 여기서 수신자를 관리할 수 없습니다",
   "isvNotExist": "모의 서비스 제공자가 존재하지 않습니다: {0}",
-  "isvBindingNotExist": "모의 서비스 제공자 채널 가맹점 바인딩이 존재하지 않습니다: {0}",
-  "isvOfChannelMerchantNotExist": "채널 가맹점이 속한 모의 서비스 제공자가 존재하지 않습니다: {0}",
-  "isvDisabled": "소속 모의 서비스 제공자가 비활성화되어 채널 가맹점을 생성할 수 없습니다",
-  "isvHasChannelMerchant": "해당 모의 서비스 제공자에 채널 가맹점이 남아 있어 삭제할 수 없습니다: {0}",
-  "isvCredentialSaveFailed": "모의 서비스 제공자 액세스 키 저장에 실패했습니다: {0}",
+  "isvNoExists": "모의 서비스 제공자 번호가 이미 존재합니다: {0}",
+  "isvNoRequired": "모의 서비스 제공자 번호는 비워둘 수 없습니다",
   "isvPayDisabled": "모의 서비스 제공자[{0}]의 결제가 비활성화되어 새 결제를 시작할 수 없습니다",
   "globalCredentialNotConfigured": "모의 채널 액세스 키가 구성되지 않았습니다. 먼저 구성을 완료하세요"
 }

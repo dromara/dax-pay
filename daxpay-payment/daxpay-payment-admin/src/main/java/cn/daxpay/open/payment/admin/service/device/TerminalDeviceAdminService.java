@@ -5,9 +5,9 @@ import cn.daxpay.open.payment.admin.param.device.TerminalDeviceParam;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
@@ -62,7 +62,7 @@ public class TerminalDeviceAdminService {
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNotExist"));
         // 门店可空, 有值则校验同商户
         String storeNo = resolveStoreNo(param.getStoreNo(), param.getMchNo());
-        TerminalDevice entity = new TerminalDevice();
+        DeviceTerminal entity = new DeviceTerminal();
         // 运营端写 MchBaseEntity 必须显式 setMchNo
         entity.setMchNo(param.getMchNo());
         entity.setTerminalNo(generateTerminalNo());
@@ -76,7 +76,7 @@ public class TerminalDeviceAdminService {
     /// 修改系统终端
     @Transactional(rollbackFor = Exception.class)
     public void update(TerminalDeviceParam param) {
-        TerminalDevice entity = terminalDeviceManager.findById(param.getId())
+        DeviceTerminal entity = terminalDeviceManager.findById(param.getId())
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         String oldStoreNo = entity.getStoreNo();
@@ -113,7 +113,7 @@ public class TerminalDeviceAdminService {
     /// 详情
     public TerminalDeviceResult findById(Long id) {
         TerminalDeviceResult result = terminalDeviceManager.findById(id)
-                .map(TerminalDevice::toResult)
+                .map(DeviceTerminal::toResult)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         transService.translate(result);
@@ -123,7 +123,7 @@ public class TerminalDeviceAdminService {
     /// 商户下系统终端列表(绑定下拉用)
     public List<TerminalDeviceResult> listByMchNo(String mchNo) {
         return terminalDeviceManager.findAllByMchNo(mchNo).stream()
-                .map(TerminalDevice::toResult)
+                .map(DeviceTerminal::toResult)
                 .collect(Collectors.toList());
     }
 
@@ -132,7 +132,7 @@ public class TerminalDeviceAdminService {
     /// 门店默认终端禁止删除(对齐默认门店禁删), 需先取消默认或转交其他终端。
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        TerminalDevice entity = terminalDeviceManager.findById(id)
+        DeviceTerminal entity = terminalDeviceManager.findById(id)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (Boolean.TRUE.equals(entity.getDefaultTerminal())) {
@@ -148,7 +148,7 @@ public class TerminalDeviceAdminService {
     /// 仅已挂载门店的终端可设默认; 对齐 [cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService#setDefault] 范式。
     @Transactional(rollbackFor = Exception.class)
     public void setDefault(Long id) {
-        TerminalDevice entity = terminalDeviceManager.findById(id)
+        DeviceTerminal entity = terminalDeviceManager.findById(id)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (StrUtil.isBlank(entity.getStoreNo())) {
@@ -166,7 +166,7 @@ public class TerminalDeviceAdminService {
     /// 取消门店默认终端
     @Transactional(rollbackFor = Exception.class)
     public void clearDefault(Long id) {
-        TerminalDevice entity = terminalDeviceManager.findById(id)
+        DeviceTerminal entity = terminalDeviceManager.findById(id)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         entity.setDefaultTerminal(false);
@@ -180,13 +180,13 @@ public class TerminalDeviceAdminService {
     /// 门店变更后原标记必须失效(否则原门店悬挂默认/新门店多默认)。
     @Transactional(rollbackFor = Exception.class)
     public void bindStoreBatch(TerminalBindStoreParam param) {
-        List<TerminalDevice> terminals = terminalDeviceManager.findAllByIds(param.getTerminalIds());
+        List<DeviceTerminal> terminals = terminalDeviceManager.findAllByIds(param.getTerminalIds());
         if (terminals.size() != param.getTerminalIds().stream().distinct().count()) {
             // 终端: 部分系统终端不存在
             throw new DataNotExistException("error.device.terminal.batchSystemNotFound");
         }
         String mchNo = terminals.getFirst().getMchNo();
-        for (TerminalDevice terminal : terminals) {
+        for (DeviceTerminal terminal : terminals) {
             if (!Objects.equals(terminal.getMchNo(), mchNo)) {
                 // 终端: 系统终端须属于同一商户
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.batchMchMismatch");
@@ -194,19 +194,19 @@ public class TerminalDeviceAdminService {
         }
         String storeNo = resolveStoreNo(param.getStoreNo(), mchNo);
         terminalDeviceManager.lambdaUpdate()
-                .set(TerminalDevice::getStoreNo, storeNo)
-                .set(TerminalDevice::getDefaultTerminal, false)
-                .in(TerminalDevice::getId, param.getTerminalIds())
+                .set(DeviceTerminal::getStoreNo, storeNo)
+                .set(DeviceTerminal::getDefaultTerminal, false)
+                .in(DeviceTerminal::getId, param.getTerminalIds())
                 .update();
     }
 
     /// 绑定通道终端
     @Transactional(rollbackFor = Exception.class)
     public void bind(TerminalChannelBindParam param) {
-        TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
+        DeviceTerminal system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
-        ChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
+        DeviceChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(system.getMchNo(), channel.getMchNo())) {
@@ -217,7 +217,7 @@ public class TerminalDeviceAdminService {
             // 终端: 绑定关系已存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindExists");
         }
-        TerminalChannelBind bind = new TerminalChannelBind();
+        DeviceTerminalChannelBind bind = new DeviceTerminalChannelBind();
         // 运营端写 MchBaseEntity 必须显式 setMchNo
         bind.setMchNo(system.getMchNo());
         bind.setSystemTerminalNo(param.getSystemTerminalNo());
@@ -237,17 +237,17 @@ public class TerminalDeviceAdminService {
 
     /// 查询系统终端已绑定的通道终端列表
     public List<ChannelTerminalResult> listBoundChannel(String terminalNo) {
-        TerminalDevice system = terminalDeviceManager.findByTerminalNo(terminalNo)
+        DeviceTerminal system = terminalDeviceManager.findByTerminalNo(terminalNo)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         List<Long> channelIds = terminalChannelBindManager.findBySystemTerminalNo(system.getTerminalNo()).stream()
-                .map(TerminalChannelBind::getChannelTerminalId)
+                .map(DeviceTerminalChannelBind::getChannelTerminalId)
                 .toList();
         if (channelIds.isEmpty()) {
             return List.of();
         }
         List<ChannelTerminalResult> results = channelTerminalManager.findAllByIds(channelIds).stream()
-                .map(ChannelTerminal::toResult)
+                .map(DeviceChannelTerminal::toResult)
                 .collect(Collectors.toList());
         transService.translate(results);
         return results;

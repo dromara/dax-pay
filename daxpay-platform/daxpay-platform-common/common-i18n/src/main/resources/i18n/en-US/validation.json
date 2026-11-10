@@ -612,7 +612,8 @@
       "notBlank": "Huifu merchant number cannot be blank"
     },
     "isvNo": {
-      "notBlank": "ISV number cannot be blank"
+      "notBlank": "ISV number cannot be blank",
+      "size": "Provider number cannot exceed 32 characters"
     },
     "sandAppId": {
       "notBlank": "Sand appId cannot be blank"

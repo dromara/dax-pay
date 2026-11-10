@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 ///
 /// 模拟支付服务商产品(ProductEnum.MOCK_ISV)下发起支付的具体执行策略, 形态照抄直连壳
 /// [MockPayStrategy] + 服务商支付闸门:
-/// doBeforePay 校验归属服务商支付开关(payEnable=false 拒新支付, 退款/同步/回调不受影响),
+/// doBeforePay 校验全局唯一模拟服务商支付开关(payEnable=false 拒新支付, 退款/同步/回调不受影响),
 /// 微信 JSAPI/小程序族方式再解析服务商双应用回填(对齐微信服务商范式),
 /// 支付执行委托给共用的 [MockPayService](凭证由 Service 内按 product 二选一组装),
 /// 解析出的 sp/sub 双应用经上下文缓存后随请求下传(对齐商业版 spAppId/subAppId 契约)。
@@ -40,7 +40,7 @@ public class MockIsvPayStrategy extends AbsNormalPayStrategy {
         return ProductEnum.MOCK_ISV;
     }
 
-    /// 支付前预处理: 先校验归属模拟服务商支付开关(仅拦新支付, 不影响存量交易处理);
+    /// 支付前预处理: 先校验全局唯一模拟服务商支付开关(仅拦新支付, 不影响存量交易处理);
     /// 微信 JSAPI/小程序族方式解析服务商双应用(sp+sub)并回填 channelAppId
     /// (优先 sub_appid, 空则 sp_appid), 解析失败抛异常整单失败; 其余方式到此为止
     @Override
@@ -52,7 +52,7 @@ public class MockIsvPayStrategy extends AbsNormalPayStrategy {
                 trade == null ? null : trade.getMchNo());
         String channelMchNo = StrUtil.blankToDefault(payParam.getChannelMchNo(),
                 StrUtil.blankToDefault(context.getChannelMchNo(), trade == null ? null : trade.getChannelMchNo()));
-        mockIsvPaymentSwitchService.assertPaymentEnabled(channelMchNo);
+        mockIsvPaymentSwitchService.assertPaymentEnabled();
         // 仅微信 JSAPI/小程序族需要 wxAppId, 其余方式零行为变化
         if (!MockPayService.isWxJsapiFamily(payParam.getMethod())) {
             return;

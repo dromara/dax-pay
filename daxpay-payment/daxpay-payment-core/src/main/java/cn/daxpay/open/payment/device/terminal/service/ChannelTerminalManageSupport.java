@@ -6,9 +6,9 @@ import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalBindParam;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalRegisterParam;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalReportParam;
@@ -84,9 +84,9 @@ public class ChannelTerminalManageSupport {
                 // 产品: 支付产品不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist", product));
         // 校验系统终端(存在性/同商户)
-        TerminalDevice systemTerminal = requireSystemTerminal(param.getSystemTerminalNo(), mchNo);
+        DeviceTerminal systemTerminal = requireSystemTerminal(param.getSystemTerminalNo(), mchNo);
 
-        ChannelTerminal entity = new ChannelTerminal();
+        DeviceChannelTerminal entity = new DeviceChannelTerminal();
         // 显式写 MchBaseEntity 的 mchNo, 不依赖上下文填充
         entity.setMchNo(mchNo);
         entity.setChannelMchNo(channelMerchant.getChannelMchNo());
@@ -111,7 +111,7 @@ public class ChannelTerminalManageSupport {
     /// 修改通道终端(仅名称/备注/报备参数; 通道商户/类型/系统终端绑定与登记状态不在此维护)
     @Transactional(rollbackFor = Exception.class)
     public void update(ChannelTerminalSaveParam param) {
-        ChannelTerminal entity = channelTerminalManager.findById(param.getId())
+        DeviceChannelTerminal entity = channelTerminalManager.findById(param.getId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         entity.setName(param.getName());
@@ -126,7 +126,7 @@ public class ChannelTerminalManageSupport {
     /// - 通道侧终端号可空 = 只改状态; 登记视为一次人工修复, 清空错误信息。
     @Transactional(rollbackFor = Exception.class)
     public void register(ChannelTerminalRegisterParam param) {
-        ChannelTerminal entity = channelTerminalManager.findById(param.getId())
+        DeviceChannelTerminal entity = channelTerminalManager.findById(param.getId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         // 目标状态按实际选择, 校验枚举合法性(含空值)
@@ -152,10 +152,10 @@ public class ChannelTerminalManageSupport {
     /// 绑定系统终端(存量记录修复入口; 正常关联由新增建档建立)
     @Transactional(rollbackFor = Exception.class)
     public void bind(ChannelTerminalBindParam param) {
-        TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
+        DeviceTerminal system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
-        ChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
+        DeviceChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(system.getMchNo(), channel.getMchNo())) {
@@ -195,16 +195,16 @@ public class ChannelTerminalManageSupport {
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         List<String> terminalNos = terminalChannelBindManager.findByChannelTerminalId(channelTerminalId).stream()
-                .map(TerminalChannelBind::getSystemTerminalNo)
+                .map(DeviceTerminalChannelBind::getSystemTerminalNo)
                 .toList();
         if (terminalNos.isEmpty()) {
             return List.of();
         }
         List<TerminalDeviceResult> results = terminalDeviceManager.lambdaQuery()
-                .in(TerminalDevice::getTerminalNo, terminalNos)
+                .in(DeviceTerminal::getTerminalNo, terminalNos)
                 .list()
                 .stream()
-                .map(TerminalDevice::toResult)
+                .map(DeviceTerminal::toResult)
                 .collect(Collectors.toList());
         transService.translate(results);
         return results;
@@ -255,7 +255,7 @@ public class ChannelTerminalManageSupport {
     /// - 不支持自动报备的通道请使用手动登记([ChannelTerminalManageSupport#register])。
     @Transactional(rollbackFor = Exception.class)
     public void report(ChannelTerminalReportParam param) {
-        ChannelTerminal entity = channelTerminalManager.findById(param.getId())
+        DeviceChannelTerminal entity = channelTerminalManager.findById(param.getId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (ChannelTerminalStatusEnum.SUBMIT.getCode().equals(entity.getStatus())) {
@@ -285,7 +285,7 @@ public class ChannelTerminalManageSupport {
     /// 终端注销(自动通道调通道 API; 人工通道直接置已注销)
     @Transactional(rollbackFor = Exception.class)
     public void cancel(Long id) {
-        ChannelTerminal entity = channelTerminalManager.findById(id)
+        DeviceChannelTerminal entity = channelTerminalManager.findById(id)
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         AbsChannelTerminalStrategy strategy = PaymentStrategyFactory
@@ -306,7 +306,7 @@ public class ChannelTerminalManageSupport {
     /// 终端状态同步(调通道 API 回读实际状态与通道侧终端号)
     @Transactional(rollbackFor = Exception.class)
     public void sync(Long id) {
-        ChannelTerminal entity = channelTerminalManager.findById(id)
+        DeviceChannelTerminal entity = channelTerminalManager.findById(id)
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         AbsChannelTerminalStrategy strategy = PaymentStrategyFactory
@@ -318,9 +318,9 @@ public class ChannelTerminalManageSupport {
     }
 
     /// 取报备锚点的系统终端号(绑定关系中的首个)
-    private String requireBoundSystemTerminalNo(ChannelTerminal entity) {
+    private String requireBoundSystemTerminalNo(DeviceChannelTerminal entity) {
         return terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
-                .map(TerminalChannelBind::getSystemTerminalNo)
+                .map(DeviceTerminalChannelBind::getSystemTerminalNo)
                 .findFirst()
                 // 终端: 未绑定系统终端
                 .orElseThrow(() -> new OperationFailException(CommonCode.FAIL_CODE,
@@ -331,8 +331,8 @@ public class ChannelTerminalManageSupport {
     ///
     /// - 首次绑定: 校验系统终端存在性与同商户、同报送类型唯一后建立绑定;
     /// - 更换系统终端: 已报送须先注销; 未报送则替换原绑定。
-    private String resolveAndEnsureBind(ChannelTerminal entity, String inputTerminalNo) {
-        TerminalChannelBind owner = terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
+    private String resolveAndEnsureBind(DeviceChannelTerminal entity, String inputTerminalNo) {
+        DeviceTerminalChannelBind owner = terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
                 .findFirst()
                 .orElse(null);
         String systemTerminalNo = StrUtil.isNotBlank(inputTerminalNo)
@@ -364,7 +364,7 @@ public class ChannelTerminalManageSupport {
     }
 
     /// 回写报备操作结果: 成功落状态与通道侧终端号, 失败落错误状态与原因(不清既有终端号)
-    private void applyOperateResult(ChannelTerminal entity, TerminalOperateResult result) {
+    private void applyOperateResult(DeviceChannelTerminal entity, TerminalOperateResult result) {
         if (result.isSuccess()) {
             entity.setStatus(result.getStatus());
             if (StrUtil.isNotBlank(result.getDeviceNo())) {
@@ -379,8 +379,8 @@ public class ChannelTerminalManageSupport {
     }
 
     /// 校验系统终端(存在性/同商户), 返回系统终端实体
-    private TerminalDevice requireSystemTerminal(String systemTerminalNo, String mchNo) {
-        TerminalDevice systemTerminal = terminalDeviceManager.findByTerminalNo(systemTerminalNo)
+    private DeviceTerminal requireSystemTerminal(String systemTerminalNo, String mchNo) {
+        DeviceTerminal systemTerminal = terminalDeviceManager.findByTerminalNo(systemTerminalNo)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (!Objects.equals(systemTerminal.getMchNo(), mchNo)) {

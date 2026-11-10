@@ -1,7 +1,7 @@
 package cn.daxpay.open.channel.mock.service.credential;
 
 import cn.daxpay.open.channel.mock.dao.credential.MockDirectCredentialManager;
-import cn.daxpay.open.channel.mock.entity.credential.MockDirectCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockPayCredential;
 import cn.daxpay.open.channel.mock.param.credential.MockDirectCredentialParam;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import org.junit.jupiter.api.DisplayName;
@@ -59,20 +59,20 @@ class MockDirectCredentialServiceTest {
 
         newService().save(param);
 
-        ArgumentCaptor<MockDirectCredential> captor = ArgumentCaptor.forClass(MockDirectCredential.class);
+        ArgumentCaptor<MockPayCredential> captor = ArgumentCaptor.forClass(MockPayCredential.class);
         verify(mockDirectCredentialManager).save(captor.capture());
-        MockDirectCredential saved = captor.getValue();
+        MockPayCredential saved = captor.getValue();
         assertEquals(CHANNEL_MCH_NO, saved.getChannelMchNo());
         assertEquals("http://10.0.0.8:10400", saved.getGatewayBaseUrl());
         assertEquals("MCH-PRIVATE", saved.getMerchantPrivateKey());
         assertEquals("MCH-PLATFORM-PUB", saved.getPlatformPublicKey());
-        verify(mockDirectCredentialManager, never()).updateById(any(MockDirectCredential.class));
+        verify(mockDirectCredentialManager, never()).updateById(any(MockPayCredential.class));
     }
 
     @Test
     @DisplayName("保存: 已有行时整体更新(行内对象), 网关地址留空保留原值")
     void save_shouldUpdateExistingRow() {
-        MockDirectCredential existing = new MockDirectCredential()
+        MockPayCredential existing = new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setMerchantPrivateKey("OLD-PRIVATE")
                 .setPlatformPublicKey("OLD-PLATFORM-PUB")
@@ -95,7 +95,7 @@ class MockDirectCredentialServiceTest {
     @Test
     @DisplayName("保存: 已配置商户仅改网关地址(两段 PEM 留空)时放行, 两件套保留原值")
     void save_shouldAllowAddressOnlyUpdate() {
-        MockDirectCredential existing = new MockDirectCredential()
+        MockPayCredential existing = new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setMerchantPrivateKey("OLD-PRIVATE")
                 .setPlatformPublicKey("OLD-PLATFORM-PUB")
@@ -121,7 +121,7 @@ class MockDirectCredentialServiceTest {
 
         newService().save(param);
 
-        ArgumentCaptor<MockDirectCredential> captor = ArgumentCaptor.forClass(MockDirectCredential.class);
+        ArgumentCaptor<MockPayCredential> captor = ArgumentCaptor.forClass(MockPayCredential.class);
         verify(mockDirectCredentialManager).save(captor.capture());
         assertEquals(CHANNEL_MCH_NO, captor.getValue().getChannelMchNo());
         assertNull(captor.getValue().getMerchantPrivateKey());
@@ -143,7 +143,7 @@ class MockDirectCredentialServiceTest {
     @Test
     @DisplayName("脱敏视图: 两件套不齐(缺平台公钥)时 configured=false(半配置态)")
     void getMasked_shouldReportUnconfiguredWhenPemPairIncomplete() {
-        MockDirectCredential row = new MockDirectCredential()
+        MockPayCredential row = new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setMerchantPrivateKey("MCH-PRIVATE");
         when(mockDirectCredentialManager.findByChannelMchNo(CHANNEL_MCH_NO)).thenReturn(row);
@@ -158,7 +158,7 @@ class MockDirectCredentialServiceTest {
     @Test
     @DisplayName("脱敏视图: 两件套齐时 configured=true, 脱敏字段承载原文, 更新时间回落创建时间")
     void getMasked_shouldMapConfiguredRow() {
-        MockDirectCredential row = new MockDirectCredential()
+        MockPayCredential row = new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setGatewayBaseUrl("http://10.0.0.8:10400")
                 .setMerchantPrivateKey("MCH-PRIVATE")
@@ -189,11 +189,11 @@ class MockDirectCredentialServiceTest {
 
         // 行存在但两件套不齐(半配置) → null
         when(mockDirectCredentialManager.findByChannelMchNo(CHANNEL_MCH_NO)).thenReturn(
-                new MockDirectCredential().setChannelMchNo(CHANNEL_MCH_NO).setMerchantPrivateKey("PRIVATE-ONLY"));
+                new MockPayCredential().setChannelMchNo(CHANNEL_MCH_NO).setMerchantPrivateKey("PRIVATE-ONLY"));
         assertNull(service.findUsable(CHANNEL_MCH_NO));
 
         // 两件套齐 → 原行返回
-        MockDirectCredential usable = new MockDirectCredential()
+        MockPayCredential usable = new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setMerchantPrivateKey("MCH-PRIVATE")
                 .setPlatformPublicKey("MCH-PLATFORM-PUB");

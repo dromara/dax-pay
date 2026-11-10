@@ -1,14 +1,13 @@
 package cn.daxpay.open.channel.mock.service;
 
 import cn.daxpay.open.channel.mock.client.credential.MockSdkCredential;
-import cn.daxpay.open.channel.mock.entity.credential.MockChannelCredential;
-import cn.daxpay.open.channel.mock.entity.credential.MockDirectCredential;
-import cn.daxpay.open.channel.mock.entity.credential.MockIsvCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockGatewayCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockPayCredential;
 import cn.daxpay.open.channel.mock.service.credential.MockChannelCredentialService;
 import cn.daxpay.open.channel.mock.service.credential.MockDirectCredentialService;
-import cn.daxpay.open.channel.mock.service.credential.MockIsvCredentialService;
 import cn.daxpay.open.channel.mock.service.isv.MockIsvConfigAssembler;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import org.junit.jupiter.api.DisplayName;
@@ -26,12 +25,12 @@ import static org.mockito.Mockito.when;
 
 /// # Mock 通道凭证装配分发测试
 ///
-/// 覆盖三分支: 服务商级两件套整行下发(主体编号取服务商编号) / 服务商级未配置回落全局单行 /
-/// 直连商户级必配(未配置报错, 不回落全局); 另覆盖无通道商户号的全局兜底与 fail-fast。
+/// 覆盖三分支: 服务商产品直接使用全局单份密钥(isvNo 回填主体编号, 仅归属留痕) /
+/// 直连商户级必配(未配置报错, 不回落全局) / 无通道商户号的全局兜底与 fail-fast。
 @ExtendWith(MockitoExtension.class)
 class MockCredentialSupportTest {
 
-    private static final String ISV_NO = "MISV1234567890123456";
+    private static final String ISV_NO = "MISV1000000000001";
     private static final String CHANNEL_MCH_NO = "MOCK-CM-001";
 
     @Mock
@@ -41,17 +40,15 @@ class MockCredentialSupportTest {
     @Mock
     private MockChannelCredentialService mockChannelCredentialService;
     @Mock
-    private MockIsvCredentialService mockIsvCredentialService;
-    @Mock
     private MockDirectCredentialService mockDirectCredentialService;
 
     private MockCredentialSupport newSupport() {
         return new MockCredentialSupport(channelMerchantManager, mockIsvConfigAssembler,
-                mockChannelCredentialService, mockIsvCredentialService, mockDirectCredentialService);
+                mockChannelCredentialService, mockDirectCredentialService);
     }
 
-    private MockChannelCredential globalCredential() {
-        return new MockChannelCredential()
+    private MockGatewayCredential globalCredential() {
+        return new MockGatewayCredential()
                 .setMerchantPrivateKey("GLOBAL-PRIVATE")
                 .setPlatformPublicKey("GLOBAL-PLATFORM-PUB");
     }
@@ -61,55 +58,33 @@ class MockCredentialSupportTest {
         MockSdkCredential assembled = new MockSdkCredential();
         assembled.setIsvNo(ISV_NO);
         assembled.setSandbox(true);
-        when(mockIsvConfigAssembler.buildConfig(CHANNEL_MCH_NO)).thenReturn(assembled);
+        when(mockIsvConfigAssembler.buildConfig()).thenReturn(assembled);
     }
 
     @Test
-    @DisplayName("服务商产品 + 服务商级两件套齐: 整行下发, 主体编号取服务商编号")
-    void build_isvProductWithCompleteCredential_shouldUseRowValues() {
+    @DisplayName("服务商产品: 直接使用全局单份密钥, 主体编号回填服务商编号, 网关地址为空")
+    void build_isvProduct_shouldUseGlobalCredential() {
         stubIsvAssembler();
-        when(mockIsvCredentialService.findUsable(ISV_NO)).thenReturn(new MockIsvCredential()
-                .setIsvNo(ISV_NO)
-                .setMerchantPrivateKey("ISV-PRIVATE")
-                .setPlatformPublicKey("ISV-PLATFORM-PUB")
-                .setGatewayBaseUrl("http://10.0.0.8:10400"));
-
-        MockSdkCredential credential = newSupport().build(ProductEnum.MOCK_ISV.getCode(), CHANNEL_MCH_NO);
-
-        assertEquals("ISV-PRIVATE", credential.getMerchantPrivateKey());
-        assertEquals("ISV-PLATFORM-PUB", credential.getPlatformPublicKey());
-        // 主体编号=服务商编号: one 侧随报文/查询串携带 key_owner_no, 模拟网关按主体编号定位登记公钥
-        assertEquals(ISV_NO, credential.getKeyOwnerNo());
-        assertEquals("http://10.0.0.8:10400", credential.getGatewayBaseUrl());
-        assertEquals(ISV_NO, credential.getIsvNo());
-        // 服务商级已配置: 不触碰全局单行
-        verify(mockChannelCredentialService, never()).getRequiredConfigured();
-    }
-
-    @Test
-    @DisplayName("服务商产品 + 服务商级未配置(findUsable=null): 整套回落全局单行, 主体编号/地址为空")
-    void build_isvProductWithoutUsableCredential_shouldFallBackGlobal() {
-        stubIsvAssembler();
-        when(mockIsvCredentialService.findUsable(ISV_NO)).thenReturn(null);
         when(mockChannelCredentialService.getRequiredConfigured()).thenReturn(globalCredential());
 
         MockSdkCredential credential = newSupport().build(ProductEnum.MOCK_ISV.getCode(), CHANNEL_MCH_NO);
 
         assertEquals("GLOBAL-PRIVATE", credential.getMerchantPrivateKey());
         assertEquals("GLOBAL-PLATFORM-PUB", credential.getPlatformPublicKey());
-        assertNull(credential.getKeyOwnerNo());
-        assertNull(credential.getGatewayBaseUrl());
-        // isvNo 仍保留, 供子应用识别服务商形态
+        // isvNo 仍保留: mock 网关按 isv_no 匹配商户档案(协议字段)
         assertEquals(ISV_NO, credential.getIsvNo());
+        // 全局密钥: 主体编号回填服务商编号(网关按全局公钥验签, key_owner_no 仅做归属留痕)
+        assertEquals(ISV_NO, credential.getKeyOwnerNo());
+        assertNull(credential.getGatewayBaseUrl());
+        verify(mockDirectCredentialService, never()).findUsable(CHANNEL_MCH_NO);
     }
 
     @Test
-    @DisplayName("服务商产品 + 服务商级与全局均未配置: fail-fast 不静默下发空密钥")
+    @DisplayName("服务商产品 + 全局密钥未配置: fail-fast 不静默下发空密钥")
     void build_isvProductWithoutGlobalCredential_shouldFailFast() {
         stubIsvAssembler();
-        when(mockIsvCredentialService.findUsable(ISV_NO)).thenReturn(null);
         when(mockChannelCredentialService.getRequiredConfigured())
-                .thenThrow(new BizInfoException(cn.daxpay.open.platform.core.code.CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                .thenThrow(new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.mock.globalCredentialNotConfigured"));
 
         assertThrows(BizInfoException.class,
@@ -119,7 +94,7 @@ class MockCredentialSupportTest {
     @Test
     @DisplayName("直连产品 + 商户级两件套齐: 整行下发, 主体编号取通道商户号")
     void build_directProductWithCompleteMchCredential_shouldUseRowValues() {
-        when(mockDirectCredentialService.findUsable(CHANNEL_MCH_NO)).thenReturn(new MockDirectCredential()
+        when(mockDirectCredentialService.findUsable(CHANNEL_MCH_NO)).thenReturn(new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setMerchantPrivateKey("MCH-PRIVATE")
                 .setPlatformPublicKey("MCH-PLATFORM-PUB")
@@ -132,8 +107,7 @@ class MockCredentialSupportTest {
         assertEquals(CHANNEL_MCH_NO, credential.getKeyOwnerNo());
         assertEquals("http://10.0.0.8:10400", credential.getGatewayBaseUrl());
         assertNull(credential.getIsvNo());
-        verify(mockIsvConfigAssembler, never()).buildConfig(CHANNEL_MCH_NO);
-        verify(mockIsvCredentialService, never()).findUsable(ISV_NO);
+        verify(mockIsvConfigAssembler, never()).buildConfig();
         verify(mockChannelCredentialService, never()).getRequiredConfigured();
     }
 
@@ -150,7 +124,7 @@ class MockCredentialSupportTest {
     @Test
     @DisplayName("直连产品 + product 缺失容错: 同样走商户级拟真凭证优先")
     void build_productMissing_shouldApplyMchCredential() {
-        when(mockDirectCredentialService.findUsable(CHANNEL_MCH_NO)).thenReturn(new MockDirectCredential()
+        when(mockDirectCredentialService.findUsable(CHANNEL_MCH_NO)).thenReturn(new MockPayCredential()
                 .setChannelMchNo(CHANNEL_MCH_NO)
                 .setMerchantPrivateKey("MCH-PRIVATE")
                 .setPlatformPublicKey("MCH-PLATFORM-PUB"));
@@ -177,20 +151,19 @@ class MockCredentialSupportTest {
     }
 
     @Test
-    @DisplayName("按通道商户号反查产品: product=mock_isv 时走服务商装配")
+    @DisplayName("按通道商户号反查产品: product=mock_isv 时走服务商装配 + 全局密钥")
     void build_byChannelMchNo_shouldResolveProduct() {
         when(channelMerchantManager.findProductByChannelMchNo(CHANNEL_MCH_NO))
                 .thenReturn(ProductEnum.MOCK_ISV.getCode());
         stubIsvAssembler();
-        when(mockIsvCredentialService.findUsable(ISV_NO)).thenReturn(new MockIsvCredential()
-                .setIsvNo(ISV_NO)
-                .setMerchantPrivateKey("ISV-PRIVATE")
-                .setPlatformPublicKey("ISV-PLATFORM-PUB"));
+        when(mockChannelCredentialService.getRequiredConfigured()).thenReturn(globalCredential());
 
         MockSdkCredential credential = newSupport().build(CHANNEL_MCH_NO);
 
         assertEquals(ISV_NO, credential.getIsvNo());
-        assertEquals("ISV-PRIVATE", credential.getMerchantPrivateKey());
+        assertEquals("GLOBAL-PRIVATE", credential.getMerchantPrivateKey());
+        assertEquals("GLOBAL-PLATFORM-PUB", credential.getPlatformPublicKey());
+        // 主体编号回填服务商编号(网关按全局公钥验签, key_owner_no 仅做归属留痕)
         assertEquals(ISV_NO, credential.getKeyOwnerNo());
     }
 }

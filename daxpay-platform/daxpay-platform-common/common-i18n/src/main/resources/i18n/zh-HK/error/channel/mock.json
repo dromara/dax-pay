@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "模擬通道: 商戶號類型接收方必須填寫商戶全稱",
   "allocReceiverNotMockProduct": "該通道商戶不屬於模擬通道, 無法在此維護接收方",
   "isvNotExist": "模擬服務商不存在: {0}",
-  "isvBindingNotExist": "模擬服務商通道商戶綁定不存在: {0}",
-  "isvOfChannelMerchantNotExist": "通道商戶歸屬的模擬服務商不存在: {0}",
-  "isvDisabled": "歸屬模擬服務商已停用, 不可建立通道商戶",
-  "isvHasChannelMerchant": "該模擬服務商名下仍有通道商戶, 無法刪除: {0}",
-  "isvCredentialSaveFailed": "模擬服務商接入密鑰保存失敗: {0}",
+  "isvNoExists": "模擬服務商編號已存在: {0}",
+  "isvNoRequired": "模擬服務商編號不能為空",
   "isvPayDisabled": "模擬服務商[{0}]已關閉支付, 無法發起新支付",
   "globalCredentialNotConfigured": "模擬通道接入密鑰未配置, 請先在運營端完成配置"
 }

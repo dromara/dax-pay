@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "模拟通道: 商户号类型接收方必须填写商户全称",
   "allocReceiverNotMockProduct": "该通道商户不属于模拟通道, 无法在此维护接收方",
   "isvNotExist": "模拟服务商不存在: {0}",
-  "isvBindingNotExist": "模拟服务商通道商户绑定不存在: {0}",
-  "isvOfChannelMerchantNotExist": "通道商户归属的模拟服务商不存在: {0}",
-  "isvDisabled": "归属模拟服务商已停用, 不可创建通道商户",
-  "isvHasChannelMerchant": "该模拟服务商名下仍有通道商户, 无法删除: {0}",
-  "isvCredentialSaveFailed": "模拟服务商接入密钥保存失败: {0}",
+  "isvNoExists": "模拟服务商编号已存在: {0}",
+  "isvNoRequired": "模拟服务商编号不能为空",
   "isvPayDisabled": "模拟服务商[{0}]已关闭支付, 无法发起新支付",
   "globalCredentialNotConfigured": "模拟通道接入密钥未配置, 请先在运营端完成配置"
 }

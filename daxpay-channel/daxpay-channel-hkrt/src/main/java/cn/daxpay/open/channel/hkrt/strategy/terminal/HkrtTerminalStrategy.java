@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.hkrt.service.isv.HkrtIsvConfigAssembler;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalOperateResult;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
@@ -48,7 +48,7 @@ public class HkrtTerminalStrategy extends AbsChannelTerminalStrategy {
 
     /// 报备: 终端绑定, 成功回写状态 submit 与回传 pn
     @Override
-    public TerminalOperateResult submit(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult submit(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<HkrtTerminalOperateResp> result = hkrtChannelClient.terminalRegister(this.buildReq(terminal, systemTerminalNo));
         if (result.getCode() != 0) {
             return TerminalOperateResult.fail(result.getMsg());
@@ -59,7 +59,7 @@ public class HkrtTerminalStrategy extends AbsChannelTerminalStrategy {
 
     /// 注销: 终端解绑, 成功状态 logged
     @Override
-    public TerminalOperateResult cancel(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult cancel(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<Void> result = hkrtChannelClient.terminalCancel(this.buildReq(terminal, systemTerminalNo));
         if (result.getCode() != 0) {
             return TerminalOperateResult.fail(result.getMsg());
@@ -69,7 +69,7 @@ public class HkrtTerminalStrategy extends AbsChannelTerminalStrategy {
 
     /// 同步: 绑定查询, 回传当前 pn
     @Override
-    public TerminalOperateResult sync(ChannelTerminal terminal, String systemTerminalNo) {
+    public TerminalOperateResult sync(DeviceChannelTerminal terminal, String systemTerminalNo) {
         DaxResult<HkrtTerminalOperateResp> result = hkrtChannelClient.terminalSync(this.buildReq(terminal, systemTerminalNo));
         if (result.getCode() != 0) {
             return TerminalOperateResult.fail(result.getMsg());
@@ -91,7 +91,7 @@ public class HkrtTerminalStrategy extends AbsChannelTerminalStrategy {
     }
 
     /// 组装转发请求: 服务商凭证 + 系统终端号(SN) + extra 差异参数
-    private HkrtTerminalOperateReq buildReq(ChannelTerminal terminal, String systemTerminalNo) {
+    private HkrtTerminalOperateReq buildReq(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return new HkrtTerminalOperateReq()
                 .setCredential(hkrtIsvConfigAssembler.buildConfig(
                         terminal.getMchNo(), terminal.getChannelMchNo(), null))

@@ -1,118 +1,107 @@
 package cn.daxpay.open.channel.mock.service.isv;
 
 import cn.daxpay.open.channel.mock.convert.isv.MockIsvInfoConvert;
-import cn.daxpay.open.channel.mock.dao.credential.MockIsvCredentialManager;
-import cn.daxpay.open.channel.mock.dao.isv.MockIsvChannelMerchantManager;
 import cn.daxpay.open.channel.mock.dao.isv.MockIsvInfoManager;
 import cn.daxpay.open.channel.mock.entity.isv.MockIsvInfo;
-import cn.daxpay.open.channel.mock.param.isv.MockIsvInfoParam;
-import cn.daxpay.open.channel.mock.result.isv.MockIsvInfoListResult;
-import cn.daxpay.open.channel.mock.result.isv.MockIsvInfoOption;
 import cn.daxpay.open.channel.mock.result.isv.MockIsvInfoResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
 
-/// # Mock 模拟服务商信息管理
+/// # Mock 模拟服务商信息(全局唯一)
 ///
-/// mock 服务商主数据维护: 服务商编号(MISV+雪花ID)创建时自动生成不可改;
-/// enable 控新建通道商户闸门, payEnable 控新支付闸门(停用不影响存量交易处理)。
-///
-/// open 版无通用编号工具(BizNoGenerateUtil 不在本仓), 编号在本类内以
-/// [IdUtil#getSnowflakeNextId] 自拼, 不改动通用工具类。
+/// open 版 mock 通道取消多服务商模式, 收敛为「全局唯一模拟服务商 + 单份全局接入密钥」:
+/// - 服务商编号可运营端修改(mock 网关按 isv_no 匹配商户档案, 须与控制台档案一致),
+///   名称固定 [#SINGLETON_ISV_NAME], 建档由本类 get-or-create 完成;
+/// - 并发/重复调用幂等(唯一索引冲突回查兜底);
+/// - 运营端不再提供新增/删除, 仅保留编号编辑与支付开关(payEnable=false 仅拒新支付, 不影响存量交易处理)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MockIsvInfoService {
 
+    /// 全局唯一模拟服务商编号缺省值(首次建档使用, 之后允许运营端修改)
+    public static final String SINGLETON_ISV_NO = "MISV1000000000001";
+
+    /// 全局唯一模拟服务商名称
+    public static final String SINGLETON_ISV_NAME = "模拟服务商";
+
     private final MockIsvInfoManager mockIsvInfoManager;
-    private final MockIsvChannelMerchantManager mockIsvChannelMerchantManager;
-    private final MockIsvCredentialManager mockIsvCredentialManager;
 
-    /// 查询全部服务商(含停用, 下拉须展示启停态; 按创建时间正序)
-    public List<MockIsvInfoOption> dropdown() {
-        return mockIsvInfoManager.findAll().stream()
-                .map(MockIsvInfoConvert.CONVERT::toOption)
-                .toList();
-    }
-
-    /// 全量服务商列表(模拟服务商管理页, 不分页: 服务商数量极少; 按 id 倒序),
-    /// 每行附带名下服务商通道商户(mock_isv)计数与签名密钥配置标记
-    public List<MockIsvInfoListResult> listWithCount() {
-        List<MockIsvInfo> isvList = mockIsvInfoManager.findAllByIdDesc();
-        // 名下服务商通道商户数分组计数(含被通用删除链清理掉绑定行的历史服务商, 计数自然为 0)
-        List<Long> isvIds = isvList.stream().map(MockIsvInfo::getId).toList();
-        Map<Long, Long> countMap = mockIsvChannelMerchantManager.countGroupByIsvIds(isvIds);
-        // 签名密钥配置存在性批量判定(isv_no 一次 IN 查询避免 N+1)
-        Set<String> configuredIsvNos = mockIsvCredentialManager.findConfiguredIsvNos(
-                isvList.stream().map(MockIsvInfo::getIsvNo).toList());
-        return isvList.stream()
-                .map(isv -> {
-                    MockIsvInfoListResult result = MockIsvInfoConvert.CONVERT.toListResult(isv);
-                    result.setChannelMerchantCount(countMap.getOrDefault(isv.getId(), 0L));
-                    result.setCredentialConfigured(configuredIsvNos.contains(isv.getIsvNo()));
-                    return result;
-                })
-                .toList();
-    }
-
-    /// 查询详情
-    public MockIsvInfoResult findById(Long id) {
-        MockIsvInfoResult result = mockIsvInfoManager.findById(id)
-                .map(MockIsvInfoConvert.CONVERT::toResult)
-                // mock: 模拟服务商不存在
-                .orElseThrow(() -> new DataNotExistException("error.channel.mock.isvNotExist", id));
-        result.setCredentialConfigured(mockIsvCredentialManager.existConfiguredByIsvNo(result.getIsvNo()));
-        return result;
-    }
-
-    /// 创建模拟服务商(服务商编号自动生成, enable/payEnable 缺省 true)
-    @Transactional(rollbackFor = Exception.class)
-    public void create(MockIsvInfoParam param) {
-        MockIsvInfo entity = new MockIsvInfo();
-        // 编号格式对齐 DDL 语义: MISV + 雪花ID(open 无 BizNoGenerateUtil, 本类内自拼)
-        entity.setIsvNo("MISV" + IdUtil.getSnowflakeNextId());
-        entity.setIsvName(param.getIsvName());
-        // 启停位缺省即启用(服务商接入密钥由密钥端点后置维护, 不作为启用前置条件)
-        entity.setEnable(param.getEnable() == null || param.getEnable());
-        entity.setPayEnable(param.getPayEnable() == null || param.getPayEnable());
-        mockIsvInfoManager.save(entity);
-    }
-
-    /// 编辑 + 启停合一(空字段不覆盖, 服务商编号不可改)
-    @Transactional(rollbackFor = Exception.class)
-    public void update(MockIsvInfoParam param) {
-        MockIsvInfo entity = mockIsvInfoManager.findById(param.getId())
-                // mock: 模拟服务商不存在
-                .orElseThrow(() -> new DataNotExistException("error.channel.mock.isvNotExist", param.getId()));
-        MockIsvInfoConvert.CONVERT.copy(param, entity);
-        mockIsvInfoManager.updateById(entity);
-    }
-
-    /// 删除服务商(名下仍有服务商通道商户(mock_isv)绑定时拒绝)
+    /// 获取全局唯一模拟服务商(不存在则按缺省编号创建, 幂等)
     ///
-    /// 同事务级联清理该服务商的接入密钥行(mock_isv_credential, 按服务商编号), 避免遗留孤儿密钥。
+    /// 编号可被运营端修改, 故按行定位(取最早一行)而不是按固定编号查;
+    /// 单例恒 enable=true(多服务商模式取消后不再有「服务商启停建档闸门」语义);
+    /// payEnable 创建时缺省 true, 之后由 [#switchPay] 维护。
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        MockIsvInfo isv = mockIsvInfoManager.findById(id)
-                // mock: 模拟服务商不存在
-                .orElseThrow(() -> new DataNotExistException("error.channel.mock.isvNotExist", id));
-        if (mockIsvChannelMerchantManager.existsByIsvId(id)) {
-            // 该模拟服务商名下仍有通道商户, 无法删除
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "error.channel.mock.isvHasChannelMerchant", id);
+    public MockIsvInfo getSingleton() {
+        Optional<MockIsvInfo> existing = mockIsvInfoManager.findSingleton();
+        if (existing.isPresent()) {
+            return existing.get();
         }
-        // 级联清理服务商接入密钥(一服务商一行)
-        mockIsvCredentialManager.deleteByIsvNo(isv.getIsvNo());
-        mockIsvInfoManager.deleteById(id);
+        MockIsvInfo entity = new MockIsvInfo();
+        entity.setIsvNo(SINGLETON_ISV_NO);
+        entity.setIsvName(SINGLETON_ISV_NAME);
+        entity.setEnable(true);
+        entity.setPayEnable(true);
+        try {
+            mockIsvInfoManager.save(entity);
+        } catch (DuplicateKeyException e) {
+            // 并发首查双插兜底: 唯一索引冲突说明他方已建行, 回查即可
+            return mockIsvInfoManager.findSingleton()
+                    // mock: 模拟服务商不存在
+                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
+                            "error.channel.mock.isvNotExist", SINGLETON_ISV_NO));
+        }
+        return entity;
+    }
+
+    /// 查询当前模拟服务商信息(运营端展示)
+    @Transactional(rollbackFor = Exception.class)
+    public MockIsvInfoResult current() {
+        return MockIsvInfoConvert.CONVERT.toResult(this.getSingleton());
+    }
+
+    /// 修改全局唯一模拟服务商编号
+    ///
+    /// 编号须与 mock 网关控制台商户档案的 isv_no 一致, 修改后立即生效
+    /// (凭证装配每笔交易重新读取单例, 无缓存); 绑定表只存 isv_id, 不随编号变更迁移。
+    @Transactional(rollbackFor = Exception.class)
+    public MockIsvInfoResult updateIsvNo(String isvNo) {
+        String normalized = StrUtil.trim(isvNo);
+        if (StrUtil.isBlank(normalized)) {
+            // 服务商编号不能为空
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.mock.isvNoRequired");
+        }
+        MockIsvInfo isv = this.getSingleton();
+        if (normalized.equals(isv.getIsvNo())) {
+            return MockIsvInfoConvert.CONVERT.toResult(isv);
+        }
+        if (mockIsvInfoManager.findByIsvNo(normalized).isPresent()) {
+            // 该模拟服务商编号已存在
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.mock.isvNoExists", normalized);
+        }
+        isv.setIsvNo(normalized);
+        mockIsvInfoManager.updateById(isv);
+        return MockIsvInfoConvert.CONVERT.toResult(isv);
+    }
+
+    /// 切换模拟服务商支付开关
+    ///
+    /// @param payEnable true 允许发起新支付, false 拒绝新支付(退款/关单/查询/同步/回调不受影响)
+    @Transactional(rollbackFor = Exception.class)
+    public void switchPay(boolean payEnable) {
+        MockIsvInfo isv = this.getSingleton();
+        isv.setPayEnable(payEnable);
+        mockIsvInfoManager.updateById(isv);
     }
 }

@@ -19,13 +19,13 @@ import lombok.experimental.FieldNameConstants;
 /// 挂在通道商户 [channelMchNo] 下, 登记通道侧终端号与状态。
 /// 已实现报备策略([cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy])的产品
 /// 经通道报备 API 报备/注销/同步并回写终端号与状态; 无实现的产品由运营人工登记维护。
-/// 与系统终端通过 [TerminalChannelBind] 多对多绑定。
+/// 与系统终端通过 [DeviceTerminalChannelBind] 多对多绑定。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@TableName("pay_channel_terminal")
-public class ChannelTerminal extends MchBaseEntity implements ToResult<ChannelTerminalResult> {
+@TableName("device_channel_terminal")
+public class DeviceChannelTerminal extends MchBaseEntity implements ToResult<ChannelTerminalResult> {
 
     /// 通道商户号(平台侧, 对应 [cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant#channelMchNo])
     @TableField(updateStrategy = FieldStrategy.NEVER)

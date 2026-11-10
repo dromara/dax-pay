@@ -1,6 +1,6 @@
 package cn.daxpay.open.device.virtual.service;
 
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import org.springframework.stereotype.Service;
 
 /// # 虚拟设备激活二维码内容服务
@@ -16,7 +16,7 @@ public class VirtualDeviceQrService {
     public static final String ACTIVATE_SCHEME = "daxpay:activate:";
 
     /// 生成设备激活二维码内容字符串
-    public String qrContent(VirtualDevice device) {
+    public String qrContent(DeviceVirtual device) {
         return qrContent(device.getDeviceNo());
     }
 

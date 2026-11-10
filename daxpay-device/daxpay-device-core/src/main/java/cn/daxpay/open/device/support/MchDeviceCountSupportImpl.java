@@ -1,7 +1,7 @@
 package cn.daxpay.open.device.support;
 
 import cn.daxpay.open.device.virtual.dao.VirtualDeviceManager;
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import cn.daxpay.open.payment.strategy.device.MchDeviceCountSupport;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class MchDeviceCountSupportImpl implements MchDeviceCountSupport {
     @Override
     public MchDeviceCount countByMchNo(String mchNo) {
         long virtualCount = virtualDeviceManager.lambdaQuery()
-                .eq(VirtualDevice::getMchNo, mchNo)
+                .eq(DeviceVirtual::getMchNo, mchNo)
                 .count();
         return new MchDeviceCount(virtualCount);
     }

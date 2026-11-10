@@ -10,8 +10,9 @@ import cn.daxpay.open.device.comm.AudioBroadcastMessage;
 import cn.daxpay.open.device.comm.PrintPushData;
 import cn.daxpay.open.device.print.service.PrintPushService;
 import cn.daxpay.open.device.virtual.client.service.VirtualDevicePushClient;
+import cn.daxpay.open.device.virtual.convert.VirtualDeviceConvert;
 import cn.daxpay.open.device.virtual.dao.VirtualDeviceManager;
-import cn.daxpay.open.device.virtual.entity.VirtualDevice;
+import cn.daxpay.open.device.virtual.entity.DeviceVirtual;
 import cn.daxpay.open.device.virtual.enums.VirtualTestMode;
 import cn.daxpay.open.device.virtual.param.VirtualDeviceQuery;
 import cn.daxpay.open.device.virtual.param.VirtualDeviceTestParam;
@@ -47,6 +48,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -88,8 +90,8 @@ public class VirtualDeviceAdminService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.batchNoExists");
         }
         List<String> deviceNos = virtualDeviceNoService.generate(param.getCount());
-        List<VirtualDevice> list = deviceNos.stream()
-                .map(deviceNo -> new VirtualDevice()
+        List<DeviceVirtual> list = deviceNos.stream()
+                .map(deviceNo -> new DeviceVirtual()
                         .setName(deviceNo)
                         .setDeviceNo(deviceNo)
                         .setBatchNo(batchNo)
@@ -101,12 +103,29 @@ public class VirtualDeviceAdminService {
     }
 
     /// 分页(全行组装运行态: 在线/激活/最后在线, Redis ZSET 批量 ZSCORE)
+    ///
+    /// 在线/离线状态筛选需先取 Redis 在线名单(与展示判定同一窗口), 名单直接作为 SQL 条件参与分页,
+    /// 不做内存过滤, 保证 total 与翻页一致。
     public PageResult<VirtualDeviceResult> page(PageParam pageParam, VirtualDeviceQuery query) {
-        Page<VirtualDevice> mpPage = virtualDeviceManager.page(pageParam, query);
+        String status = StrUtil.trim(query.getStatus());
+        Collection<String> onlineDeviceNos = null;
+        if (VirtualDeviceQuery.STATUS_ONLINE.equals(status) || VirtualDeviceQuery.STATUS_OFFLINE.equals(status)) {
+            onlineDeviceNos = virtualDeviceRuntimeService.loadOnlineDeviceNos();
+        }
+        Page<DeviceVirtual> mpPage = virtualDeviceManager.page(pageParam, query, onlineDeviceNos);
         PageResult<VirtualDeviceResult> pageResult = MpUtil.toPageResult(mpPage);
         fillRuntime(mpPage.getRecords(), pageResult.getRecords());
         transService.translate(pageResult);
         return pageResult;
+    }
+
+    /// 详情(单台: 运行态与名称翻译口径同列表, 供小程序详情页按主键直达)
+    public VirtualDeviceResult get(Long id) {
+        DeviceVirtual entity = requireDevice(id);
+        VirtualDeviceResult result = VirtualDeviceConvert.CONVERT.toResult(entity);
+        fillRuntime(List.of(entity), List.of(result));
+        transService.translate(result);
+        return result;
     }
 
     /// 导出(服务端生成 xlsx, 查询条件与分页同参, 无时间范围必填要求)
@@ -134,7 +153,7 @@ public class VirtualDeviceAdminService {
             // ids 全是空串等无效内容时按未勾选口径导全量, 避免空导出
             return this.page(pageParam, query);
         }
-        Page<VirtualDevice> mpPage = virtualDeviceManager.pageByIds(pageParam, idList, null);
+        Page<DeviceVirtual> mpPage = virtualDeviceManager.pageByIds(pageParam, idList, null);
         PageResult<VirtualDeviceResult> pageResult = MpUtil.toPageResult(mpPage);
         fillRuntime(mpPage.getRecords(), pageResult.getRecords());
         transService.translate(pageResult);
@@ -201,7 +220,7 @@ public class VirtualDeviceAdminService {
     ///
     /// online/lastOnlineTime 口径见 [VirtualDeviceRuntimeService];
     /// activated = secret 非空(实体在手边自行判定)。
-    private void fillRuntime(List<VirtualDevice> entities, List<VirtualDeviceResult> results) {
+    private void fillRuntime(List<DeviceVirtual> entities, List<VirtualDeviceResult> results) {
         if (entities.isEmpty()) {
             return;
         }
@@ -222,7 +241,7 @@ public class VirtualDeviceAdminService {
     /// 修改设备(设备号/归属不可改, 归属走 bind/unbind)
     @Transactional(rollbackFor = Exception.class)
     public void update(VirtualDeviceParam param) {
-        VirtualDevice entity = requireDevice(param.getId());
+        DeviceVirtual entity = requireDevice(param.getId());
         entity.setName(param.getName());
         entity.setEnable(param.getEnable());
         virtualDeviceManager.updateById(entity);
@@ -235,14 +254,14 @@ public class VirtualDeviceAdminService {
             // 设备: 启用状态不可为空
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.enableNotNull");
         }
-        VirtualDevice entity = requireDevice(id);
+        DeviceVirtual entity = requireDevice(id);
         virtualDeviceManager.changeEnable(entity.getId(), enable);
     }
 
     /// 删除设备(未激活且未绑定才可删: 已绑定/已激活须先解绑, 解绑会清空凭证回到可删状态)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        VirtualDevice entity = requireDevice(id);
+        DeviceVirtual entity = requireDevice(id);
         if (StrUtil.isNotBlank(entity.getMchNo()) || StrUtil.isNotBlank(entity.getSecret())) {
             // 设备: 设备已绑定商户或已激活, 请先解绑后再删除
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.deleteBound");
@@ -256,7 +275,7 @@ public class VirtualDeviceAdminService {
     @Transactional(rollbackFor = Exception.class)
     public void bindMerchant(DeviceBindMerchantParam param) {
         deviceBindSupport.validateMerchant(param.getMchNo());
-        for (VirtualDevice device : virtualDeviceManager.findAllByIds(param.getIds())) {
+        for (DeviceVirtual device : virtualDeviceManager.findAllByIds(param.getIds())) {
             if (StrUtil.isNotBlank(device.getMchNo()) && !device.getMchNo().equals(param.getMchNo())) {
                 // 设备: 设备已绑定其他商户, 请先解绑后再绑定
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.boundOtherMch");
@@ -281,7 +300,7 @@ public class VirtualDeviceAdminService {
     /// 任一设备不存在则整批拒绝。
     @Transactional(rollbackFor = Exception.class)
     public void bindStoreBatch(DeviceBindStoreBatchParam param) {
-        List<VirtualDevice> devices = virtualDeviceManager.findAllByIds(param.getDeviceIds());
+        List<DeviceVirtual> devices = virtualDeviceManager.findAllByIds(param.getDeviceIds());
         if (devices.size() != param.getDeviceIds().stream().distinct().count()) {
             // 设备: 部分虚拟设备不存在
             throw new DataNotExistException("error.device.virtual.batchNotFound");
@@ -293,9 +312,9 @@ public class VirtualDeviceAdminService {
     }
 
     /// 校验设备列表均已绑定商户且同一 mchNo, 返回该商户号
-    private String requireSameAssignedMchOf(List<VirtualDevice> list) {
+    private String requireSameAssignedMchOf(List<DeviceVirtual> list) {
         String mchNo = null;
-        for (VirtualDevice device : list) {
+        for (DeviceVirtual device : list) {
             if (StrUtil.isBlank(device.getMchNo())) {
                 // 设备: 虚拟设备未绑定商户
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.mchNotAssigned");
@@ -318,7 +337,7 @@ public class VirtualDeviceAdminService {
         VirtualTestSampleSupport.requireAnnounceMode(param.getMode());
         long amountFen = VirtualTestSampleSupport.resolveAmountFen(param.getAmountFen());
         String channel = VirtualTestSampleSupport.resolveChannel(param.getChannel());
-        VirtualDevice device = requireActivated(param.getId());
+        DeviceVirtual device = requireActivated(param.getId());
         String msgId = virtualDevicePushClient.testBroadcast(device.getDeviceNo(), device.getSecret(),
                 amountFen, VirtualTestSampleSupport.toDeviceChannel(channel));
         log.info("虚拟设备试播: deviceNo={}, amountFen={}, channel={}", device.getDeviceNo(), amountFen, channel);
@@ -340,7 +359,7 @@ public class VirtualDeviceAdminService {
     /// 返回 msgId 供回执轮询。
     public String testPrint(VirtualDeviceTestParam param) {
         VirtualTestMode mode = VirtualTestSampleSupport.resolvePrintMode(param.getMode());
-        VirtualDevice device = requireActivated(param.getId());
+        DeviceVirtual device = requireActivated(param.getId());
         TestBuild build = buildTest(device, param);
         PrintPushData printData = printPushService.renderTest(device, build.mchName(), build.appName(), build.sample());
         if (printData == null) {
@@ -378,7 +397,7 @@ public class VirtualDeviceAdminService {
     ///
     /// 商户名/应用名取设备归属上下文(库存态设备两值为空串, 票头变量留空);
     /// 应用名不做默认应用回推(设备未绑应用时取商户默认应用名会误导票头, 留空更诚实)。
-    private TestBuild buildTest(VirtualDevice device, VirtualDeviceTestParam param) {
+    private TestBuild buildTest(DeviceVirtual device, VirtualDeviceTestParam param) {
         long amountFen = VirtualTestSampleSupport.resolveAmountFen(param.getAmountFen());
         String channel = VirtualTestSampleSupport.resolveChannel(param.getChannel());
         String mchName = "";
@@ -405,15 +424,15 @@ public class VirtualDeviceAdminService {
     }
 
     /// 按主键取设备(不存在抛错)
-    private VirtualDevice requireDevice(Long id) {
+    private DeviceVirtual requireDevice(Long id) {
         return virtualDeviceManager.findById(id)
                 // 设备: 虚拟设备不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.virtual.notFound"));
     }
 
     /// 设备须存在且已激活(试播试打共用前置校验)
-    private VirtualDevice requireActivated(Long id) {
-        VirtualDevice device = requireDevice(id);
+    private DeviceVirtual requireActivated(Long id) {
+        DeviceVirtual device = requireDevice(id);
         if (StrUtil.isBlank(device.getSecret())) {
             throw VirtualDevicePushClient.notActivatedException();
         }

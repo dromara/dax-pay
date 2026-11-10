@@ -14,7 +14,7 @@ import java.util.Map;
 /// 开源版不移植打印模板表与 CRUD(拍板 2): 版式为代码内置 JSON 常量, 首期一套
 /// 「标准收款小票」(内容自 plus `_config/sql/data.sql` 平台预置模板 `pay_print_template`
 /// id=1800000000000000901 原样拷贝, 快照 773134af)。`resolveTemplate(templateCode)` 查本表,
-/// 无表无 CRUD; 应用配置(`pay_mch_app_device_config.template_code`)只存代码, 下拉为枚举扩展位。
+/// 无表无 CRUD; 应用配置(`device_mch_app_config.template_code`)只存代码, 下拉为枚举扩展位。
 ///
 /// 常量内容在类加载时过一遍 [PrintTemplateParser#parse] 快速自检: 内容损坏(手改常量引入)
 /// 会在首个调用点抛出明确异常, 而不是渲染出静默残票。

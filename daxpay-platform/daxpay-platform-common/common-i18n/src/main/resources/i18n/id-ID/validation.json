@@ -582,7 +582,8 @@
       "notBlank": "Nomor pedagang Huifu tidak boleh kosong"
     },
     "isvNo": {
-      "notBlank": "Nomor ISV wajib diisi"
+      "notBlank": "Nomor ISV wajib diisi",
+      "size": "Nomor penyedia layanan tidak boleh melebihi 32 karakter"
     },
     "sandAppId": {
       "notBlank": "Sand appId tidak boleh kosong"

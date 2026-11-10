@@ -25,8 +25,8 @@ import java.time.OffsetDateTime;
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@TableName("pay_virtual_device")
-public class VirtualDevice extends MpBaseEntity implements ToResult<VirtualDeviceResult>, PrintTerminal {
+@TableName("device_virtual")
+public class DeviceVirtual extends MpBaseEntity implements ToResult<VirtualDeviceResult>, PrintTerminal {
 
     /// 设备名称
     private String name;

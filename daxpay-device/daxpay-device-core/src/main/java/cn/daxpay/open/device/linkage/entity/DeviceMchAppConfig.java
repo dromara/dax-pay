@@ -24,8 +24,8 @@ import lombok.experimental.FieldNameConstants;
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@TableName("pay_mch_app_device_config")
-public class MchAppDeviceConfig extends MchBaseEntity {
+@TableName("device_mch_app_config")
+public class DeviceMchAppConfig extends MchBaseEntity {
 
     /// 应用号(全局唯一, 一应用一行)
     private String appId;

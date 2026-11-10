@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 /// # 虚拟设备在线追踪(Redis ZSET 在线窗口 + 节流落库锁 + ack nonce 防重放)
 ///
@@ -114,6 +115,15 @@ public class VirtualOnlineTracker {
         Long count = stringRedisTemplate.opsForZSet()
                 .count(ONLINE_KEY, (double) (epochNow() - ONLINE_WINDOW_SECONDS), ONLINE_SCORE_MAX);
         return count == null ? 0L : count;
+    }
+
+    /// 当前在线设备号名单(在线窗口内成员; 列表按在线/离线切分用, 与展示判定同一窗口)
+    ///
+    /// 名单规模即当前在线设备数(通常远小于台账总量), 供 SQL in/notIn 使用。
+    public List<String> findOnlineDeviceNos() {
+        Set<String> members = stringRedisTemplate.opsForZSet()
+                .rangeByScore(ONLINE_KEY, (double) (epochNow() - ONLINE_WINDOW_SECONDS), ONLINE_SCORE_MAX);
+        return members == null ? List.of() : List.copyOf(members);
     }
 
     /// 移除在线成员(凭证回收汇聚点顺带清理: 解绑/删除, 防残留成员虚高在线数)

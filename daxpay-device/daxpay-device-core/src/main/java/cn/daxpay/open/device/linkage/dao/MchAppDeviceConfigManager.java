@@ -1,6 +1,6 @@
 package cn.daxpay.open.device.linkage.dao;
 
-import cn.daxpay.open.device.linkage.entity.MchAppDeviceConfig;
+import cn.daxpay.open.device.linkage.entity.DeviceMchAppConfig;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import lombok.RequiredArgsConstructor;
@@ -16,13 +16,13 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class MchAppDeviceConfigManager extends BaseManager<MchAppDeviceConfigMapper, MchAppDeviceConfig> {
+public class MchAppDeviceConfigManager extends BaseManager<MchAppDeviceConfigMapper, DeviceMchAppConfig> {
 
     /// 按应用号查配置行(忽略租户: JMS 消费线程/免登录客户端无商户上下文, 消费侧配置读取入口)
     @IgnoreTenant
-    public Optional<MchAppDeviceConfig> findByAppIdNotTenant(String appId) {
+    public Optional<DeviceMchAppConfig> findByAppIdNotTenant(String appId) {
         return lambdaQuery()
-                .eq(MchAppDeviceConfig::getAppId, appId)
+                .eq(DeviceMchAppConfig::getAppId, appId)
                 .oneOpt();
     }
 
@@ -36,19 +36,19 @@ public class MchAppDeviceConfigManager extends BaseManager<MchAppDeviceConfigMap
     /// 注解在本方法上可可靠生效, 且可重入计数会同时覆盖内部查询与写入。
     @IgnoreTenant
     @Transactional(rollbackFor = Exception.class)
-    public void saveConfig(MchAppDeviceConfig config) {
-        MchAppDeviceConfig existing = findByAppIdNotTenant(config.getAppId()).orElse(null);
+    public void saveConfig(DeviceMchAppConfig config) {
+        DeviceMchAppConfig existing = findByAppIdNotTenant(config.getAppId()).orElse(null);
         if (existing == null) {
             this.save(config);
             return;
         }
         lambdaUpdate()
-                .set(MchAppDeviceConfig::getMchNo, config.getMchNo())
-                .set(MchAppDeviceConfig::getBroadcastEnable, config.getBroadcastEnable())
-                .set(MchAppDeviceConfig::getPrintEnable, config.getPrintEnable())
-                .set(MchAppDeviceConfig::getStoreStrictMatch, config.getStoreStrictMatch())
-                .set(MchAppDeviceConfig::getTemplateCode, config.getTemplateCode())
-                .eq(MchAppDeviceConfig::getId, existing.getId())
+                .set(DeviceMchAppConfig::getMchNo, config.getMchNo())
+                .set(DeviceMchAppConfig::getBroadcastEnable, config.getBroadcastEnable())
+                .set(DeviceMchAppConfig::getPrintEnable, config.getPrintEnable())
+                .set(DeviceMchAppConfig::getStoreStrictMatch, config.getStoreStrictMatch())
+                .set(DeviceMchAppConfig::getTemplateCode, config.getTemplateCode())
+                .eq(DeviceMchAppConfig::getId, existing.getId())
                 .update();
     }
 }

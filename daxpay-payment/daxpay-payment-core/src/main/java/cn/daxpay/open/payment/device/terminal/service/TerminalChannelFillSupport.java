@@ -2,8 +2,8 @@ package cn.daxpay.open.payment.device.terminal.service;
 
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalChannelBindManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminalChannelBind;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
 import cn.hutool.core.collection.CollUtil;
@@ -45,13 +45,13 @@ public class TerminalChannelFillSupport {
         if (terminalNos.isEmpty()) {
             return;
         }
-        List<TerminalChannelBind> binds = terminalChannelBindManager.findBySystemTerminalNos(terminalNos);
-        Map<String, List<TerminalChannelBind>> bindGroup = binds.stream()
-                .collect(Collectors.groupingBy(TerminalChannelBind::getSystemTerminalNo));
+        List<DeviceTerminalChannelBind> binds = terminalChannelBindManager.findBySystemTerminalNos(terminalNos);
+        Map<String, List<DeviceTerminalChannelBind>> bindGroup = binds.stream()
+                .collect(Collectors.groupingBy(DeviceTerminalChannelBind::getSystemTerminalNo));
         Map<Long, ChannelTerminalResult> channelTerminalMap = this.loadChannelTerminals(binds);
         for (TerminalDeviceResult result : results) {
             List<Long> channelTerminalIds = bindGroup.getOrDefault(result.getTerminalNo(), List.of()).stream()
-                    .map(TerminalChannelBind::getChannelTerminalId)
+                    .map(DeviceTerminalChannelBind::getChannelTerminalId)
                     .filter(Objects::nonNull)
                     .distinct()
                     .sorted()
@@ -65,9 +65,9 @@ public class TerminalChannelFillSupport {
     }
 
     /// 批量加载本次涉及的全部通道终端并按主键索引(逻辑删除的数据自动过滤, 调用方按需跳过)
-    private Map<Long, ChannelTerminalResult> loadChannelTerminals(List<TerminalChannelBind> binds) {
+    private Map<Long, ChannelTerminalResult> loadChannelTerminals(List<DeviceTerminalChannelBind> binds) {
         List<Long> channelTerminalIds = binds.stream()
-                .map(TerminalChannelBind::getChannelTerminalId)
+                .map(DeviceTerminalChannelBind::getChannelTerminalId)
                 .filter(Objects::nonNull)
                 .distinct()
                 .toList();
@@ -75,7 +75,7 @@ public class TerminalChannelFillSupport {
             return Map.of();
         }
         return channelTerminalManager.findAllByIds(channelTerminalIds).stream()
-                .map(ChannelTerminal::toResult)
+                .map(DeviceChannelTerminal::toResult)
                 .collect(Collectors.toMap(ChannelTerminalResult::getId, result -> result, (a, b) -> a));
     }
 }

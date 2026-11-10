@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # Mock 模拟服务商信息
+/// # Mock 模拟服务商信息(全局唯一)
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,7 +25,4 @@ public class MockIsvInfoResult extends BaseResult {
 
     @Schema(description = "是否启用服务商支付")
     private Boolean payEnable;
-
-    @Schema(description = "是否已配置服务商签名密钥(未配置时服务商产品回落全局密钥)")
-    private Boolean credentialConfigured;
 }

@@ -582,7 +582,8 @@
       "notBlank": "Số người bán Huifu không được để trống"
     },
     "isvNo": {
-      "notBlank": "Số ISV không được để trống"
+      "notBlank": "Số ISV không được để trống",
+      "size": "Mã nhà cung cấp dịch vụ không được vượt quá 32 ký tự"
     },
     "sandAppId": {
       "notBlank": "Sand appId không được để trống"

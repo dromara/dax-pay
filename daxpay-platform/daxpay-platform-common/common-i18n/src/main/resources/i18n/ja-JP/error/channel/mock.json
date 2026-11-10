@@ -15,11 +15,8 @@
   "allocReceiverNameRequired": "モックチャネル: 加盟店番号タイプの受取方には加盟店正式名称が必要です",
   "allocReceiverNotMockProduct": "このチャネル加盟店はモックチャネルではないため、ここで受取方を管理できません",
   "isvNotExist": "モックサービスプロバイダーが存在しません: {0}",
-  "isvBindingNotExist": "モックサービスプロバイダーのチャネル加盟店バインドが存在しません: {0}",
-  "isvOfChannelMerchantNotExist": "チャネル加盟店が属するモックサービスプロバイダーが存在しません: {0}",
-  "isvDisabled": "所属モックサービスプロバイダーは無効です。チャネル加盟店を作成できません",
-  "isvHasChannelMerchant": "このモックサービスプロバイダーにはチャネル加盟店が残っているため削除できません: {0}",
-  "isvCredentialSaveFailed": "モックサービスプロバイダーのアクセスキー保存に失敗しました: {0}",
+  "isvNoExists": "モックサービスプロバイダー番号は既に存在します: {0}",
+  "isvNoRequired": "モックサービスプロバイダー番号は必須です",
   "isvPayDisabled": "モックサービスプロバイダー[{0}]は決済が無効です。新規決済を開始できません",
   "globalCredentialNotConfigured": "モックチャネルのアクセスキーが未設定です。先に設定を完了してください"
 }

@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.elf.service.cashier;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
-import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceTerminal;
 import cn.daxpay.open.payment.elf.result.cashier.ElfCashierConfigOptionsResult;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
@@ -80,9 +80,9 @@ public class ElfCashierConfigService {
         // 只返回启用未删终端(全商户维度, 精灵端按已选门店过滤); 默认终端在前, 其次按终端号升序
         List<ElfCashierConfigOptionsResult.TerminalOption> terminalOptions = terminalDeviceManager
                 .findEnabledByMchNo(mchNo).stream()
-                .sorted(Comparator.comparing(TerminalDevice::getDefaultTerminal)
+                .sorted(Comparator.comparing(DeviceTerminal::getDefaultTerminal)
                         .reversed()
-                        .thenComparing(TerminalDevice::getTerminalNo))
+                        .thenComparing(DeviceTerminal::getTerminalNo))
                 .map(terminal -> new ElfCashierConfigOptionsResult.TerminalOption()
                         .setTerminalNo(terminal.getTerminalNo())
                         .setName(terminal.getName())

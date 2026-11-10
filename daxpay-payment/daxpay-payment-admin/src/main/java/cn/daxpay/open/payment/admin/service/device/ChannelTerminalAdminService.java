@@ -6,7 +6,7 @@ import cn.daxpay.open.payment.admin.param.device.ChannelTerminalReportParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.device.terminal.bo.TerminalExtraField;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
-import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.device.terminal.entity.DeviceChannelTerminal;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalBindParam;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalSaveParam;
@@ -68,7 +68,7 @@ public class ChannelTerminalAdminService {
     /// 商户下通道终端列表(绑定下拉用)
     public List<ChannelTerminalResult> listByMchNo(String mchNo) {
         return channelTerminalManager.findAllByMchNo(mchNo).stream()
-                .map(ChannelTerminal::toResult)
+                .map(DeviceChannelTerminal::toResult)
                 .collect(Collectors.toList());
     }
 

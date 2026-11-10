@@ -1,6 +1,6 @@
 package cn.daxpay.open.channel.mock.convert.credential;
 
-import cn.daxpay.open.channel.mock.entity.credential.MockChannelCredential;
+import cn.daxpay.open.channel.mock.entity.credential.MockGatewayCredential;
 import cn.daxpay.open.channel.mock.param.credential.MockChannelCredentialParam;
 import cn.daxpay.open.channel.mock.result.credential.MockChannelCredentialResult;
 import org.mapstruct.BeanMapping;
@@ -18,9 +18,9 @@ public interface MockChannelCredentialConvert {
     MockChannelCredentialConvert CONVERT = Mappers.getMapper(MockChannelCredentialConvert.class);
 
     /// 转换为返回对象
-    MockChannelCredentialResult toResult(MockChannelCredential entity);
+    MockChannelCredentialResult toResult(MockGatewayCredential entity);
 
     /// 更新参数到实体(空值不覆盖, 密钥为空时保留原值)
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void copy(MockChannelCredentialParam param, @MappingTarget MockChannelCredential entity);
+    void copy(MockChannelCredentialParam param, @MappingTarget MockGatewayCredential entity);
 }
