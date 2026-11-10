@@ -11,6 +11,7 @@ import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.capability.audit.log.param.OperateLogParam;
 import cn.daxpay.open.platform.capability.audit.log.service.ip2region.IpToRegionService;
 import cn.daxpay.open.platform.capability.audit.log.service.log.OperateLogService;
+import cn.daxpay.open.platform.capability.audit.log.util.UserAgentDisplayUtil;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.ListUtil;
@@ -95,8 +96,8 @@ public class OperateLogAspectHandler {
                     .setMethod(className + "#" + methodName)
                     .setRequestMethod(RequestContextHolder.getMethod())
                     .setClient(clientCode)
-                    .setOs(userAgent.getOs().getName())
-                    .setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getVersion())
+                    .setOs(UserAgentDisplayUtil.os(userAgent))
+                    .setBrowser(UserAgentDisplayUtil.browser(userAgent))
                     .setSuccess(true)
                     .setOperateIp(ip)
                     .setOperateLocation(location)

@@ -6,6 +6,7 @@ import cn.daxpay.open.platform.iam.auth.service.LoginRetryService;
 import cn.daxpay.open.platform.capability.audit.log.param.LoginLogParam;
 import cn.daxpay.open.platform.capability.audit.log.service.ip2region.IpToRegionService;
 import cn.daxpay.open.platform.capability.audit.log.service.log.LoginLogService;
+import cn.daxpay.open.platform.capability.audit.log.util.UserAgentDisplayUtil;
 import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.capability.auth.handler.LoginFailureHandler;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
@@ -58,8 +59,8 @@ public class LoginFailureHandlerImpl implements LoginFailureHandler {
                 .setMsg(e.getMessage())
                 .setIp(ip)
                 .setLoginLocation(location)
-                .setOs(userAgent.getOs().getName())
-                .setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getVersion())
+                .setOs(UserAgentDisplayUtil.os(userAgent))
+                .setBrowser(UserAgentDisplayUtil.browser(userAgent))
                 .setLoginTime(OffsetDateTime.now(ZoneOffset.UTC));
         loginLogService.add(loginLog);
     }

@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.capability.audit.log.service.ip2region;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.hutool.core.lang.PatternPool;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -206,8 +207,8 @@ public class IpToRegionService {
         else if (region.isChinaIp()) {
             return StrUtil.format("{}/{}/{}", region.getProvince(), region.getCity(), region.getIsp());
         }
-        // 内网
-        else if (region.isInnerIp()) {
+        // 内网(含回环): ip2region 对 127.0.0.1 等保留地址返回 "Reserved/0", 统一按内网展示
+        else if (region.isInnerIp() || this.isReservedIp(ip)) {
             // 内网地址
             return I18nUtil.get("log.region.innerIp");
         }
@@ -215,6 +216,23 @@ public class IpToRegionService {
         else {
             return StrUtil.format("{}/{}", region.getCountry(), region.getIsp());
         }
+    }
+
+    /// 是否内网/保留地址
+    ///
+    /// ip2region 对回环等保留段返回 "Reserved/0", 不能依赖其 isp 字段判断;
+    /// 另注意 [NetUtil#isInnerIP] 仅接受 IPv4, 直接传 IPv6 会抛 IllegalArgumentException, 故先按格式分流。
+    /// 包级可见: 供单测覆盖 IPv4/IPv6 分流逻辑
+    boolean isReservedIp(String ip) {
+        if (PatternPool.IPV4.matcher(ip).matches()) {
+            return NetUtil.isInnerIP(ip);
+        }
+        // IPv6: 回环 + 链路本地 + ULA
+        String lower = ip.toLowerCase();
+        return "::1".equals(ip)
+                || lower.startsWith("fe80")
+                || lower.startsWith("fc")
+                || lower.startsWith("fd");
     }
 
     /// 获取 IPv4 xdb 文件路径
