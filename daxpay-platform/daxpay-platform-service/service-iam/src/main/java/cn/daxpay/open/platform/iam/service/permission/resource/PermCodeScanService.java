@@ -8,13 +8,13 @@ import cn.daxpay.open.platform.iam.dao.upms.RoleCodeManager;
 import cn.daxpay.open.platform.iam.entity.permission.PermCodeData;
 import cn.daxpay.open.platform.iam.param.permission.resource.PermCodeScanParam;
 import cn.daxpay.open.platform.iam.result.permission.resource.PermCodeScanResult;
+import cn.daxpay.open.platform.iam.service.upms.IamPermCodeCacheService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,13 +57,16 @@ public class PermCodeScanService {
     private final PermCodeManager permCodeManager;
     /// 角色与权限码关系管理器，用于删除失效权限码对应的关系数据。
     private final RoleCodeManager roleCodeManager;
+    /// 权限码缓存失效(事务提交后定序失效)
+    private final IamPermCodeCacheService iamPermCodeCacheService;
 
     /// 扫描并同步权限码主数据。
     /// 扫描结果会根据新增、更新、跳过、删除分别计入返回对象，便于前端直接展示同步摘要。
-    /// 主数据变更影响管理员"全部码"路径且会联动删 role_code, 全清权限码缓存
-    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
+    /// 主数据变更影响管理员"全部码"路径且会联动删 role_code, 提交后全清权限码缓存
     @Transactional(rollbackFor = Exception.class)
     public PermCodeScanResult scan(PermCodeScanParam param) {
+        // 提交后全清权限码缓存(失效时序见 IamPermCodeCacheService)
+        iamPermCodeCacheService.evictAllAfterCommit();
         Map<String, PermCodeDefinition> definitionMap = this.collectDefinitions();
         this.validateDefinitions(definitionMap);
 

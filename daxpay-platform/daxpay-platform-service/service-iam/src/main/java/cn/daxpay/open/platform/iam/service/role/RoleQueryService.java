@@ -9,6 +9,7 @@ import cn.daxpay.open.platform.iam.entity.role.Role;
 import cn.daxpay.open.platform.iam.exception.role.RoleNotExistedException;
 import cn.daxpay.open.platform.iam.param.role.RoleQuery;
 import cn.daxpay.open.platform.iam.result.role.RoleResult;
+import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,11 @@ public class RoleQueryService {
 
     private final RoleManager roleManager;
 
-    /// 角色列表
+    private final ClientCodeService clientCodeService;
+
+    /// 角色列表(按当前终端过滤, 不跨终端暴露角色定义)
     public List<RoleResult> findAll() {
-        return MpUtil.toListResult(roleManager.findAll());
+        return MpUtil.toListResult(roleManager.findAllByClientCode(clientCodeService.getClientCode()));
     }
 
     /// 角色分页
@@ -34,9 +37,9 @@ public class RoleQueryService {
         return MpUtil.toPageResult(roleManager.page(pageParam, query));
     }
 
-    /// 角色下拉框
+    /// 角色下拉框(按当前终端过滤)
     public List<KeyValue> dropdown() {
-        return roleManager.findDropdown();
+        return roleManager.findDropdownByClientCode(clientCodeService.getClientCode());
     }
 
     /// 详情

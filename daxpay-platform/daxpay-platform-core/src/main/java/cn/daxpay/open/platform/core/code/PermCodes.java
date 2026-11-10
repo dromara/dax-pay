@@ -96,24 +96,6 @@ public interface PermCodes {
             String MENU = "merchant:app:route";
         }
 
-        /// 应用配置工作台子页 menuCode=merchant:app:workbench（与应用列表消歧）
-        interface AppWorkbench {
-            /// 菜单编码
-            String MENU = "merchant:app:workbench";
-        }
-
-        /// 聚合支付配置 menuCode=merchant:gateway-aggregate
-        interface GatewayAggregate {
-            /// 菜单编码
-            String MENU = "merchant:gateway-aggregate";
-        }
-
-        /// 码牌支付配置 menuCode=merchant:gateway-code
-        interface GatewayCode {
-            /// 菜单编码
-            String MENU = "merchant:gateway-code";
-        }
-
         /// 网关支付配置(码牌/聚合共用) menuCode=merchant:gateway-pay-config
         interface GatewayPayConfig {
             /// 菜单编码
@@ -193,12 +175,6 @@ public interface PermCodes {
                 /// 菜单编码
                 String MENU = "payment:platform:product";
         }
-
-            /// 支付方式 menuCode=payment:platform:pay-method
-            interface PayMethod {
-                /// 菜单编码
-                String MENU = "payment:platform:pay-method";
-            }
 
             /// 支付渠道 menuCode=payment:platform:provider
             interface Provider {

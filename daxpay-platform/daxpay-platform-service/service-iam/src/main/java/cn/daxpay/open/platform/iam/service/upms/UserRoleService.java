@@ -16,7 +16,6 @@ import cn.daxpay.open.platform.capability.auth.authentication.SubjectAdminGuardH
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +37,9 @@ public class UserRoleService {
 
     private final UserRoleManager userRoleManager;
 
+    /// 权限码缓存失效(事务提交后定序失效, 见 IamPermCodeCacheService)
+    private final IamPermCodeCacheService iamPermCodeCacheService;
+
     /// 主体管理员保护钩子(业务域 SPI, payment 侧提供实现)
     private final List<SubjectAdminGuardHook> subjectAdminGuardHooks;
 
@@ -45,9 +47,10 @@ public class UserRoleService {
     ///
     /// 主体管理员(创建商户时自动建号的管理员用户)角色固定不可变更:
     /// 所有分配入口统一在此拦截; 主体创建链路的初始绑定因"先绑角色后存挂靠关联"的时序天然放行。
-    @CacheEvict(cacheNames = "iam:user-perm-codes", key = "#userId")
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(Long userId, Long roleId, boolean ignoreScopes) {
+        // 提交后精确失效该用户权限码缓存(失效时序见 IamPermCodeCacheService)
+        iamPermCodeCacheService.evictUserAfterCommit(userId);
         // 内置超管权限不依赖角色, 拒绝挂脏数据
         userInfoManager.findById(userId)
                 .filter(UserInfo::isAdministrator)
@@ -82,10 +85,10 @@ public class UserRoleService {
     }
 
     /// 批量给用户分配角色（单角色模式）
-    /// 批量入参无法逐 key 精确失效, 直接全清(管理端低频操作, 冷启动代价可忽略)
-    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
+    /// 批量入参无法逐 key 精确失效, 提交后直接全清(管理端低频操作, 冷启动代价可忽略)
     @Transactional(rollbackFor = Exception.class)
     public void saveAssignBatch(List<Long> userIds, Long roleId) {
+        iamPermCodeCacheService.evictAllAfterCommit();
         List<Long> roleIdsByUser = this.findRoleIdsByUser();
         if (!roleIdsByUser.contains(roleId)){
             // 权限: 角色分配超出了可分配的范围

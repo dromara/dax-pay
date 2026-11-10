@@ -120,10 +120,16 @@ public class UserRolePremService {
     /// 超级管理员直接返回全部权限码
     ///
     /// 鉴权热路径(每个 @PermCode 请求一次), 走多级缓存(L1 60s / L2 30min, 集群广播失效);
-    /// 失效入口: 用户角色变更(精确 evict)与角色授权/权限码扫描(全清), 见各写入口的 @CacheEvict
+    /// 失效入口: 用户角色变更(精确 evict)与角色授权/权限码扫描(全清), 见各写入口的失效注册。
+    /// 超管判定按目标 userId 落库, 不读当前登录上下文: 避免以他人 userId 调用时把超管全量码
+    /// 缓存到普通用户键下(L2 最长 30 分钟提权), 同时 DB 侧管理员标志变更可随缓存过期生效;
+    /// 用户表查询仅在缓存 miss 时发生一次, 热路径无额外开销。
     @Cacheable(cacheNames = "iam:user-perm-codes", key = "#userId")
     public List<String> findAllCodesByUser(Long userId){
-        if (SecurityUtil.getUser().isAdmin()){
+        boolean administrator = userInfoManager.findById(userId)
+                .map(UserInfo::isAdministrator)
+                .orElse(false);
+        if (administrator){
             return permCodeService.findAllCode();
         }
         List<Long> roleIds = userRoleService.findRoleIdsByUser(userId);

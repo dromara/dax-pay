@@ -2,8 +2,10 @@ package cn.daxpay.open.platform.iam.controller.permission.resource;
 
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.annotation.InternalPath;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -44,6 +46,7 @@ public class PermCodeController {
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @InternalPath
+    @OperateLog(title = "扫描同步权限码", businessType = OperateLogType.SYNC)
     @Operation(summary = "手动扫描同步权限码")
     @PostMapping("/scan")
     public Result<PermCodeScanResult> scan() {

@@ -1,7 +1,9 @@
 package cn.daxpay.open.platform.iam.controller.role;
 
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.dto.KeyValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -38,6 +40,7 @@ public class RoleController {
     private final RoleQueryService roleQueryService;
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "添加角色", businessType = OperateLogType.ADD, saveParam = true)
     @Operation(summary = "添加角色")
     @PostMapping(value = "/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) RoleParam roleParam) {
@@ -47,6 +50,7 @@ public class RoleController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "修改角色", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "修改角色")
     @PostMapping(value = "/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) RoleParam roleParam) {
@@ -63,6 +67,7 @@ public class RoleController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "删除角色", businessType = OperateLogType.DELETE, saveParam = true)
     @Operation(summary = "删除角色")
     @PostMapping(value = "/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

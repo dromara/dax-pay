@@ -1,7 +1,9 @@
 package cn.daxpay.open.platform.iam.controller.permission.assign;
 
 import cn.daxpay.open.platform.core.annotation.InternalPath;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -45,6 +47,7 @@ public class RoleUnifiedAssignController {
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @InternalPath
+    @OperateLog(title = "角色统一授权", businessType = OperateLogType.GRANT, saveParam = true)
     @Operation(summary = "保存角色统一授权")
     @PostMapping("/save")
     public Result<Void> save(@RequestBody @Validated RoleUnifiedAssignParam param) {

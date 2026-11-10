@@ -16,10 +16,10 @@ import cn.daxpay.open.platform.iam.exception.role.RoleNotExistedException;
 import cn.daxpay.open.platform.iam.param.permission.assign.RoleUnifiedAssignParam;
 import cn.daxpay.open.platform.iam.result.permission.assign.RoleUnifiedAssignResult;
 import cn.daxpay.open.platform.iam.result.permission.assign.RoleUnifiedAssignTreeResult;
+import cn.daxpay.open.platform.iam.service.upms.IamPermCodeCacheService;
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +48,8 @@ public class RoleUnifiedAssignService {
     private final PermCodeManager permCodeManager;
     private final RoleMenuManager roleMenuManager;
     private final RoleCodeManager roleCodeManager;
+    /// 权限码缓存失效(事务提交后定序失效)
+    private final IamPermCodeCacheService iamPermCodeCacheService;
 
     /// 查询角色在指定终端下的统一授权数据。
     /// 这里返回的是"菜单树 + 挂载到菜单下的权限码节点"，前端基于该结果直接渲染统一授权树。
@@ -162,10 +164,11 @@ public class RoleUnifiedAssignService {
     /// 前端会同时提交菜单 ID 与权限码 ID，这里在落库前会校验权限码是否都依赖于本次已选择的菜单，
     /// 从而保证功能权限不能脱离菜单权限单独生效。
     /// 保存时会分别维护 `role_menu` 与 `role_code` 两张关系表，仅同步当前角色本次提交的数据差异。
-    /// 角色→权限码映射变更影响挂该角色的全部用户, 无法按 roleId 反查用户, 直接全清权限码缓存
-    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
+    /// 角色→权限码映射变更影响挂该角色的全部用户, 无法按 roleId 反查用户, 提交后直接全清权限码缓存
     @Transactional(rollbackFor = Exception.class)
     public void save(RoleUnifiedAssignParam param) {
+        // 提交后全清权限码缓存(失效时序见 IamPermCodeCacheService)
+        iamPermCodeCacheService.evictAllAfterCommit();
         Role role = roleManager.findById(param.getRoleId()).orElseThrow(RoleNotExistedException::new);
         if (!Objects.equals(role.getClientCode(), param.getClientCode())) {
             // 权限: 角色所属终端与请求终端不一致

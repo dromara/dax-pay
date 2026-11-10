@@ -32,9 +32,10 @@ public class RoleManager extends BaseManager<RoleMapper, Role> {
         return existedByField(Role::getCode, code, id);
     }
 
-    /// 下拉框查询，返回 i18nKey 供前端翻译
-    public List<KeyValue> findDropdown() {
+    /// 下拉框查询，返回 i18nKey 供前端翻译(按终端过滤, 不跨终端暴露角色定义)
+    public List<KeyValue> findDropdownByClientCode(String clientCode) {
         return lambdaQuery().select(Role::getId, Role::getCode, Role::getI18nKey)
+            .eq(Role::getClientCode, clientCode)
             .list()
             .stream()
             .map(role -> new KeyValue(String.valueOf(role.getId()),role.getI18nKey()))

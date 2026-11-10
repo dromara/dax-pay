@@ -1,7 +1,9 @@
 package cn.daxpay.open.platform.iam.controller.session;
 
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -38,6 +40,7 @@ public class OnlineUserController {
     }
 
     @PermCode(code = PermCodes.Action.KICKOUT)
+    @OperateLog(title = "强制用户下线", businessType = OperateLogType.FORCE, saveParam = true)
     @Operation(summary = "强制用户下线")
     @PostMapping("/kickout")
     public Result<Void> kickout(String sessionId) {
@@ -46,6 +49,7 @@ public class OnlineUserController {
     }
 
     @PermCode(code = PermCodes.Action.KICKOUT)
+    @OperateLog(title = "批量强制用户下线", businessType = OperateLogType.FORCE, saveParam = true)
     @Operation(summary = "批量强制用户下线")
     @PostMapping("/kickout-batch")
     public Result<Void> kickoutBatch(@RequestBody @NotEmpty(message = "{validation.field.sessionIds.notEmpty}") List<String> sessionIds) {

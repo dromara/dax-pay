@@ -13,10 +13,10 @@ import cn.daxpay.open.platform.iam.exception.role.RoleNotExistedException;
 import cn.daxpay.open.platform.iam.param.role.RoleParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.iam.service.upms.IamPermCodeCacheService;
 
 /// # 角色操作服务
 ///
@@ -32,6 +32,9 @@ public class RoleService {
     private final RoleMenuManager roleMenuManager;
 
     private final RoleCodeManager roleCodeManager;
+
+    /// 权限码缓存失效(事务提交后定序失效, 见 IamPermCodeCacheService)
+    private final IamPermCodeCacheService iamPermCodeCacheService;
 
     /// 添加
     @Transactional(rollbackFor = Exception.class)
@@ -61,10 +64,11 @@ public class RoleService {
     }
 
     /// 删除
-    /// 守卫保证无用户挂载才可删, 理论上无缓存影响; 仍全清权限码缓存兜底
-    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
+    /// 守卫保证无用户挂载才可删, 理论上无缓存影响; 仍提交后全清权限码缓存兜底
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long roleId) {
+        // 提交后全清权限码缓存(失效时序见 IamPermCodeCacheService)
+        iamPermCodeCacheService.evictAllAfterCommit();
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
 
         // 内置角色不允许删除

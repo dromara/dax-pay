@@ -1,7 +1,9 @@
 package cn.daxpay.open.platform.iam.controller.session;
 
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -39,6 +41,7 @@ public class LoginLockController {
     }
 
     @PermCode(code = PermCodes.Action.UNLOCK)
+    @OperateLog(title = "解锁用户登录锁定", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "解锁用户登录锁定")
     @PostMapping("/unlock")
     public Result<Void> unlock(Long userId) {

@@ -1,7 +1,9 @@
 package cn.daxpay.open.platform.iam.controller.upms;
 
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.param.upms.UserRoleBatchParam;
@@ -29,6 +31,7 @@ public class UserRoleController {
     private final UserRoleService userRoleService;
 
     @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
+    @OperateLog(title = "分配用户角色", businessType = OperateLogType.GRANT, saveParam = true)
     @Operation(summary = "给用户分配角色")
     @PostMapping(value = "/save-assign")
     public Result<Void> saveAssign(@Validated @RequestBody UserRoleParam param) {
@@ -37,6 +40,7 @@ public class UserRoleController {
     }
 
     @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
+    @OperateLog(title = "批量分配用户角色", businessType = OperateLogType.GRANT, saveParam = true)
     @Operation(summary = "给用户分配角色(批量)")
     @PostMapping(value = "/save-assign-batch")
     public Result<Void> saveAssignBatch(@RequestBody @Validated UserRoleBatchParam param) {

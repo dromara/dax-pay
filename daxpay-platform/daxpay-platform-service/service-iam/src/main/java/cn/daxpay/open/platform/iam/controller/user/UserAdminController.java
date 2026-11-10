@@ -1,7 +1,9 @@
 package cn.daxpay.open.platform.iam.controller.user;
 
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -42,6 +44,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "新增运营用户", businessType = OperateLogType.ADD, saveParam = true, maskParam = true)
     @Operation(summary = "添加用户")
     @PostMapping("/add")
     public Result<UserPasswordResult> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
@@ -50,6 +53,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "修改运营用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     @Operation(summary = "修改用户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserInfoParam userInfoParam) {
@@ -58,6 +62,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "强制解绑运营用户邮箱", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "强制解绑用户邮箱")
     @PostMapping("/unbind-email")
     public Result<Void> unbindEmail(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -67,6 +72,8 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.RESET_PASSWORD)
+    // 不落返回值: 响应含一次性明文初始密码
+    @OperateLog(title = "重置运营用户密码", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
     public Result<UserPasswordResult> restartPassword(@RequestBody @Validated RestartPwdParam param) {
@@ -75,6 +82,8 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.RESET_PASSWORD)
+    // 不落返回值: 响应含一次性明文初始密码列表
+    @OperateLog(title = "批量重置运营用户密码", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "批量重置密码")
     @PostMapping("/restart-password-batch")
     public Result<List<UserPasswordResult>> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
@@ -83,6 +92,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.STATUS)
+    @OperateLog(title = "封禁用户", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "封禁用户")
     @PostMapping("/ban")
     public Result<Void> ban(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -91,6 +101,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.STATUS)
+    @OperateLog(title = "批量封禁用户", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "批量封禁用户")
     @PostMapping("/ban-batch")
     public Result<Void> banBatch(@RequestBody @Validated UserBatchParam param) {
@@ -99,6 +110,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.STATUS)
+    @OperateLog(title = "解锁用户", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "解锁用户")
     @PostMapping("/unlock")
     public Result<Void> unlock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -107,6 +119,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.STATUS)
+    @OperateLog(title = "批量解锁用户", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "批量解锁用户")
     @PostMapping("/unlock-batch")
     public Result<Void> unlockBatch(@RequestBody @Validated UserBatchParam param) {
@@ -115,6 +128,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.STATUS)
+    @OperateLog(title = "锁定用户", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "锁定用户")
     @PostMapping("/lock")
     public Result<Void> lock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -123,6 +137,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.STATUS)
+    @OperateLog(title = "批量锁定用户", businessType = OperateLogType.UPDATE, saveParam = true)
     @Operation(summary = "批量锁定用户")
     @PostMapping("/lock-batch")
     public Result<Void> lockBatch(@RequestBody @Validated UserBatchParam param) {
@@ -138,6 +153,7 @@ public class UserAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @OperateLog(title = "删除用户(注销)", businessType = OperateLogType.DELETE, saveParam = true)
     @Operation(summary = "删除用户(注销: 级联清理+脱敏+逻辑删, 挂靠商户的用户请先在对应商户的用户管理中删除)")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
