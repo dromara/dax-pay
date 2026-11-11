@@ -10,5 +10,7 @@
   "unsupportedType": "Phương thức thanh toán không được hỗ trợ",
   "unsupportedMethod": "Loại giao diện không được hỗ trợ",
   "orderNotFound": "Không tìm thấy đơn hàng EasyPay",
-  "tradeNotFound": "Không tìm thấy giao dịch thanh toán liên quan"
+  "tradeNotFound": "Không tìm thấy giao dịch thanh toán liên quan",
+  "h5OrderNotPayable": "Đơn hàng không thể thanh toán ở trạng thái hiện tại",
+  "h5OrderExpired": "Đơn hàng đã hết hạn, không thể khởi tạo thanh toán"
 }

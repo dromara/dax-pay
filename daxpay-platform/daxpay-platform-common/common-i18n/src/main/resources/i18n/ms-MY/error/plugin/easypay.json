@@ -10,5 +10,7 @@
   "unsupportedType": "Kaedah pembayaran tidak disokong",
   "unsupportedMethod": "Jenis antaramuka tidak disokong",
   "orderNotFound": "Pesanan EasyPay tidak dijumpai",
-  "tradeNotFound": "Transaksi pembayaran berkaitan tidak dijumpai"
+  "tradeNotFound": "Transaksi pembayaran berkaitan tidak dijumpai",
+  "h5OrderNotPayable": "Pesanan tidak boleh dibayar dalam status semasa",
+  "h5OrderExpired": "Pesanan telah tamat tempoh, pembayaran tidak boleh dimulakan"
 }

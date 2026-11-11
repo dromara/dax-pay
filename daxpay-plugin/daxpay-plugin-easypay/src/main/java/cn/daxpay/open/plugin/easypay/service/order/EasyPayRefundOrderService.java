@@ -1,17 +1,27 @@
 package cn.daxpay.open.plugin.easypay.service.order;
 
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.notice.command.NoticeDispatchCommand;
+import cn.daxpay.open.payment.trade.notice.service.NoticeDispatcher;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeContentModeEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeTransportEnum;
 import cn.daxpay.open.plugin.easypay.dao.EasyPayOrderManager;
 import cn.daxpay.open.plugin.easypay.dao.EasyPayRefundOrderManager;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayCredential;
+import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayRefundOrder;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -32,6 +42,7 @@ public class EasyPayRefundOrderService {
 
     private final EasyPayRefundOrderManager easyPayRefundOrderManager;
     private final EasyPayOrderManager easyPayOrderManager;
+    private final NoticeDispatcher noticeDispatcher;
 
     /// 退款发起后由内核退款单创建/更新易支付退款记录(双写)
     public void createFromKernelRefund(RefundOrder refundOrder, EasyPayCredential credential) {
@@ -62,6 +73,10 @@ public class EasyPayRefundOrderService {
         // 关联易支付订单
         findEasyPayOrderId(refundOrder).ifPresent(entity::setEasyPayOrderId);
         easyPayRefundOrderManager.save(entity);
+        // 同步退款建单即为成功态, 直接注册退款出站通知
+        if (Objects.equals(entity.getStatus(), 1)) {
+            registerRefundNotice(entity);
+        }
     }
 
     /// 退款成功钩子回写(异步退款最终成功时由插件策略调用)
@@ -78,6 +93,7 @@ public class EasyPayRefundOrderService {
         }
         entity.setStatus(1).setEndTime(OffsetDateTime.now(ZoneOffset.UTC));
         easyPayRefundOrderManager.updateById(entity);
+        registerRefundNotice(entity);
     }
 
     /// 根据内核退款单定位关联的易支付订单 ID
@@ -110,6 +126,43 @@ public class EasyPayRefundOrderService {
             entity.setEndTime(OffsetDateTime.now(ZoneOffset.UTC));
         }
         easyPayRefundOrderManager.updateById(entity);
+        // 内核状态同步为成功时同样注册退款通知(与 markSuccess 路径互补)
+        if (mapped == 1) {
+            registerRefundNotice(entity);
+        }
+    }
+
+    /// 退款确认成功后注册易支付退款出站通知
+    ///
+    /// 退款接口不单独接收 notify_url, 按协议惯例回发至原支付单的 notify_url;
+    /// content 仅存退款镜像单 id 指针, 报文在发送时由 [cn.daxpay.open.plugin.easypay.notice.EasyPayPayloadBuilder] 实时组装。
+    private void registerRefundNotice(EasyPayRefundOrder refundOrder) {
+        // 原支付单未关联时无法取得回调地址, 跳过
+        if (Objects.isNull(refundOrder.getEasyPayOrderId())) {
+            log.info("易支付退款通知跳过: 未关联原支付单, refundNo={}", refundOrder.getRefundNo());
+            return;
+        }
+        EasyPayOrder easyPayOrder = easyPayOrderManager.findByIdNotTenant(refundOrder.getEasyPayOrderId()).orElse(null);
+        if (Objects.isNull(easyPayOrder) || StrUtil.isBlank(easyPayOrder.getNotifyUrl())) {
+            log.info("易支付退款通知跳过: 原支付单无回调地址, refundNo={}", refundOrder.getRefundNo());
+            return;
+        }
+        String content = JacksonUtil.toJson(Map.of(
+                "refundId", refundOrder.getId(),
+                "pid", Objects.isNull(refundOrder.getPid()) ? 0 : refundOrder.getPid(),
+                "remark", "ref-only; payload assembled at send time"
+        ));
+        noticeDispatcher.dispatch(new NoticeDispatchCommand()
+                .setMchNo(refundOrder.getMchNo())
+                .setAppId(refundOrder.getAppId())
+                .setEvent(NoticeEventEnum.REFUND_SUCCESS.getCode())
+                .setBizId(refundOrder.getId())
+                .setBizNo(Objects.nonNull(refundOrder.getRefundNo()) ? refundOrder.getRefundNo() : refundOrder.getBizRefundNo())
+                .setTransport(NoticeTransportEnum.HTTP)
+                .setFormat(NoticeFormatEnum.EASY_PAY)
+                .setContentMode(NoticeContentModeEnum.REF)
+                .setContentOrRef(content)
+                .setProtocolNotifyUrl(easyPayOrder.getNotifyUrl()));
     }
 
     /// 内核退款状态码 → 易支付协议状态(1=成功, 0=其它)

@@ -10,5 +10,7 @@
   "unsupportedType": "Unsupported payment type",
   "unsupportedMethod": "Unsupported method",
   "orderNotFound": "EasyPay order not found",
-  "tradeNotFound": "Related payment trade not found"
+  "tradeNotFound": "Related payment trade not found",
+  "h5OrderNotPayable": "현재 주문 상태로는 결제를 진행할 수 없습니다",
+  "h5OrderExpired": "주문이 만료되어 결제를 진행할 수 없습니다"
 }

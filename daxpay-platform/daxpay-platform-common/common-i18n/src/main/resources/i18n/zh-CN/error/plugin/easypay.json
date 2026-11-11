@@ -10,5 +10,7 @@
   "unsupportedType": "不支持的支付方式",
   "unsupportedMethod": "不支持的接口类型",
   "orderNotFound": "易支付订单不存在",
-  "tradeNotFound": "关联支付交易不存在"
+  "tradeNotFound": "关联支付交易不存在",
+  "h5OrderNotPayable": "订单当前状态不可拉起支付",
+  "h5OrderExpired": "订单已超时，不可拉起支付"
 }

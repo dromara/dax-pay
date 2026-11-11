@@ -10,5 +10,7 @@
   "unsupportedType": "Unsupported payment type",
   "unsupportedMethod": "Unsupported method",
   "orderNotFound": "EasyPay order not found",
-  "tradeNotFound": "Related payment trade not found"
+  "tradeNotFound": "Related payment trade not found",
+  "h5OrderNotPayable": "Order is not payable in current status",
+  "h5OrderExpired": "Order expired, payment cannot be initiated"
 }

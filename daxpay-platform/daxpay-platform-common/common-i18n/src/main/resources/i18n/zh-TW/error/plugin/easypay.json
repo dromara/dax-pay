@@ -10,5 +10,7 @@
   "unsupportedType": "不支援的支付方式",
   "unsupportedMethod": "不支援的介面類型",
   "orderNotFound": "易支付訂單不存在",
-  "tradeNotFound": "關聯支付交易不存在"
+  "tradeNotFound": "關聯支付交易不存在",
+  "h5OrderNotPayable": "訂單目前狀態不可拉起支付",
+  "h5OrderExpired": "訂單已逾時，不可拉起支付"
 }

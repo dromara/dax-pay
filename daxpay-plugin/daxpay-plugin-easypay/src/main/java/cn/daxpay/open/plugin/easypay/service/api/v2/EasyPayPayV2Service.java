@@ -9,6 +9,7 @@ import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.exception.ValidationFailedException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.daxpay.open.plugin.easypay.dao.EasyPayOrderManager;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayCredential;
@@ -38,6 +39,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class EasyPayPayV2Service {
+
+    /// H5 拉起支付的时效窗口(分钟), 超窗订单拒绝拉起
+    private static final long H5_PAY_EXPIRE_MINUTES = 30;
 
     private final EasyPayCredentialService easyPayCredentialService;
     private final EasyPayAssistService easyPayAssistService;
@@ -127,6 +131,15 @@ public class EasyPayPayV2Service {
     public NormalPayResult submitPayByH5(EasyPayH5PayParam param) {
         var order = easyPayOrderManager.findByIdNotTenant(param.getId())
                 .orElseThrow(() -> new DataNotExistException("error.plugin.easypay.orderNotFound"));
+        // 端点匿名无验签, 仅允许待支付订单拉起, 防止凭订单 id 对已支付订单重复触发真实支付
+        if (!Objects.equals(order.getStatus(), 0)) {
+            throw new ValidationFailedException("error.plugin.easypay.h5OrderNotPayable");
+        }
+        // 下单超过时效窗口后拒绝拉起(内核单超时通常为同量级, 超窗拉起必然失败且徒增通道调用)
+        if (Objects.nonNull(order.getAddTime()) && order.getAddTime()
+                .isBefore(OffsetDateTime.now(ZoneOffset.UTC).minusMinutes(H5_PAY_EXPIRE_MINUTES))) {
+            throw new ValidationFailedException("error.plugin.easypay.h5OrderExpired");
+        }
         if (StrUtil.isNotBlank(order.getPayBody())) {
             return new NormalPayResult()
                     .setPayBody(order.getPayBody())

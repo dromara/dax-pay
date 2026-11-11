@@ -4,12 +4,16 @@ import cn.daxpay.open.payment.trade.notice.entity.MchNoticeTask;
 import cn.daxpay.open.payment.trade.notice.payload.NoticeEnvelope;
 import cn.daxpay.open.payment.trade.notice.payload.NoticePayloadBuilder;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
 import cn.daxpay.open.plugin.easypay.dao.EasyPayOrderManager;
+import cn.daxpay.open.plugin.easypay.dao.EasyPayRefundOrderManager;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
+import cn.daxpay.open.plugin.easypay.entity.EasyPayRefundOrder;
 import cn.daxpay.open.plugin.easypay.enums.EasyPayApiVersionEnum;
 import cn.daxpay.open.plugin.easypay.result.api.v1.EasyPayCallbackV1Result;
 import cn.daxpay.open.plugin.easypay.result.api.v2.EasyPayCallbackV2Result;
+import cn.daxpay.open.plugin.easypay.result.api.v2.EasyPayRefundCallbackV2Result;
 import cn.daxpay.open.plugin.easypay.service.config.EasyPayCredentialService;
 import cn.daxpay.open.plugin.easypay.util.EasyPayUtil;
 import cn.hutool.core.util.StrUtil;
@@ -39,6 +43,7 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Shanghai"));
 
     private final EasyPayOrderManager easyPayOrderManager;
+    private final EasyPayRefundOrderManager easyPayRefundOrderManager;
     private final EasyPayCredentialService easyPayCredentialService;
 
     @Override
@@ -48,6 +53,10 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
 
     @Override
     public NoticeEnvelope build(MchNoticeTask task) {
+        // 退款成功通知: content ref 存退款镜像单 id, 信封由退款单与原支付单组装
+        if (Objects.equals(task.getEvent(), NoticeEventEnum.REFUND_SUCCESS.getCode())) {
+            return buildRefundV2(task);
+        }
         Long easyPayOrderId = JSONUtil.parseObj(task.getContent()).getLong("id");
         if (Objects.isNull(easyPayOrderId)) {
             throw new IllegalStateException("easy pay ref missing id");
@@ -58,6 +67,11 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
         }
         Object callback = Objects.equals(order.getApiVersion(), EasyPayApiVersionEnum.V1.getCode())
                 ? buildV1(order) : buildV2(order);
+        return toGetEnvelope(task, callback);
+    }
+
+    /// 组装 GET query 信封: 报文按 key 排序拼接为 query 附到通知地址
+    private NoticeEnvelope toGetEnvelope(MchNoticeTask task, Object callback) {
         // 转 TreeMap 拼接 query (按 key 排序)
         TreeMap<String, String> map = JacksonUtil.toBean(JacksonUtil.toJson(callback),
                 new TypeReference<TreeMap<String, String>>() {});
@@ -68,6 +82,38 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
                 .setMethod("GET")
                 .setUrl(fullUrl)
                 .setRequestDigest(StrUtil.sub(fullUrl, 0, 500));
+    }
+
+    /// 退款成功通知信封(V2 RSA 签名; V1 无退款接口, 退款镜像单 apiVersion 恒为 v2)
+    private NoticeEnvelope buildRefundV2(MchNoticeTask task) {
+        Long refundId = JSONUtil.parseObj(task.getContent()).getLong("refundId");
+        if (Objects.isNull(refundId)) {
+            throw new IllegalStateException("easy pay refund ref missing refundId");
+        }
+        EasyPayRefundOrder refund = easyPayRefundOrderManager.findByIdNotTenant(refundId)
+                .orElseThrow(() -> new IllegalStateException("easy pay refund order not found: " + refundId));
+        // 原支付单提供 type/name, 查不到时字段留空不影响签名与投递
+        EasyPayOrder order = Objects.isNull(refund.getEasyPayOrderId())
+                ? null
+                : easyPayOrderManager.findByIdNotTenant(refund.getEasyPayOrderId()).orElse(null);
+        var credential = easyPayCredentialService.getAndCheck(refund.getPid());
+        var callback = new EasyPayRefundCallbackV2Result()
+                .setPid(refund.getPid())
+                .setTradeNo(refund.getTradeNo())
+                .setOutTradeNo(refund.getOutTradeNo())
+                .setRefundNo(refund.getRefundNo())
+                .setBizRefundNo(refund.getBizRefundNo())
+                .setType(Objects.isNull(order) ? null : order.getType())
+                .setName(Objects.isNull(order) ? null : order.getName())
+                // 协议金额单位为元, 镜像单存分需转换
+                .setMoney(Objects.isNull(refund.getMoney()) ? null : EasyPayUtil.fenToYuanString(refund.getMoney()))
+                .setTradeStatus("REFUND_SUCCESS")
+                .setAddTime(Objects.isNull(refund.getAddTime()) ? null : NORM.format(refund.getAddTime().toInstant()))
+                .setEndTime(Objects.isNull(refund.getEndTime()) ? null : NORM.format(refund.getEndTime().toInstant()))
+                .setTimestamp(String.valueOf(System.currentTimeMillis() / 1000))
+                .setSignType("RSA");
+        callback.setSign(EasyPayUtil.signByRsa(callback, credential.getPlatformPrivateKey()));
+        return toGetEnvelope(task, callback);
     }
 
     private EasyPayCallbackV1Result buildV1(EasyPayOrder order) {
