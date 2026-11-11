@@ -65,7 +65,7 @@ public class PlatformUrlConfigService {
         String urlType = StrUtil.trim(param.getUrlType());
         String targetUrl = StrUtil.blankToDefault(StrUtil.trim(param.getUrl()), resolveSavedUrl(urlType));
         if (StrUtil.isBlank(targetUrl)) {
-            return ConnectivityCheckResult.fail(I18nUtil.get("error.system.url.notConfigured"));
+            return ConnectivityCheckResult.fail(I18nUtil.get(this.resolveNotConfiguredKey(urlType)));
         }
         targetUrl = StrUtil.removeSuffix(targetUrl, "/");
 
@@ -129,6 +129,17 @@ public class PlatformUrlConfigService {
             case "paymentgateway" -> config.getPaymentGatewayBaseUrl();
             case "backend" -> config.getBackendBaseUrl();
             default -> null;
+        };
+    }
+
+    /// 按 urlType 返回「地址未配置」文案 key, 明确提示缺失的是哪个端点
+    private String resolveNotConfiguredKey(String urlType) {
+        return switch (StrUtil.nullToEmpty(urlType).toLowerCase()) {
+            case "admin" -> "error.system.url.notConfiguredAdmin";
+            case "merchant" -> "error.system.url.notConfiguredMerchant";
+            case "paymentgateway" -> "error.system.url.notConfiguredPaymentGateway";
+            case "backend" -> "error.system.url.notConfiguredBackend";
+            default -> "error.system.url.notConfigured";
         };
     }
 }

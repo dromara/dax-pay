@@ -1,5 +1,9 @@
 {
   "notConfigured": "URL akses tidak dikonfigurasi",
+  "notConfiguredAdmin": "URL akses admin tidak dikonfigurasi",
+  "notConfiguredMerchant": "URL akses merchant tidak dikonfigurasi",
+  "notConfiguredPaymentGateway": "URL gateway pembayaran tidak dikonfigurasi",
+  "notConfiguredBackend": "URL API backend tidak dikonfigurasi",
   "checkSuccess": "Pemeriksaan konektivitas berhasil",
   "checkFailed": "Pemeriksaan konektivitas gagal, status HTTP: {0}",
   "notExposed": "Pemeriksaan konektivitas gagal, endpoint {0} tidak dibuka: gateway panel deployment belum membuka grup antarmuka ini. Aktifkan \"Callback Kanal\" di 「Gateway -> Antarmuka Eksternal」 pada panel lalu coba lagi",

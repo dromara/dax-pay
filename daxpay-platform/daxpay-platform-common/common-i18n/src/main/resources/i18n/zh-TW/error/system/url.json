@@ -1,5 +1,9 @@
 {
   "notConfigured": "訪問地址未配置",
+  "notConfiguredAdmin": "管理端訪問地址未配置",
+  "notConfiguredMerchant": "商戶端訪問地址未配置",
+  "notConfiguredPaymentGateway": "支付網關前端地址未配置",
+  "notConfiguredBackend": "後端 API 地址未配置",
   "checkSuccess": "連通性檢查通過",
   "checkFailed": "連通性檢查失敗, HTTP 狀態碼: {0}",
   "notExposed": "連通性檢查失敗, 介面 {0} 未放行: 部署面板網關未開放該介面組, 請在面板「網關 -> 對外介面」啟用「通道回調」後重試",

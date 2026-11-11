@@ -1,5 +1,9 @@
 {
   "notConfigured": "URL akses tidak dikonfigurasikan",
+  "notConfiguredAdmin": "URL akses admin tidak dikonfigurasikan",
+  "notConfiguredMerchant": "URL akses pedagang tidak dikonfigurasikan",
+  "notConfiguredPaymentGateway": "URL gerbang pembayaran tidak dikonfigurasikan",
+  "notConfiguredBackend": "URL API bahagian belakang tidak dikonfigurasikan",
   "checkSuccess": "Semakan ketersambungan lulus",
   "checkFailed": "Semakan kesambungan gagal, status HTTP: {0}",
   "notExposed": "Semakan ketersambungan gagal, titik akhir {0} tidak didedahkan: gateway panel penggunaan belum membuka kumpulan antara muka ini. Dayakan 「Panggil Balik Saluran」 di 「Gateway -> Antara Muka Luaran」 pada panel kemudian cuba lagi",

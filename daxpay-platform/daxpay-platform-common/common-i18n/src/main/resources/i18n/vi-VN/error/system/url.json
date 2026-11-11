@@ -1,5 +1,9 @@
 {
   "notConfigured": "URL truy cập chưa được định cấu hình",
+  "notConfiguredAdmin": "URL truy cập trang quản trị chưa được định cấu hình",
+  "notConfiguredMerchant": "URL truy cập merchant chưa được định cấu hình",
+  "notConfiguredPaymentGateway": "URL cổng thanh toán chưa được định cấu hình",
+  "notConfiguredBackend": "URL API backend chưa được định cấu hình",
   "checkSuccess": "Đã vượt qua kiểm tra kết nối",
   "checkFailed": "Kiểm tra kết nối không thành công, trạng thái HTTP: {0}",
   "notExposed": "Kiểm tra kết nối không thành công, điểm cuối {0} chưa được mở: gateway của bảng điều khiển triển khai chưa mở nhóm giao diện này. Hãy bật 「Callback kênh」 tại 「Gateway -> Giao diện đối ngoại」 trên bảng điều khiển rồi thử lại",

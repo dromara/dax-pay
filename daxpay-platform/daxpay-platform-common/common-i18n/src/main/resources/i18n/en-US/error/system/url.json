@@ -1,5 +1,9 @@
 {
   "notConfigured": "Access URL is not configured",
+  "notConfiguredAdmin": "Admin portal URL is not configured",
+  "notConfiguredMerchant": "Merchant portal URL is not configured",
+  "notConfiguredPaymentGateway": "Payment gateway URL is not configured",
+  "notConfiguredBackend": "Backend API URL is not configured",
   "checkSuccess": "Connectivity check passed",
   "checkFailed": "Connectivity check failed, HTTP status: {0}",
   "notExposed": "Connectivity check failed, endpoint {0} is not exposed: the deployment panel gateway has not opened this interface group. Enable \"Channel Callback\" under Gateway -> Exposed Interfaces in the panel and retry",

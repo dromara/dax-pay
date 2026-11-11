@@ -1,5 +1,9 @@
 {
   "notConfigured": "액세스 URL이 구성되지 않았습니다.",
+  "notConfiguredAdmin": "관리자 액세스 URL이 구성되지 않았습니다.",
+  "notConfiguredMerchant": "상점 액세스 URL이 구성되지 않았습니다.",
+  "notConfiguredPaymentGateway": "결제 게이트웨이 URL이 구성되지 않았습니다.",
+  "notConfiguredBackend": "백엔드 API URL이 구성되지 않았습니다.",
   "checkSuccess": "연결 확인 통과",
   "checkFailed": "연결 확인 실패, HTTP 상태: {0}",
   "notExposed": "연결 확인 실패, 엔드포인트 {0}이(가) 공개되지 않았습니다. 배포 패널 게이트웨이에서 이 인터페이스 그룹이 열려 있지 않습니다. 패널의 「게이트웨이 -> 외부 인터페이스」에서 「채널 콜백」을 활성화한 후 다시 시도하세요",
