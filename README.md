@@ -26,7 +26,7 @@
 | 通道子应用 | [dax-pay-channel-one](https://gitee.com/opendaxpay/dax-pay-channel-one) | [dax-pay-channel-one](https://github.com/opendaxpay/dax-pay-channel-one) |
 | H5 网关端(PC + 移动) | [dax-pay-h5](https://gitee.com/opendaxpay/dax-pay-h5) | [dax-pay-h5](https://github.com/opendaxpay/dax-pay-h5) |
 
-> 聚合通道(`dax-pay-channel-two`,拉卡拉 / 海科融通 / 斗拱 / 乐刷 / 随行付等)、运营 / 商户 / 收银小程序等属于商业扩展包,详见 [版本清单](https://doc.open.daxpay.cn/extension/pricing/overview)。
+> 聚合通道(`dax-pay-channel-two`,拉卡拉 / 海科融通 / 斗拱 / 乐刷 / 随行付等)、运营 / 商户 / 收银小程序等属于商业扩展包,详见 [官网定价页](https://www.daxpay.cn/pricing/extension)。
 
 ### 演示环境
 
@@ -70,7 +70,7 @@
 | `daxpay-channel-ums`    | 银联商务 | 直连               |
 | `daxpay-channel-douyin` | 抖音支付 | 直连               |
 
-> 聚合通道(拉卡拉、海科融通、斗拱、乐刷、随行付、河马付、Adapay、富友、易宝等 )属于商业扩展包,由 `dax-pay-channel-two` 子应用承载,详见 [版本清单](https://doc.open.daxpay.cn/extension/pricing/overview)。
+> 聚合通道(拉卡拉、海科融通、斗拱、乐刷、随行付、河马付、Adapay、富友、易宝等 )属于商业扩展包,由 `dax-pay-channel-two` 子应用承载,详见 [官网定价页](https://www.daxpay.cn/pricing/extension)。
 
 ## 安全机制
 
@@ -157,7 +157,7 @@ curl -fsSL https://download.daxpay.top/open/install/install.sh | sudo bash
 - **结果可控** — 场景规则让订单按预期成功、失败、延迟到账或不发回调,异常分支更方便测试;
 - **开放网关协议** — 对外提供 DaxPay 开放接口风格的 RSA 双向签名网关,可用于验收自己的签名与验签代码
 
-获取:源码随[商业扩展包](https://doc.open.daxpay.cn/extension/pricing/overview)基础版起附带,· [在线演示](https://mockpay.open.daxpay.cn/)(账号 `mock` / `mock`) · [产品介绍](https://www.daxpay.cn/products/mock/)
+获取:源码随[商业扩展包](https://www.daxpay.cn/pricing/extension)基础版起附带 · [在线演示](https://mockpay.open.daxpay.cn/)(账号 `mock` / `mock`) · [产品介绍](https://www.daxpay.cn/products/mock/)
 
 <p align="left">
   <img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/authcode.C_FqeJPK.2ksqldxkbt.webp" width="400" alt="模拟联调通道手机付款码">
