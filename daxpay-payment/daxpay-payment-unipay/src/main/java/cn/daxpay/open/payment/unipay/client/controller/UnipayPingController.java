@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 后端发起 GET `{后端API地址}/unipay/callback/ping`, 按 HTTP 状态码与响应体标识判定。
 ///
 /// 路径刻意落在 `/unipay/callback` 前缀内(与通道回调同组), 原因有二:
-/// - 部署面板网关按接口组放行, 「通道回调」未开放时该前缀整体 404, 检查即可直接暴露出来;
+/// - 网关/反向代理按前缀放行, 「通道回调」未放行时该前缀整体 404, 检查即可直接暴露出来;
 /// - 该前缀正是通道回调地址(`{后端API地址}/unipay/callback/{mchNo}/{channelMchNo}/{通道}/...`)所在,
 ///   探针通过即代表通道回调链路可达——这正是「后端 API 地址」的用途。
 ///

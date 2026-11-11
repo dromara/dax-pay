@@ -6,7 +6,7 @@
   "notConfiguredBackend": "URL API backend tidak dikonfigurasi",
   "checkSuccess": "Pemeriksaan konektivitas berhasil",
   "checkFailed": "Pemeriksaan konektivitas gagal, status HTTP: {0}",
-  "notExposed": "Pemeriksaan konektivitas gagal, endpoint {0} tidak dibuka: gateway panel deployment belum membuka grup antarmuka ini. Aktifkan \"Callback Kanal\" di 「Gateway -> Antarmuka Eksternal」 pada panel lalu coba lagi",
+  "notExposed": "Pemeriksaan konektivitas gagal, endpoint {0} mengembalikan 404: grup antarmuka \"Callback Kanal\" tidak diizinkan oleh gateway atau reverse proxy. Izinkan prefiks ini di lapisan akses Anda lalu coba lagi",
   "probeMismatch": "Pemeriksaan konektivitas gagal, respons probe mandiri backend tidak sesuai (domain mungkin dilayani oleh CDN atau situs lain)",
   "networkError": "Jaringan tidak dapat dijangkau, harap verifikasi URL dan ketersediaan layanan"
 }

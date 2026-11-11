@@ -6,7 +6,7 @@
   "notConfiguredBackend": "URL API bahagian belakang tidak dikonfigurasikan",
   "checkSuccess": "Semakan ketersambungan lulus",
   "checkFailed": "Semakan kesambungan gagal, status HTTP: {0}",
-  "notExposed": "Semakan ketersambungan gagal, titik akhir {0} tidak didedahkan: gateway panel penggunaan belum membuka kumpulan antara muka ini. Dayakan 「Panggil Balik Saluran」 di 「Gateway -> Antara Muka Luaran」 pada panel kemudian cuba lagi",
+  "notExposed": "Semakan ketersambungan gagal, titik akhir {0} mengembalikan 404: kumpulan antara muka 「Panggil Balik Saluran」 tidak dibenarkan oleh gateway atau proksi balik. Benarkan awalan ini pada lapisan akses anda kemudian cuba lagi",
   "probeMismatch": "Semakan ketersambungan gagal, respons probe semak kendiri bahagian belakang tidak seperti dijangka (domain mungkin disediakan oleh CDN atau laman lain)",
   "networkError": "Rangkaian tidak dapat dicapai, sila sahkan URL dan ketersediaan perkhidmatan"
 }

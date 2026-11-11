@@ -6,7 +6,7 @@
   "notConfiguredBackend": "Backend API URL is not configured",
   "checkSuccess": "Connectivity check passed",
   "checkFailed": "Connectivity check failed, HTTP status: {0}",
-  "notExposed": "Connectivity check failed, endpoint {0} is not exposed: the deployment panel gateway has not opened this interface group. Enable \"Channel Callback\" under Gateway -> Exposed Interfaces in the panel and retry",
+  "notExposed": "Connectivity check failed, endpoint {0} returned 404: the \"Channel Callback\" interface group is not allowed by the gateway or reverse proxy. Allow this prefix in your access layer and retry",
   "probeMismatch": "Connectivity check failed, the backend self-check probe returned an unexpected response (the domain may be served by a CDN or another site)",
   "networkError": "Network unreachable, please verify the URL and service availability"
 }

@@ -80,7 +80,7 @@ public class PlatformUrlConfigService {
                 .execute()) {
             long latency = System.currentTimeMillis() - start;
             int status = response.getStatus();
-            // 404 单独提示: 部署面板网关未开放该接口组(面板部署下检查失败的常见原因)
+            // 404 单独提示: 接入层(网关/反向代理)未放行「通道回调」接口组
             if (backendProbe && status == 404) {
                 return ConnectivityCheckResult.fail(
                         I18nUtil.get("error.system.url.notExposed", BACKEND_PROBE_PATH),
