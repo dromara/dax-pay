@@ -53,7 +53,7 @@ public class NotifyUserNoticeService {
         Long userId = SecurityUtil.getUserId();
         // 公告未读数(含被忽略的, 忽略视同已读, 与 list() 判定一致, 避免已忽略公告被反复计为未读)
         int noticeUnread = (int) noticeManager.countVisibleUnread(userId, OffsetDateTime.now());
-        // 个人消息未读数(预留, 当前表无数据返回0)
+        // 个人消息未读数
         int messageUnread = (int) messageManager.countByUserAndUnread(userId);
         return new NotifyUnreadCountResult()
             .setNoticeCount(noticeUnread)
@@ -160,11 +160,12 @@ public class NotifyUserNoticeService {
     public void markRead(String type, Long id) {
         if (NotifyTypeEnum.notice.getCode().equals(type)) {
             markNoticeRead(id, false);
+        } else if (NotifyTypeEnum.message.getCode().equals(type)) {
+            markMessageRead(id);
         }
-        // 个人消息标记已读预留(暂不接入业务)
     }
 
-    /// 清空(全部标记已读): 为所有可见公告批量补阅读记录, 已存在的静默跳过, 幂等
+    /// 清空(全部标记已读): 为所有可见公告批量补阅读记录, 个人消息置位 is_read, 已存在的静默跳过, 幂等
     @Transactional(rollbackFor = Exception.class)
     public void readAll() {
         Long userId = SecurityUtil.getUserId();
@@ -181,6 +182,12 @@ public class NotifyUserNoticeService {
             reads.add(read);
         }
         readManager.saveAllIgnoreConflict(reads);
+        // 个人消息一并置为已读: 未读数含消息, 只清公告会导致角标无法归零
+        messageManager.lambdaUpdate()
+            .eq(NotifyMessage::getUserId, userId)
+            .eq(NotifyMessage::getIsRead, false)
+            .set(NotifyMessage::getIsRead, true)
+            .update();
     }
 
     /// 忽略(用户主动隐藏)
@@ -202,5 +209,16 @@ public class NotifyUserNoticeService {
     private void markNoticeRead(Long noticeId, boolean ignored) {
         Long userId = SecurityUtil.getUserId();
         readManager.upsertRead(userId, noticeId, OffsetDateTime.now(), ignored);
+    }
+
+    /// 标记个人消息已读(仅限归属当前用户的消息, 重复标记幂等)
+    private void markMessageRead(Long messageId) {
+        Long userId = SecurityUtil.getUserId();
+        messageManager.lambdaUpdate()
+            .eq(NotifyMessage::getId, messageId)
+            .eq(NotifyMessage::getUserId, userId)
+            .eq(NotifyMessage::getIsRead, false)
+            .set(NotifyMessage::getIsRead, true)
+            .update();
     }
 }
