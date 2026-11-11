@@ -15,10 +15,10 @@ public class VbillSdkCredential {
     /// 天阙合作机构ID(orgId)
     private String orgId;
 
-    /// 商户RSA私钥(Base64, PKCS8, 去头尾)
+    /// 商户RSA私钥(Base64, PKCS8/PKCS1 均支持, 头尾换行可选)
     private String privateKey;
 
-    /// 天阙RSA公钥(Base64, X509, 去头尾, 用于响应/回调验签)
+    /// 天阙RSA公钥(Base64, X509/PKCS1 均支持, 头尾换行可选, 用于响应/回调验签)
     private String publicKey;
 
     /// 天阙商户号(mno, 子商户级)
