@@ -12,7 +12,8 @@
  *       ④ 删除全部「无列名 INSERT 位置回退」分支，改为硬失败——开源版各表列序与 plus 不同，
  *          位置锚定会静默错位，宁可中止导出也不产出错位的种子。
  * 策略：保留系统种子表(KEEP_TABLES) + bootx 内置超管(id=1)及其登录链路关联行，其余整表清除；
- *       种子表内的 mock 演示元数据按 MOCK_ROW_RULES 行级排除(旁路输出供 demo 侧复用)；
+ *       种子表内的逻辑删除行一律丢弃(dev 库测试残留, 纯净/demo 都不带)；
+ *       种子表内的 mock 演示元数据与 dev 测试敏感词按 MOCK_ROW_RULES 行级排除(旁路输出供 demo 侧复用)；
  *       bootx 密码重置为开发默认密码(见 BOOTX_DEV_PASSWORD_HASH)、扩展行 sex 置空(防源头漂移)。
  *
  * 决策序：
@@ -90,6 +91,9 @@ export const MOCK_ROW_RULES = new Map([
   ['pay_md_channel', [{ id: new Set(['92005']) }, { code: new Set(['mock']) }]],
   ['pay_md_product', [{ id: new Set(['96005', '96006']) }, { code: new Set(['mock_pay', 'mock_isv']) }]],
   ['pay_md_product_capability', [{ product_code: new Set(['mock_pay', 'mock_isv']) }]],
+  // dev 库测试敏感词(status=enable + level=reject): 纯净版装机会误拦含该词/该串的业务内容,
+  // demo 段依赖它(命中样本 3 条 + 断言指向), 故行级排除并旁路给 [4.2] 段
+  ['system_sensitive_word', [{ id: new Set(['2077569027575820288']) }]],
 ])
 
 // 菜单两表不经本工具(种子链路在 export-sql.mjs 的 [3] 菜单段), 误传入即硬错误
@@ -367,8 +371,14 @@ function main() {
       fatal = `表 ${table} 不经本工具(菜单种子另有链路), 请检查上游管线`
       return
     }
-    // ① 系统种子表：先过 mock 行级排除, 再保留
+    // ① 系统种子表：先丢弃逻辑删除行(dev 库测试残留), 再过 mock 行级排除, 最后保留
     if (KEEP_TABLES.has(table)) {
+      // 逻辑删除行不属装机种子: 纯净版/demo 版都不带、也不旁路(dev 库历史测试数据会随整表导出, 如 system_dict code='cs')
+      const deletedIdx = columns.indexOf('deleted')
+      if (deletedIdx !== -1 && tokens[deletedIdx] && String(tokens[deletedIdx].raw).toLowerCase() === 'true') {
+        bump(table, false)
+        return
+      }
       let mockRow = false
       if (MOCK_ROW_RULES.has(table)) {
         mockRow = isMockRow(table, columns, tokens)

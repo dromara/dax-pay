@@ -1,5 +1,5 @@
 -- ============================================================================
--- data-demo.sql — DaxPay 演示版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-10T05:48:34.887Z
+-- data-demo.sql — DaxPay 演示版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-11T06:56:26.647Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432（[4] 段为剧本生成，不取库内业务数据）
 -- 内容: [2] 纯净种子  [3] 菜单种子（含演示菜单）  [4] 演示数据（旁路 mock 元数据 + 剧本生成的商户/通道/流水）
 -- 用法: 先执行 table.sql，再执行本文件（与 data.sql 二选一，不要都执行）
@@ -5654,7 +5654,6 @@ INSERT INTO public.pay_md_provider_method (id, provider, method, sort_no, delete
 --
 
 INSERT INTO public.system_dict (id, creator, create_time, last_modifier, last_modified_time, version, deleted, name, dict_type, code, remark, enable, internal, i18n_key) VALUES (308196335536967680, 1, '2026-04-30 11:15:28.565006+00', 1, '2026-04-30 11:15:28.565006+00', 0, false, '支付宝认证方式', 'common', 'alipay_auth_type', '支付宝接口认证方式', true, true, NULL);
-INSERT INTO public.system_dict (id, creator, create_time, last_modifier, last_modified_time, version, deleted, name, dict_type, code, remark, enable, internal, i18n_key) VALUES (2034597186006867968, 0, '2026-03-19 19:45:44.788062+00', 1, '2026-07-14 07:20:39.360411+00', 7, true, '123', NULL, 'cs', NULL, true, false, NULL);
 
 --
 -- Data for Name: system_dict_item; Type: TABLE DATA; Schema: public; Owner: -
@@ -5662,13 +5661,10 @@ INSERT INTO public.system_dict (id, creator, create_time, last_modifier, last_mo
 
 INSERT INTO public.system_dict_item (id, dict_id, dict_code, code, sort_no, enable, remark, creator, create_time, last_modifier, last_modified_time, version, deleted, i18n_key) VALUES (308196335536967681, 308196335536967680, 'alipay_auth_type', 'public_key', 0, true, '使用公钥进行签名验证', 1, '2026-04-30 11:15:28.567585+00', 1, '2026-07-14 02:47:08.934408+00', 0, false, 'dict.alipay_auth_type.public_key');
 INSERT INTO public.system_dict_item (id, dict_id, dict_code, code, sort_no, enable, remark, creator, create_time, last_modifier, last_modified_time, version, deleted, i18n_key) VALUES (308196335536967682, 308196335536967680, 'alipay_auth_type', 'cert', 1, true, '使用证书进行签名验证', 1, '2026-04-30 11:15:28.570843+00', 1, '2026-07-14 02:47:08.934408+00', 0, false, 'dict.alipay_auth_type.cert');
-INSERT INTO public.system_dict_item (id, dict_id, dict_code, code, sort_no, enable, remark, creator, create_time, last_modifier, last_modified_time, version, deleted, i18n_key) VALUES (2034632666501005312, 2034597186006867968, 'cs', 'cs', 0, true, NULL, 0, '2026-03-19 22:06:44.064918+00', 1, '2026-07-14 07:20:36.33256+00', 3, true, 'dict.cs.cs');
 
 --
 -- Data for Name: system_sensitive_word; Type: TABLE DATA; Schema: public; Owner: -
 --
-
-INSERT INTO public.system_sensitive_word (id, word, category, match_mode, level, status, remark, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2077569027575820288, '测试敏感词', 'custom', 'contains', 'reject', 'enable', '1111', 1, '2026-07-16 01:40:30.198619+00', 1, '2026-07-16 03:58:13.005826+00', 1, false);
 
 --
 -- PostgreSQL database dump complete
@@ -6077,7 +6073,7 @@ INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521623474
 INSERT INTO public.iam_role_menu (id, role_id, menu_id) VALUES (2098335521627668480, 1, 206);
 
 -- ---------------------------------------------------------------------------
--- [4.2] mock 支付元数据（旁路导出 45 条，带列名）
+-- [4.2] 旁路导出（mock 支付元数据 + 演示敏感词，共 46 条，带列名）
 -- ---------------------------------------------------------------------------
 INSERT INTO public.pay_md_channel (id, code, sort_no, icon, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (92005, 'mock', 24, NULL, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false);
 INSERT INTO public.pay_md_product (id, code, channel, sort_no, creator, create_time, last_modifier, last_modified_time, version, deleted, sandbox, enabled) VALUES (96005, 'mock_pay', 'mock', 999, 1, '2026-10-31 00:00:00+00', 1, '2026-11-07 08:32:06.023194+00', 0, false, true, true);
@@ -6124,6 +6120,7 @@ INSERT INTO public.pay_md_product_capability (id, product_code, capability_code,
 INSERT INTO public.pay_md_product_capability (id, product_code, capability_code, sort_no, deleted, last_modifier, last_modified_time, version, creator, create_time) VALUES (97043, 'mock_isv', 'douyin_jsapi', 18, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
 INSERT INTO public.pay_md_product_capability (id, product_code, capability_code, sort_no, deleted, last_modifier, last_modified_time, version, creator, create_time) VALUES (97044, 'mock_isv', 'douyin_h5', 19, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
 INSERT INTO public.pay_md_product_capability (id, product_code, capability_code, sort_no, deleted, last_modifier, last_modified_time, version, creator, create_time) VALUES (97045, 'mock_isv', 'douyin_app', 20, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.system_sensitive_word (id, word, category, match_mode, level, status, remark, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2077569027575820288, '测试敏感词', 'custom', 'contains', 'reject', 'enable', '1111', 1, '2026-07-16 01:40:30.198619+00', 1, '2026-07-16 03:58:13.005826+00', 1, false);
 
 
 -- ---------------------------------------------------------------------------
@@ -7495,13 +7492,13 @@ BEGIN
      WHERE mch_no = 'M1999999999999' AND default_store = true AND deleted = false;
     IF n <> 1 THEN RAISE EXCEPTION '[演示数据校验] 默认门店数 %（预期恰好 1）', n; END IF;
 
-    -- 14. 系统终端规模与停用形态（≥5 台，含 enable=false；每门店默认终端唯一由部分唯一索引保证）
+    -- 14. 商户终端规模与停用形态（≥5 台，含 enable=false；每门店默认终端唯一由部分唯一索引保证）
     SELECT count(*) INTO n FROM public.device_terminal
      WHERE mch_no = 'M1999999999999' AND deleted = false;
-    IF n < 5 THEN RAISE EXCEPTION '[演示数据校验] 系统终端数 %（预期 ≥ 5）', n; END IF;
+    IF n < 5 THEN RAISE EXCEPTION '[演示数据校验] 商户终端数 %（预期 ≥ 5）', n; END IF;
     SELECT count(*) INTO n FROM public.device_terminal
      WHERE mch_no = 'M1999999999999' AND enable = false AND deleted = false;
-    IF n < 1 THEN RAISE EXCEPTION '[演示数据校验] 缺停用系统终端（enable=false）'; END IF;
+    IF n < 1 THEN RAISE EXCEPTION '[演示数据校验] 缺停用商户终端（enable=false）'; END IF;
 
     -- 15. 通道终端状态覆盖（≥3 种登记状态，撑起状态筛选）
     SELECT count(DISTINCT status) INTO n FROM public.device_channel_terminal
@@ -7516,7 +7513,7 @@ BEGIN
      WHERE b.deleted = false
        AND NOT EXISTS (SELECT 1 FROM public.device_terminal t
                         WHERE t.terminal_no = b.system_terminal_no AND t.deleted = false);
-    IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] % 条终端绑定指向不存在的系统终端', n; END IF;
+    IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] % 条终端绑定指向不存在的商户终端', n; END IF;
     SELECT count(*) INTO n FROM public.device_terminal_channel_bind b
      WHERE b.deleted = false
        AND NOT EXISTS (SELECT 1 FROM public.device_channel_terminal c
@@ -7801,7 +7798,7 @@ BEGIN
      WHERE mch_no <> 'M1999999999999';
     IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] % 条 unipay 日志未指向演示商户', n; END IF;
 
-    -- 34. 敏感词命中指向种子词库（system_sensitive_word 来自 [2] 段种子）
+    -- 34. 敏感词命中指向种子词库（system_sensitive_word 来自 [4.2] 段旁路种子）
     SELECT count(*) INTO n FROM public.system_sensitive_word_hit h
      WHERE h.deleted = false
        AND NOT EXISTS (SELECT 1 FROM public.system_sensitive_word w WHERE w.id = h.word_id AND w.deleted = false);

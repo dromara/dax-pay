@@ -336,7 +336,7 @@ function buildSeedSection() {
     console.error('[错误] redact-data.mjs 失败，纯净种子不可用')
     exit(1)
   }
-  // 旁路产物 = 纯净版排除的 mock 元数据行（带列名 INSERT），演示段 [4.2] 直接复用：
+  // 旁路产物 = 纯净版排除的 mock 元数据/演示敏感词行（带列名 INSERT），演示段 [4.2] 直接复用：
   // 一份规则两个方向——纯净版排除的行正是演示版要的行，且列名随表结构自动跟随，永不漂移。
   const bypassPath = join(tmpDir, 'bypass-mock-metadata.sql')
   const bypassRaw = existsSync(bypassPath) ? readFileSync(bypassPath, 'utf8') : ''
@@ -521,7 +521,7 @@ function buildDemoSection() {
     menuSection.bypass,
     '',
     '-- ---------------------------------------------------------------------------',
-    `-- [4.2] mock 支付元数据（旁路导出 ${seedSection.bypassCount} 条，带列名）`,
+    `-- [4.2] 旁路导出（mock 支付元数据 + 演示敏感词，共 ${seedSection.bypassCount} 条，带列名）`,
     '-- ---------------------------------------------------------------------------',
     seedSection.bypass,
     '',
@@ -643,7 +643,7 @@ ${menuSection.body}
 `
 
 const pureSql = headers.pure + '\n' + dataBody
-// 演示版 = 纯净版同源 [2]+[3] + [4] 演示段（含 [4.1] 演示菜单 / [4.2] mock 元数据 / [4.6] 装机期断言）
+// 演示版 = 纯净版同源 [2]+[3] + [4] 演示段（含 [4.1] 演示菜单 / [4.2] 旁路元数据与演示敏感词 / [4.6] 装机期断言）
 const demoSql = demoSection ? headers.demo + '\n' + dataBody + '\n' + demoSection.body + '\n' : null
 
 // ---------- 断言 ----------

@@ -1,5 +1,5 @@
 -- ============================================================================
--- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-10T05:48:34.887Z
+-- table.sql — DaxPay 表结构脚本（纯净版与演示版共用） | 工具 build/export-sql.mjs | 时间 2026-11-11T06:56:26.647Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432
 -- 内容: [1] 表结构 168 张表（建表 / 主键 / 索引 / 注释）
 -- 用法: 空库先执行本文件，再执行 data.sql（纯净版）或 data-demo.sql（演示版，阶段 B）
@@ -2462,7 +2462,7 @@ CREATE TABLE public.device_terminal (
 -- Name: TABLE device_terminal; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.device_terminal IS '系统终端';
+COMMENT ON TABLE public.device_terminal IS '商户终端';
 
 --
 -- Name: COLUMN device_terminal.id; Type: COMMENT; Schema: public; Owner: -
@@ -2474,7 +2474,7 @@ COMMENT ON COLUMN public.device_terminal.id IS '主键';
 -- Name: COLUMN device_terminal.terminal_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_terminal.terminal_no IS '系统终端编码';
+COMMENT ON COLUMN public.device_terminal.terminal_no IS '商户终端编码';
 
 --
 -- Name: COLUMN device_terminal.name; Type: COMMENT; Schema: public; Owner: -
@@ -2572,7 +2572,7 @@ CREATE TABLE public.device_terminal_channel_bind (
 -- Name: TABLE device_terminal_channel_bind; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.device_terminal_channel_bind IS '系统终端与通道终端多对多绑定';
+COMMENT ON TABLE public.device_terminal_channel_bind IS '商户终端与通道终端多对多绑定';
 
 --
 -- Name: COLUMN device_terminal_channel_bind.id; Type: COMMENT; Schema: public; Owner: -
@@ -2584,7 +2584,7 @@ COMMENT ON COLUMN public.device_terminal_channel_bind.id IS '主键';
 -- Name: COLUMN device_terminal_channel_bind.system_terminal_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_terminal_channel_bind.system_terminal_no IS '系统终端编码';
+COMMENT ON COLUMN public.device_terminal_channel_bind.system_terminal_no IS '商户终端编码';
 
 --
 -- Name: COLUMN device_terminal_channel_bind.channel_terminal_id; Type: COMMENT; Schema: public; Owner: -
@@ -20990,7 +20990,7 @@ CREATE INDEX idx_device_terminal_channel_bind_system ON public.device_terminal_c
 -- Name: INDEX idx_device_terminal_channel_bind_system; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_device_terminal_channel_bind_system IS '按系统终端号查询绑定';
+COMMENT ON INDEX public.idx_device_terminal_channel_bind_system IS '按商户终端号查询绑定';
 
 --
 -- Name: idx_device_terminal_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -22580,7 +22580,7 @@ CREATE UNIQUE INDEX uk_device_terminal_channel_bind ON public.device_terminal_ch
 -- Name: INDEX uk_device_terminal_channel_bind; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_device_terminal_channel_bind IS '系统终端+通道终端绑定唯一';
+COMMENT ON INDEX public.uk_device_terminal_channel_bind IS '商户终端+通道终端绑定唯一';
 
 --
 -- Name: uk_device_terminal_store_default; Type: INDEX; Schema: public; Owner: -
@@ -23681,6 +23681,18 @@ CREATE UNIQUE INDEX uk_pay_route_scene_config_method ON public.pay_route_scene_c
 COMMENT ON INDEX public.uk_pay_route_scene_config_method IS '同一策略下支付方式唯一';
 
 --
+-- Name: uk_pay_route_strategy_app; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_route_strategy_app ON public.pay_route_strategy USING btree (app_id) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_pay_route_strategy_app; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_route_strategy_app IS '同一应用仅一条路由策略';
+
+--
 -- Name: uk_pay_trade_trade_no; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23954,7 +23966,7 @@ CREATE UNIQUE INDEX uk_term_bind_channel_terminal ON public.device_terminal_chan
 -- Name: INDEX uk_term_bind_channel_terminal; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_term_bind_channel_terminal IS '一条通道终端只归属一个系统终端';
+COMMENT ON INDEX public.uk_term_bind_channel_terminal IS '一条通道终端只归属一个商户终端';
 
 --
 -- Name: uk_term_bind_sys_chmch_type; Type: INDEX; Schema: public; Owner: -

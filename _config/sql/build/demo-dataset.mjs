@@ -8,7 +8,7 @@
  * 分段（[4.4] 含三个配置域函数，段号与 data-demo.sql 装机断言 [4.6] 保持稳定）：
  *   [4.3] buildIdentity     商户 / 用户 / 应用 / 门店×5 / 码牌×9 / 路由（basic）/ 协议版本
  *   [4.4] buildChannels     mock 全局与直连凭证 + 模拟服务商 + 微信应用 + 产品生效环境
- *        buildTerminals    终端设备域（系统终端 / 通道终端台账 / 终端绑定 / 虚拟设备 / 播报打印配置）
+ *        buildTerminals    终端设备域（商户终端 / 通道终端台账 / 终端绑定 / 虚拟设备 / 播报打印配置）
  *        buildGateway      网关配置域（网关支付配置 / 客户端环境策略 / 收银台支付项）
  *   [4.5] buildTransactions 交易流水（订单/退款/资金流水/通知/回调，四维度打通门店/码牌/终端/method）
  *        buildGatewayOrders 网关支付订单（聚合/收银台 + trade_type=gateway 交易闭环）
@@ -74,7 +74,7 @@ export const ANCHORS = {
   ],
   // 码牌第二批批次号（与首批 DEMOB20261101 构成 ≥2 批次覆盖）
   qrBatchSecond: 'DEMOB20261201',
-  // 系统终端（2026-11-10 终端设备域）：每家启用门店 1 默认终端 + 总店备援 + 停用店停用终端
+  // 商户终端（2026-11-10 终端设备域）：每家启用门店 1 默认终端 + 总店备援 + 停用店停用终端
   terminals: [
     'TERM20261101001', 'TERM20261101002', 'TERM20261101003',
     'TERM20261101004', 'TERM20261101005', 'TERM20261101006',
@@ -487,7 +487,7 @@ export function buildChannels(gen, ctx) {
 const VD_SECRET = 'DemoBroadcastSecret0000000000000001'
 
 /**
- * 终端设备域 5 表：系统终端 / 通道终端台账 / 终端绑定 / 虚拟设备（收款播报）/ 应用播报打印配置。
+ * 终端设备域 5 表：商户终端 / 通道终端台账 / 终端绑定 / 虚拟设备（收款播报）/ 应用播报打印配置。
  *
  * 终端布局：4 家启用门店各 1 台默认终端（default_terminal 每门店部分唯一）+ 总店 1 台备援 + 停用店 1 台停用终端；
  * 通道终端全挂 mock 通道商户，type 覆盖 TerminalTypeEnum 四档（common/wechat/alipay/union），
@@ -501,7 +501,7 @@ export function buildTerminals(gen, ctx) {
   const enabledStores = stores.filter((s) => s.status === 'enable')
   const disabledStores = stores.filter((s) => s.status !== 'enable')
 
-  // ===== 系统终端（device_terminal）=====
+  // ===== 商户终端（device_terminal）=====
   const TERMINAL_META = [
     ...enabledStores.map((s) => ({ storeIdx: stores.indexOf(s), name: `${s.name}收银终端`, enable: true, isDefault: true })),
     { storeIdx: 0, name: `${stores[0].name}备援终端`, enable: true, isDefault: false },
@@ -653,7 +653,7 @@ export function buildTerminals(gen, ctx) {
   })
 
   // ===== 交易段四维度打通用的句柄（挂在 ctx.device，buildTransactions/buildGatewayOrders 消费）=====
-  // terminalHandles: 每台系统终端 + 其绑定的通道终端（出号/类型/状态），供订单 terminal_no / out_terminal_no 解析
+  // terminalHandles: 每台商户终端 + 其绑定的通道终端（出号/类型/状态），供订单 terminal_no / out_terminal_no 解析
   ctx.device = {
     vdMainRow,
     terminalHandles: terminalRows.map((t) => ({
@@ -2142,7 +2142,7 @@ export function buildTransfers(gen, ctx, tx) {
  * operate_url/method 用真实控制器路径（/admin/merchant/page、/admin/device/qrcode/create-batch 等）。
  * unipay 日志表无 base 列（仅 id + 业务列），api_path/api_title 与 PaymentVerifyAspect#resolveApiTitle 映射一致，
  * 成功 code=0（CommonCode.SUCCESS_CODE）、失败样本 20052（PayErrorCode.VERIFY_SIGN_FAILED）。
- * 敏感词命中 word_id 指向 [2] 段种子 id 2077569027575820288（system_sensitive_word 测试词），
+ * 敏感词命中 word_id 指向 [4.2] 段旁路种子 id 2077569027575820288（system_sensitive_word 测试词，纯净版已排除），
  * scene/source 取 SensitiveWordSceneEnum / SensitiveWordSourceEnum。
  */
 export function buildP2Extras(gen, ctx) {
@@ -2241,7 +2241,7 @@ export function buildP2Extras(gen, ctx) {
     })
   })
 
-  // ===== 敏感词命中 3 条（word_id 指向 [2] 段种子测试敏感词 2077569027575820288）=====
+  // ===== 敏感词命中 3 条（word_id 指向 [4.2] 段旁路测试敏感词 2077569027575820288）=====
   const SENSITIVE_PLAN = [
     { scene: 'pay_title', source: 'unipay', operator: null, mch: true, ip: '203.0.113.99', path: '/unipay/pay', preview: '测试敏感词-演示下单标题', time: ago('4 day') },
     { scene: 'notice', source: 'admin', operator: adminUserId, mch: false, ip: '203.0.113.10', path: '/notify/notice/add', preview: '公告标题包含「测试敏感词」的演示样本', time: ago('2 day') },
@@ -2465,13 +2465,13 @@ export function checkConsistency(gen) {
     storeNoSeen.add(s.store_no)
   }
 
-  // 9. 系统终端：terminal_no 唯一、每启用门店恰好 1 台默认终端、存在停用终端
+  // 9. 商户终端：terminal_no 唯一、每启用门店恰好 1 台默认终端、存在停用终端
   const terminals = gen.all('device_terminal')
-  if (terminals.length < 5) fails.push(`系统终端数 ${terminals.length} < 5`)
-  if (!terminals.some((t) => t.enable === false)) fails.push('系统终端缺少 enable=false 行')
+  if (terminals.length < 5) fails.push(`商户终端数 ${terminals.length} < 5`)
+  if (!terminals.some((t) => t.enable === false)) fails.push('商户终端缺少 enable=false 行')
   const termNoSeen = new Set()
   for (const t of terminals) {
-    if (termNoSeen.has(t.terminal_no)) fails.push(`系统终端编码重复 ${t.terminal_no}`)
+    if (termNoSeen.has(t.terminal_no)) fails.push(`商户终端编码重复 ${t.terminal_no}`)
     termNoSeen.add(t.terminal_no)
   }
   const enabledStoreNos = new Set(stores.filter((s) => s.status === 'enable').map((s) => s.store_no))
@@ -2611,7 +2611,7 @@ export function checkConsistency(gen) {
     if (o.terminal_no == null) continue
     const t = termByNo.get(o.terminal_no)
     if (!t) {
-      fails.push(`订单 ${o.order_no} terminal_no=${o.terminal_no} 找不到系统终端`)
+      fails.push(`订单 ${o.order_no} terminal_no=${o.terminal_no} 找不到商户终端`)
       continue
     }
     if (t.enable !== true) fails.push(`订单 ${o.order_no} 指向停用终端 ${t.terminal_no}`)
@@ -3073,13 +3073,13 @@ BEGIN
      WHERE mch_no = '${ANCHORS.mchMain}' AND default_store = true AND deleted = false;
     IF n <> 1 THEN RAISE EXCEPTION '[演示数据校验] 默认门店数 %（预期恰好 1）', n; END IF;
 
-    -- 14. 系统终端规模与停用形态（≥5 台，含 enable=false；每门店默认终端唯一由部分唯一索引保证）
+    -- 14. 商户终端规模与停用形态（≥5 台，含 enable=false；每门店默认终端唯一由部分唯一索引保证）
     SELECT count(*) INTO n FROM public.device_terminal
      WHERE mch_no = '${ANCHORS.mchMain}' AND deleted = false;
-    IF n < 5 THEN RAISE EXCEPTION '[演示数据校验] 系统终端数 %（预期 ≥ 5）', n; END IF;
+    IF n < 5 THEN RAISE EXCEPTION '[演示数据校验] 商户终端数 %（预期 ≥ 5）', n; END IF;
     SELECT count(*) INTO n FROM public.device_terminal
      WHERE mch_no = '${ANCHORS.mchMain}' AND enable = false AND deleted = false;
-    IF n < 1 THEN RAISE EXCEPTION '[演示数据校验] 缺停用系统终端（enable=false）'; END IF;
+    IF n < 1 THEN RAISE EXCEPTION '[演示数据校验] 缺停用商户终端（enable=false）'; END IF;
 
     -- 15. 通道终端状态覆盖（≥3 种登记状态，撑起状态筛选）
     SELECT count(DISTINCT status) INTO n FROM public.device_channel_terminal
@@ -3094,7 +3094,7 @@ BEGIN
      WHERE b.deleted = false
        AND NOT EXISTS (SELECT 1 FROM public.device_terminal t
                         WHERE t.terminal_no = b.system_terminal_no AND t.deleted = false);
-    IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] % 条终端绑定指向不存在的系统终端', n; END IF;
+    IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] % 条终端绑定指向不存在的商户终端', n; END IF;
     SELECT count(*) INTO n FROM public.device_terminal_channel_bind b
      WHERE b.deleted = false
        AND NOT EXISTS (SELECT 1 FROM public.device_channel_terminal c
@@ -3379,7 +3379,7 @@ BEGIN
      WHERE mch_no <> '${ANCHORS.mchMain}';
     IF n > 0 THEN RAISE EXCEPTION '[演示数据校验] % 条 unipay 日志未指向演示商户', n; END IF;
 
-    -- 34. 敏感词命中指向种子词库（system_sensitive_word 来自 [2] 段种子）
+    -- 34. 敏感词命中指向种子词库（system_sensitive_word 来自 [4.2] 段旁路种子）
     SELECT count(*) INTO n FROM public.system_sensitive_word_hit h
      WHERE h.deleted = false
        AND NOT EXISTS (SELECT 1 FROM public.system_sensitive_word w WHERE w.id = h.word_id AND w.deleted = false);

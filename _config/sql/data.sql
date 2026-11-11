@@ -1,5 +1,5 @@
 -- ============================================================================
--- data.sql — DaxPay 纯净版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-10T05:48:34.887Z
+-- data.sql — DaxPay 纯净版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-11T06:56:26.647Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432
 -- 内容: [2] 纯净种子数据（已脱敏）  [3] 菜单种子   —— 不含表结构
 -- 用法: 先执行 table.sql，再执行本文件
@@ -5653,7 +5653,6 @@ INSERT INTO public.pay_md_provider_method (id, provider, method, sort_no, delete
 --
 
 INSERT INTO public.system_dict (id, creator, create_time, last_modifier, last_modified_time, version, deleted, name, dict_type, code, remark, enable, internal, i18n_key) VALUES (308196335536967680, 1, '2026-04-30 11:15:28.565006+00', 1, '2026-04-30 11:15:28.565006+00', 0, false, '支付宝认证方式', 'common', 'alipay_auth_type', '支付宝接口认证方式', true, true, NULL);
-INSERT INTO public.system_dict (id, creator, create_time, last_modifier, last_modified_time, version, deleted, name, dict_type, code, remark, enable, internal, i18n_key) VALUES (2034597186006867968, 0, '2026-03-19 19:45:44.788062+00', 1, '2026-07-14 07:20:39.360411+00', 7, true, '123', NULL, 'cs', NULL, true, false, NULL);
 
 --
 -- Data for Name: system_dict_item; Type: TABLE DATA; Schema: public; Owner: -
@@ -5661,13 +5660,10 @@ INSERT INTO public.system_dict (id, creator, create_time, last_modifier, last_mo
 
 INSERT INTO public.system_dict_item (id, dict_id, dict_code, code, sort_no, enable, remark, creator, create_time, last_modifier, last_modified_time, version, deleted, i18n_key) VALUES (308196335536967681, 308196335536967680, 'alipay_auth_type', 'public_key', 0, true, '使用公钥进行签名验证', 1, '2026-04-30 11:15:28.567585+00', 1, '2026-07-14 02:47:08.934408+00', 0, false, 'dict.alipay_auth_type.public_key');
 INSERT INTO public.system_dict_item (id, dict_id, dict_code, code, sort_no, enable, remark, creator, create_time, last_modifier, last_modified_time, version, deleted, i18n_key) VALUES (308196335536967682, 308196335536967680, 'alipay_auth_type', 'cert', 1, true, '使用证书进行签名验证', 1, '2026-04-30 11:15:28.570843+00', 1, '2026-07-14 02:47:08.934408+00', 0, false, 'dict.alipay_auth_type.cert');
-INSERT INTO public.system_dict_item (id, dict_id, dict_code, code, sort_no, enable, remark, creator, create_time, last_modifier, last_modified_time, version, deleted, i18n_key) VALUES (2034632666501005312, 2034597186006867968, 'cs', 'cs', 0, true, NULL, 0, '2026-03-19 22:06:44.064918+00', 1, '2026-07-14 07:20:36.33256+00', 3, true, 'dict.cs.cs');
 
 --
 -- Data for Name: system_sensitive_word; Type: TABLE DATA; Schema: public; Owner: -
 --
-
-INSERT INTO public.system_sensitive_word (id, word, category, match_mode, level, status, remark, creator, create_time, last_modifier, last_modified_time, version, deleted) VALUES (2077569027575820288, '测试敏感词', 'custom', 'contains', 'reject', 'enable', '1111', 1, '2026-07-16 01:40:30.198619+00', 1, '2026-07-16 03:58:13.005826+00', 1, false);
 
 --
 -- PostgreSQL database dump complete

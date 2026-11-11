@@ -34,6 +34,7 @@ psql -v ON_ERROR_STOP=1 --single-transaction -f data-demo.sql   # 演示版（�
   - `iam_user_role`（user_id=1 → role_id=1 `admin_admin`）
 - `bootx` 密码由 `build/redact-data.mjs` 重置为开发默认密码 `121212`（防止开发库改密导致导出密码漂移），**生产部署后必须立即修改**；忘记密码执行 `reset-bootx-password.sql`
 - **不含**任何商户域数据：`mch_*`、`mock_*`、`device_qr_code`、演示账号（`admin` / `csqysh` 等）、示例商户与 mock 通道元数据全部排除，由演示数据段承担
+- **不含 dev 库测试残留**：种子表内的逻辑删除行（`deleted=true`）一律丢弃；dev 库的测试敏感词（`测试敏感词`，reject 级，会让生产误拦）行级排除，改由演示段 `[4.2]` 旁路注入
 
 ### 演示版内容（data-demo.sql）
 
@@ -44,18 +45,17 @@ psql -v ON_ERROR_STOP=1 --single-transaction -f data-demo.sql   # 演示版（�
 - 路由策略 1 条（basic 模式）+ 5 个支付渠道（`aggregate_pay` / `wechat` / `alipay` / `union_pay` / `douyin`）全部指向 mock 通道商户
 - mock 凭证：全局单行 `mock_gateway_credential`（主键固定 1）+ 直连 `mock_pay_credential`（`gateway_base_url` 留空，回落子应用 yml）；两段 PEM 为公开测试钥
 - 微信应用 `wx9999999999999999`（与 mock 内置种子一致）+ `wechat_jsapi` / `wechat_mini` 两个应用能力绑定
-- 交易流水（近 30 天）：168 单 / 168 交易 / 15 退款（成功/处理中/失败/关闭四态齐全）/ 137 资金流水 / 167 通知任务 / 179 通知记录 / 6 条通道回调；含今日 3 笔「现场演示订单」（可退款/可关单）
+- 交易流水（近 30 天）：176 单 / 182 交易 / 13 退款（成功/处理中/失败/关闭四态齐全）/ 156 资金流水 / 186 通知任务 / 211 通知记录 / 6 条通道回调；含今日 3 笔「现场演示订单」（可退款/可关单）
 - **仅适用于开发/演示环境**（要求 `daxpay.platform.config.sandbox-enabled=true`）；生产装机必须用 `data.sql`
 
 ## 二、目录
 
 | 文件 | 内容 | 手编 |
 |---|---|---|
-| `table.sql` | 表结构（169 张表：建表 / 主键 / 索引 / 注释），纯净/演示共用 | 否 |
+| `table.sql` | 表结构（168 张表：建表 / 主键 / 索引 / 注释），纯净/演示共用 | 否 |
 | `data.sql` | 纯净版数据 = `[2]` 纯净种子 + `[3]` 菜单种子（不含表结构） | 否 |
 | `data-demo.sql` | 演示版数据 = `[2]` + `[3]` + `[4]` 演示段（旁路菜单/mock 元数据 + 剧本生成 + 装机断言） | 否 |
 | `reset-bootx-password.sql` | `bootx` 密码重置回 `121212` | 是 |
-| `migrate-2026-11-06-remove-mch-app-notify-config.sql` | 既有库一次性迁移：异步通知配置功能下线（删表 + IAM 三表关联 + 应用级通知任务存量） | 是 |
 | `build/export-sql.mjs` | 生成脚本（唯一入口）：连库导出 + 拼装 + 自检 + 原子落盘 | — |
 | `build/redact-data.mjs` | 纯净种子脱敏规则（白名单表 / mock 行级排除 / bootx 行级保留 / 密码重置），同时旁路输出演示段所需的 mock 元数据 | — |
 | `build/demo-gen.mjs` | 演示数据编译器，按 `table.sql` 列契约生成 INSERT（列名/必填/引用完整性校验） | — |
@@ -83,15 +83,15 @@ node build/export-sql.mjs --out-dir /tmp/x    # 试跑，不动仓内产物（�
 
 | 检查点 | 口径 |
 |---|---|
-| 建表数 | `CREATE TABLE` = 169 = 库 `pg_tables` 数，且双向差集为空（不漏表也不多表） |
-| 表注释 | 169 / 169（每张表都有 `COMMENT ON TABLE`） |
-| 列注释 | ≥ 2400（dev 库实测 2506） |
+| 建表数 | `CREATE TABLE` = 168 = 库 `pg_tables` 数，且双向差集为空（不漏表也不多表） |
+| 表注释 | 168 / 168（每张表都有 `COMMENT ON TABLE`） |
+| 列注释 | ≥ 2400（dev 库实测 2489） |
 | 序列 | `CREATE SEQUENCE` = 0（主键全为雪花 `ASSIGN_ID`） |
 | pg_dump 残留 | 无 `\restrict` / `\unrestrict` / `SET transaction_timeout` / `CREATE SCHEMA public` |
 | 纯净种子 | 零 mock 行、零演示菜单、零演示锚点、零 `mch_*` / `mock_*` / `device_qr_code` 行 |
 | bootx | `iam_user_info` / `iam_user_expand_info` / `iam_user_role` / `iam_user_password_security` 各恰好 1 行 |
 | 无列名 INSERT | 硬失败（开源版列序与 plus 不同，位置锚定会静默错位，不提供回退） |
-| 菜单段 | `[3]` 段必须带列名；演示菜单 id（Demos 6 + mock 工作台 2）剔除，真实商户分组菜单保留 |
+| 菜单段 | `[3]` 段必须带列名；演示菜单 id（Demos 6 条）剔除，真实商户分组菜单保留 |
 | 演示段 | 关键锚点齐全、无 plus 独有表（`agent_*` / `pay_onb_*` / 费率限额/快照明细）、无 dev 示例商户编号、含 `[4.6]` 断言块、订单数 ≥ 150、`mock_gateway_credential` 主键 1、`pay_md_product_config(mock_pay, sandbox)` 存在 |
 
 ## 四、演示数据
@@ -103,12 +103,12 @@ node build/export-sql.mjs --out-dir /tmp/x    # 试跑，不动仓内产物（�
 
 | 段 | 内容 | 来源 |
 |---|---|---|
-| `[4.1]` 演示菜单 | Demos 6 条（`2,202,204,205,206,208`） | 旁路导出 |
-| `[4.2]` mock 支付元数据 | 渠道 `92005` / 产品 `96005,96006` / 产品能力 42 行 | 旁路导出 |
+| `[4.1]` 演示菜单 | Demos 6 条菜单 + 6 条角色绑定（`2,202,204,205,206,208`） | 旁路导出 |
+| `[4.2]` 旁路元数据 | 渠道 `92005` / 产品 `96005,96006` / 产品能力 42 行 + 演示敏感词 1 条 | 旁路导出 |
 | `[4.3]` 身份与配置 | 账号 `admin` / `csqysh`、商户 `M1999999999999`、应用 `A1999999999999999`、门店 `S1999999999990001/2`、码牌 `DEMOQR20261101001/2/3`、路由策略 + 5 渠道 | 剧本生成 |
 | `[4.4]` 通道配置 | mock 全局/直连凭证（PEM）、微信应用 `wx9999999999999999` + 2 条能力绑定、`mock_pay` 沙箱生效环境 | 剧本生成 |
-| `[4.5]` 交易流水 | 近 30 天 168 单 / 15 退款 / 137 资金流水 / 167 通知任务 / 179 通知记录 / 6 条回调 | 剧本生成 |
-| `[4.6]` 一致性校验 | `DO $$ … $$` 检查块（13 项），失败则整装回滚 | 编译器产出 |
+| `[4.5]` 交易流水 | 近 30 天 176 单 / 182 交易 / 13 退款 / 156 资金流水 / 186 通知任务 / 211 通知记录 / 6 条回调 | 剧本生成 |
+| `[4.6]` 一致性校验 | `DO $$ … $$` 检查块（97 处断言），失败则整装回滚 | 编译器产出 |
 
 - 演示菜单 id 已固定在 `export-sql.mjs` 的 `DEMO_MENU_IDS`；`4040130~4040132` 是真实商户分组菜单（`menu.payment.merchant.group.*`），**不是**演示菜单
 - 开源版时间为 `timestamp(6) with time zone`，`demo-gen.mjs` 的时间工具为 `now()` / `now() - interval '…'`；`dayAt()` 先按 `Asia/Shanghai` 取日界再还原为 timestamptz
