@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/// # 系统终端管理（商户端）
+/// # 商户终端管理（商户端）
 ///
 /// 对照运营端 [TerminalDeviceAdminController]，路径 `/mch/device/terminal/system`。
 /// 商户号由 Service 从 PaymentContext 强制写入；通道终端绑定/解绑已收口运营端，
-/// 商户端仅保留系统终端管理与已绑定通道终端的只读查询。
+/// 商户端仅保留商户终端管理与已绑定通道终端的只读查询。
 @PermCode(menuCode = PermCodes.Merchant.Terminal.MENU)
 @Validated
-@Tag(name = "系统终端管理(商户端)")
+@Tag(name = "商户终端管理(商户端)")
 @RestController
 @RequestMapping("/mch/device/terminal/system")
 @RequiredArgsConstructor
@@ -39,7 +39,7 @@ public class MchTerminalDeviceController {
     private final MchTerminalDeviceService mchTerminalDeviceService;
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "新增系统终端")
+    @Operation(summary = "新增商户终端")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) TerminalDeviceParam param) {
         mchTerminalDeviceService.add(param);
@@ -47,7 +47,7 @@ public class MchTerminalDeviceController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "修改系统终端")
+    @Operation(summary = "修改商户终端")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) TerminalDeviceParam param) {
         mchTerminalDeviceService.update(param);
@@ -55,28 +55,28 @@ public class MchTerminalDeviceController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "系统终端分页")
+    @Operation(summary = "商户终端分页")
     @GetMapping("/page")
     public Result<PageResult<TerminalDeviceResult>> page(PageParam pageParam, TerminalDeviceQuery query) {
         return Res.ok(mchTerminalDeviceService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "系统终端详情")
+    @Operation(summary = "商户终端详情")
     @GetMapping("/get")
     public Result<TerminalDeviceResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchTerminalDeviceService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "当前商户系统终端列表")
+    @Operation(summary = "当前商户商户终端列表")
     @GetMapping("/list")
     public Result<List<TerminalDeviceResult>> list() {
         return Res.ok(mchTerminalDeviceService.list());
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "删除系统终端")
+    @Operation(summary = "删除商户终端")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         mchTerminalDeviceService.delete(id);

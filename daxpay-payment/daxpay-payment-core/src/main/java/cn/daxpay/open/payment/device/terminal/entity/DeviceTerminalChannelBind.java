@@ -9,9 +9,9 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
-/// # 系统终端与通道终端绑定
+/// # 商户终端与通道终端绑定
 ///
-/// 一条通道终端只归属一个系统终端; 同一系统终端在同一通道商户下按报送类型唯一。
+/// 一条通道终端只归属一个商户终端; 同一商户终端在同一通道商户下按报送类型唯一。
 /// 两端必须同属 [mchNo]。冗余 [channelMchNo]/[channel]/[type] 自通道终端,
 /// 唯一校验与支付终端解析均可单表完成。
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +21,7 @@ import lombok.experimental.FieldNameConstants;
 @TableName("device_terminal_channel_bind")
 public class DeviceTerminalChannelBind extends MchBaseEntity {
 
-    /// 系统终端编码
+    /// 商户终端编码
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String systemTerminalNo;
 

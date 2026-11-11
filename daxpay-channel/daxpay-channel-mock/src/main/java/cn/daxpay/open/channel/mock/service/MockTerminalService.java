@@ -72,7 +72,7 @@ public class MockTerminalService {
                 resp == null ? null : resp.getDeviceNo());
     }
 
-    /// 组装转发请求: 凭证按产品装配 + 台账归属/报送类型/系统终端号/终端号/扩展参数
+    /// 组装转发请求: 凭证按产品装配 + 台账归属/报送类型/商户终端号/终端号/扩展参数
     private MockTerminalOperateReq buildReq(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return new MockTerminalOperateReq()
                 .setCredential(mockCredentialSupport.build(terminal.getProduct(), terminal.getChannelMchNo()))

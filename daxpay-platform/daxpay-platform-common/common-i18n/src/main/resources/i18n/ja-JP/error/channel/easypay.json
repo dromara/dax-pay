@@ -3,5 +3,6 @@
   "payFailed": "EasyPay決済エラー: {0}",
   "refundFailed": "EasyPay返金エラー: {0}",
   "unsupportedPayMethod": "EasyPayが対応していない支払い方法: {0}",
-  "mchDuplicate": "この加盟店の下にこのEasyPay加盟店IDが既に存在します"
+  "mchDuplicate": "この加盟店の下にこのEasyPay加盟店IDが既に存在します",
+  "baseInfoRequired": "初回保存にはプラットフォームゲートウェイURLと加盟店ID(pid)の入力が必要です"
 }

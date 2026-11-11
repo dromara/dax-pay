@@ -98,7 +98,7 @@ public class ChannelTerminalAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "绑定系统终端")
+    @Operation(summary = "绑定商户终端")
     @PostMapping("/bind")
     public Result<Void> bind(@RequestBody @Validated TerminalChannelBindParam param) {
         channelTerminalAdminService.bind(param);
@@ -106,7 +106,7 @@ public class ChannelTerminalAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "解绑系统终端")
+    @Operation(summary = "解绑商户终端")
     @PostMapping("/unbind")
     public Result<Void> unbind(@RequestBody @Validated TerminalChannelBindParam param) {
         channelTerminalAdminService.unbind(param);
@@ -114,7 +114,7 @@ public class ChannelTerminalAdminController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "已绑定的系统终端列表")
+    @Operation(summary = "已绑定的商户终端列表")
     @GetMapping("/bound-system-list")
     public Result<List<TerminalDeviceResult>> listBoundSystem(
             @NotNull(message = "{validation.field.id.notNull}") Long channelTerminalId) {
@@ -137,7 +137,7 @@ public class ChannelTerminalAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "终端报备(调通道API; 未绑定时报备需选择系统终端)")
+    @Operation(summary = "终端报备(调通道API; 未绑定时报备需选择商户终端)")
     @PostMapping("/report")
     public Result<Void> report(@RequestBody @Validated ChannelTerminalReportParam param) {
         channelTerminalAdminService.report(param);

@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 /// # 门店概况聚合结果(门店工作台)
 ///
-/// 按门店聚合默认应用(门店级/商户级回退链)、本店默认终端与绑定计数(码牌/系统终端),
+/// 按门店聚合默认应用(门店级/商户级回退链)、本店默认终端与绑定计数(码牌/商户终端),
 /// 供门店工作台一屏展示; 由 [cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService#overview] 组装。
 /// 计数字段一律用 Integer(全局 Long/long 序列化为字符串契约, 前端按 number 接收)。
 ///
@@ -49,7 +49,7 @@ public class MchStoreOverviewResult {
     @Schema(description = "绑定本店的码牌数")
     private Integer qrCodeCount;
 
-    /// 本店系统终端数(全部, 不按启用过滤)
-    @Schema(description = "本店系统终端数(不按启用过滤)")
+    /// 本店商户终端数(全部, 不按启用过滤)
+    @Schema(description = "本店商户终端数(不按启用过滤)")
     private Integer terminalCount;
 }

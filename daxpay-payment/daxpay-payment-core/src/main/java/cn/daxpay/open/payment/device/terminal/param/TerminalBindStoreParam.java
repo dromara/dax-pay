@@ -9,16 +9,16 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
-/// # 系统终端批量绑定门店参数(运营端/商户端共用)
+/// # 商户终端批量绑定门店参数(运营端/商户端共用)
 ///
 /// 门店工作台一次勾选多台终端批量绑定门店; 任一终端不存在/归属不符整批拒绝。
 @Data
 @Accessors(chain = true)
-@Schema(title = "系统终端批量绑定门店参数")
+@Schema(title = "商户终端批量绑定门店参数")
 public class TerminalBindStoreParam {
 
-    /// 系统终端主键列表
-    @Schema(description = "系统终端主键列表")
+    /// 商户终端主键列表
+    @Schema(description = "商户终端主键列表")
     @NotEmpty(message = "{validation.field.ids.notEmpty}")
     private List<Long> terminalIds;
 

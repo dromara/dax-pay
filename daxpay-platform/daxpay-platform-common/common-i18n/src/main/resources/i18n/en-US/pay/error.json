@@ -45,6 +45,7 @@
     "openIdRequired": "This payment method requires openId, please authorize first",
     "clientEnvsRequired": "Configure at least one environment and form",
     "clientEnvMethodRequired": "Payment method is required for filled rows",
+    "clientEnvMethodMismatch": "Client environment [{0}] does not support payment method [{1}], please adjust before saving",
     "clientEnvChannelMchRequired": "Channel merchant is required in direct mode",
     "clientEnvCapabilityRequired": "Capability is required in direct mode",
     "channelLocked": "Payment method locked for this order",

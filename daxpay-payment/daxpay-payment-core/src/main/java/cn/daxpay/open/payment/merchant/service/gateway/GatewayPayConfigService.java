@@ -1,10 +1,12 @@
 package cn.daxpay.open.payment.merchant.service.gateway;
 
+import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayClientEnvManager;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayConfigManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayClientEnv;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayConfig;
 import cn.daxpay.open.payment.merchant.enums.AggregateConfigLevelEnum;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayClientEnvParam;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
@@ -35,6 +37,7 @@ public class GatewayPayConfigService {
 
     private final GatewayPayConfigManager configManager;
     private final GatewayPayClientEnvManager clientEnvManager;
+    private final PayProviderMethodService payProviderMethodService;
 
     /// 按应用查询, 不存在返回空对象(level 默认 AUTO)
     public GatewayPayConfigResult findByAppId(String appId) {
@@ -137,10 +140,18 @@ public class GatewayPayConfigService {
         for (GatewayPayClientEnvParam env : filledEnvs) {
             // 校验 payForm 合法
             CodePayFormEnum.findByCode(env.getPayForm());
-            if (level == AggregateConfigLevelEnum.METHOD && StrUtil.isBlank(env.getMethod())) {
-                // 网关: 已填写的环境与形态须选择支付方式
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.error.gateway.clientEnvMethodRequired");
+            if (level == AggregateConfigLevelEnum.METHOD) {
+                if (StrUtil.isBlank(env.getMethod())) {
+                    // 网关: 已填写的环境与形态须选择支付方式
+                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                            "pay.error.gateway.clientEnvMethodRequired");
+                }
+                // 网关: 校验支付方式与环境的渠道归属匹配, 防止把 A 渠道方式配到 B 渠道环境(支付时路由必失败)
+                ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(env.getClientEnv());
+                if (!payProviderMethodService.contains(clientEnv.getCode(), env.getMethod())) {
+                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                            "pay.error.gateway.clientEnvMethodMismatch", clientEnv.getCode(), env.getMethod());
+                }
             }
             if (level == AggregateConfigLevelEnum.DIRECT) {
                 if (StrUtil.isBlank(env.getChannelMchNo())) {

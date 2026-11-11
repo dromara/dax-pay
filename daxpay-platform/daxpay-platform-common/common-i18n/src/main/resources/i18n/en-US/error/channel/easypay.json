@@ -3,5 +3,6 @@
   "payFailed": "EasyPay payment error: {0}",
   "refundFailed": "EasyPay refund error: {0}",
   "unsupportedPayMethod": "Unsupported payment method for EasyPay: {0}",
-  "mchDuplicate": "An EasyPay merchant ID already exists under this merchant"
+  "mchDuplicate": "An EasyPay merchant ID already exists under this merchant",
+  "baseInfoRequired": "Gateway URL and partner ID (pid) are required for first-time save"
 }

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 /// # 通道终端新增参数(商户端)
 ///
 /// 不含商户号: 归属商户强制取自 [cn.daxpay.open.payment.common.context.PaymentContext],
-/// 通道商户号由抽屉上下文带出并校验归属当前商户。建档即绑定所选系统终端(须为当前商户名下)。
+/// 通道商户号由抽屉上下文带出并校验归属当前商户。建档即绑定所选商户终端(须为当前商户名下)。
 @Data
 @Accessors(chain = true)
 @Schema(title = "通道终端新增参数(商户端)")
@@ -27,8 +27,8 @@ public class MchChannelTerminalAddParam {
     @NotBlank(message = "{validation.field.type.notBlank}")
     private String type;
 
-    /// 绑定的系统终端编码(须为当前商户名下终端)
-    @Schema(description = "绑定的系统终端编码")
+    /// 绑定的商户终端编码(须为当前商户名下终端)
+    @Schema(description = "绑定的商户终端编码")
     @NotBlank(message = "{validation.field.systemTerminalNo.notBlank}")
     private String systemTerminalNo;
 

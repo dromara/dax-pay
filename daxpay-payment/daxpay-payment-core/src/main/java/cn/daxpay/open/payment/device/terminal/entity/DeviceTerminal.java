@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
-/// # 系统终端(逻辑终端)
+/// # 商户终端(逻辑终端)
 ///
 /// 系统商户下的公共逻辑设备编号, 对接方下单主要传 [terminalNo]。
 /// 可归属一门店([storeNo] 可空, 门店 1:N 终端); 与通道终端通过中间表多对多绑定。
@@ -24,7 +24,7 @@ import lombok.experimental.FieldNameConstants;
 @TableName("device_terminal")
 public class DeviceTerminal extends MchBaseEntity implements ToResult<TerminalDeviceResult> {
 
-    /// 系统终端编码(平台生成, 创建后不可改)
+    /// 商户终端编码(平台生成, 创建后不可改)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String terminalNo;
 

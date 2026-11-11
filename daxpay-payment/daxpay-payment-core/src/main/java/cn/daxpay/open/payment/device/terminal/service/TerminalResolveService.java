@@ -20,7 +20,7 @@ import java.util.Optional;
 
 /// # 支付终端校验与解析服务
 ///
-/// 下单上送系统终端号时的校验与解析(宽松策略):
+/// 下单上送商户终端号时的校验与解析(宽松策略):
 /// - 校验: 终端号不存在/不属于当前商户/已停用 → 一律拦截下单(传错号属配置错误, 放行会静默丢失终端维度);
 /// - 解析: 通道路由落定后按绑定关系解析通道侧终端号(登记状态=已报送且通道终端号非空的第一条),
 ///   解析不到返回 null 不拦截(宽松策略, 按无报备继续), 只有校验失败才拦截;
@@ -43,19 +43,19 @@ public class TerminalResolveService {
     private final TerminalChannelBindManager terminalChannelBindManager;
     private final ChannelTerminalManager channelTerminalManager;
 
-    /// 校验系统终端(存在性/归属/启用), 失败抛异常拦截下单
+    /// 校验商户终端(存在性/归属/启用), 失败抛异常拦截下单
     public void validateTerminal(String terminalNo, String mchNo) {
         DeviceTerminal device = terminalDeviceManager.findByTerminalNo(terminalNo)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.device.terminal.notFound", terminalNo));
         if (!Objects.equals(device.getMchNo(), mchNo)) {
-            // 终端: 系统终端不属于当前商户
+            // 终端: 商户终端不属于当前商户
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.device.terminal.mchNotMatch", terminalNo);
         }
         if (!Boolean.TRUE.equals(device.getEnable())) {
-            // 终端: 系统终端已停用
+            // 终端: 商户终端已停用
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.device.terminal.disabled", terminalNo);
         }
@@ -74,7 +74,7 @@ public class TerminalResolveService {
                 .orElse(null);
     }
 
-    /// 解析通道侧终端号: 系统终端号 + 通道商户号 定位绑定, 取登记状态=已报送且通道终端号非空的第一条
+    /// 解析通道侧终端号: 商户终端号 + 通道商户号 定位绑定, 取登记状态=已报送且通道终端号非空的第一条
     ///
     /// 宽松策略: 查不到返回 null(无绑定/未报送/终端号为空), 不拦截下单
     public String resolveOutTerminalNo(String systemTerminalNo, String channelMchNo) {
@@ -95,7 +95,7 @@ public class TerminalResolveService {
     ///
     /// 供通道支付链路读取终端级编号(如拉卡拉门店编号 storeId), 语义移植自 plus 版
     /// [TerminalInfo#getResolvedChannelExtra] 的编排层回填(open 解析方法拆分、不持有
-    /// [TerminalInfo], 由通道侧按系统终端号现查); 查不到返回 null, 不拦截支付。
+    /// [TerminalInfo], 由通道侧按商户终端号现查); 查不到返回 null, 不拦截支付。
     public String resolveChannelExtra(String systemTerminalNo, String channelMchNo) {
         if (StrUtil.isBlank(channelMchNo)) {
             return null;

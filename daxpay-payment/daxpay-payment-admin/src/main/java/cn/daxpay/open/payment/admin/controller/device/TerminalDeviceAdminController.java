@@ -28,10 +28,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/// # 系统终端管理(运营端)
+/// # 商户终端管理(运营端)
 @PermCode(menuCode = PermCodes.Merchant.Terminal.MENU)
 @Validated
-@Tag(name = "系统终端管理")
+@Tag(name = "商户终端管理")
 @RestController
 @RequestMapping("/admin/device/terminal/system")
 @RequiredArgsConstructor
@@ -40,7 +40,7 @@ public class TerminalDeviceAdminController {
     private final TerminalDeviceAdminService terminalDeviceAdminService;
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "新增系统终端")
+    @Operation(summary = "新增商户终端")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) TerminalDeviceParam param) {
         terminalDeviceAdminService.add(param);
@@ -48,7 +48,7 @@ public class TerminalDeviceAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "修改系统终端")
+    @Operation(summary = "修改商户终端")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) TerminalDeviceParam param) {
         terminalDeviceAdminService.update(param);
@@ -56,7 +56,7 @@ public class TerminalDeviceAdminController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "系统终端分页")
+    @Operation(summary = "商户终端分页")
     @GetMapping("/page")
     public Result<PageResult<TerminalDeviceResult>> page(PageParam pageParam, TerminalDeviceQuery query) {
         return Res.ok(terminalDeviceAdminService.page(pageParam, query));
@@ -70,14 +70,14 @@ public class TerminalDeviceAdminController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "系统终端详情")
+    @Operation(summary = "商户终端详情")
     @GetMapping("/get")
     public Result<TerminalDeviceResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(terminalDeviceAdminService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "按商户查询系统终端列表")
+    @Operation(summary = "按商户查询商户终端列表")
     @GetMapping("/list-by-mch-no")
     public Result<List<TerminalDeviceResult>> listByMchNo(
             @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
@@ -85,7 +85,7 @@ public class TerminalDeviceAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "删除系统终端")
+    @Operation(summary = "删除商户终端")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         terminalDeviceAdminService.delete(id);

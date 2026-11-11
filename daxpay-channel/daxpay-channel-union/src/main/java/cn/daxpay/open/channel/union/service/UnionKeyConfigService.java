@@ -6,6 +6,7 @@ import cn.daxpay.open.channel.union.dao.UnionKeyConfigManager;
 import cn.daxpay.open.channel.union.entity.UnionKeyConfig;
 import cn.daxpay.open.channel.union.param.UnionKeyConfigParam;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,9 +35,10 @@ public class UnionKeyConfigService {
                 .setSignType(UnionCode.SIGN_TYPE_RSA2)
                 .setCertSign(true)
                 .setSandbox(sandbox);
-        // 查询通用通道商户主表填充平台商户号(运营端写 MchBaseEntity 必须显式 mchNo)
-        channelMerchantManager.findByChannelMchNo(channelMchNo)
-                .ifPresent(mch -> config.setMchNo(mch.getMchNo()));
+        // 查询通用通道商户主表填充平台商户号(运营端写 MchBaseEntity 必须显式 mchNo); 通道商户缺失时拒绝懒建(mch_no 为非空列, 空壳落库会违反约束)
+        var channelMerchant = channelMerchantManager.findByChannelMchNo(channelMchNo)
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        config.setMchNo(channelMerchant.getMchNo());
         unionKeyConfigManager.save(config);
         return config;
     }

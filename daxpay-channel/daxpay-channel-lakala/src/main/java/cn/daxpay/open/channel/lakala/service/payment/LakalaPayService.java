@@ -121,7 +121,7 @@ public class LakalaPayService {
         if (terminal == null) {
             return null;
         }
-        // 编排层回填的报备参数原文优先, 未回填时按系统终端号现查已报送终端
+        // 编排层回填的报备参数原文优先, 未回填时按商户终端号现查已报送终端
         String extra = terminal.getResolvedChannelExtra();
         if (StrUtil.isBlank(extra) && StrUtil.isNotBlank(terminal.getTerminalNo())) {
             extra = terminalResolveService.resolveChannelExtra(terminal.getTerminalNo(), payParam.getChannelMchNo());

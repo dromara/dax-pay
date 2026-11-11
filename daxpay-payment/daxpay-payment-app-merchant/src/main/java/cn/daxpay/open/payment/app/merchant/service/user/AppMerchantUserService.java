@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.app.merchant.service.user;
 
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserQuery;
+import cn.daxpay.open.payment.merchant.result.info.MerchantUserDetailResult;
 import cn.daxpay.open.payment.merchant.result.info.MerchantUserResult;
 import cn.daxpay.open.payment.merchant.service.user.MerchantUserAdminService;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -33,6 +34,12 @@ public class AppMerchantUserService {
     /// 详情
     public UserInfoResult findById(Long id) {
         return merchantUserAdminService.findById(id);
+    }
+
+    /// 详情(含角色/登录轨迹/密码安全信息)
+    /// 归属校验在 [MerchantUserAdminService#findDetail] 内部完成, 商户端只能查本商户用户
+    public MerchantUserDetailResult findDetail(Long id) {
+        return merchantUserAdminService.findDetail(id);
     }
 
     /// 新增

@@ -3,5 +3,6 @@
   "payFailed": "易支付支付異常: {0}",
   "refundFailed": "易支付退款異常: {0}",
   "unsupportedPayMethod": "易支付不支援的支付方式: {0}",
-  "mchDuplicate": "該商戶下已存在此易支付商戶ID"
+  "mchDuplicate": "該商戶下已存在此易支付商戶ID",
+  "baseInfoRequired": "首次保存需填寫平台網關地址與商戶ID(pid)"
 }

@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-/// # 系统终端管理(运营端)
+/// # 商户终端管理(运营端)
 ///
 /// 维护系统商户下的逻辑终端台账; 支持可选挂门店(1:N)、与通道终端多对多绑定。
 /// 本期不调通道报备接口。
@@ -53,7 +53,7 @@ public class TerminalDeviceAdminService {
     private final TerminalChannelFillSupport terminalChannelFillSupport;
     private final TransService transService;
 
-    /// 新增系统终端
+    /// 新增商户终端
     @Transactional(rollbackFor = Exception.class)
     public void add(TerminalDeviceParam param) {
         // 校验商户存在
@@ -73,11 +73,11 @@ public class TerminalDeviceAdminService {
         terminalDeviceManager.save(entity);
     }
 
-    /// 修改系统终端
+    /// 修改商户终端
     @Transactional(rollbackFor = Exception.class)
     public void update(TerminalDeviceParam param) {
         DeviceTerminal entity = terminalDeviceManager.findById(param.getId())
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         String oldStoreNo = entity.getStoreNo();
         String storeNo = resolveStoreNo(param.getStoreNo(), entity.getMchNo());
@@ -114,26 +114,26 @@ public class TerminalDeviceAdminService {
     public TerminalDeviceResult findById(Long id) {
         TerminalDeviceResult result = terminalDeviceManager.findById(id)
                 .map(DeviceTerminal::toResult)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         transService.translate(result);
         return result;
     }
 
-    /// 商户下系统终端列表(绑定下拉用)
+    /// 商户下商户终端列表(绑定下拉用)
     public List<TerminalDeviceResult> listByMchNo(String mchNo) {
         return terminalDeviceManager.findAllByMchNo(mchNo).stream()
                 .map(DeviceTerminal::toResult)
                 .collect(Collectors.toList());
     }
 
-    /// 删除系统终端(级联解绑)
+    /// 删除商户终端(级联解绑)
     ///
     /// 门店默认终端禁止删除(对齐默认门店禁删), 需先取消默认或转交其他终端。
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         DeviceTerminal entity = terminalDeviceManager.findById(id)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (Boolean.TRUE.equals(entity.getDefaultTerminal())) {
             // 终端: 门店默认终端不可删除, 请先取消默认或转交其他终端
@@ -149,7 +149,7 @@ public class TerminalDeviceAdminService {
     @Transactional(rollbackFor = Exception.class)
     public void setDefault(Long id) {
         DeviceTerminal entity = terminalDeviceManager.findById(id)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (StrUtil.isBlank(entity.getStoreNo())) {
             // 终端: 终端未挂载门店, 无法设为默认
@@ -167,7 +167,7 @@ public class TerminalDeviceAdminService {
     @Transactional(rollbackFor = Exception.class)
     public void clearDefault(Long id) {
         DeviceTerminal entity = terminalDeviceManager.findById(id)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         entity.setDefaultTerminal(false);
         terminalDeviceManager.updateById(entity);
@@ -182,13 +182,13 @@ public class TerminalDeviceAdminService {
     public void bindStoreBatch(TerminalBindStoreParam param) {
         List<DeviceTerminal> terminals = terminalDeviceManager.findAllByIds(param.getTerminalIds());
         if (terminals.size() != param.getTerminalIds().stream().distinct().count()) {
-            // 终端: 部分系统终端不存在
+            // 终端: 部分商户终端不存在
             throw new DataNotExistException("error.device.terminal.batchSystemNotFound");
         }
         String mchNo = terminals.getFirst().getMchNo();
         for (DeviceTerminal terminal : terminals) {
             if (!Objects.equals(terminal.getMchNo(), mchNo)) {
-                // 终端: 系统终端须属于同一商户
+                // 终端: 商户终端须属于同一商户
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.batchMchMismatch");
             }
         }
@@ -204,13 +204,13 @@ public class TerminalDeviceAdminService {
     @Transactional(rollbackFor = Exception.class)
     public void bind(TerminalChannelBindParam param) {
         DeviceTerminal system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         DeviceChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(system.getMchNo(), channel.getMchNo())) {
-            // 终端: 系统终端与通道终端须属于同一商户
+            // 终端: 商户终端与通道终端须属于同一商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
         }
         if (terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
@@ -235,10 +235,10 @@ public class TerminalDeviceAdminService {
         terminalChannelBindManager.deleteBind(param.getSystemTerminalNo(), param.getChannelTerminalId());
     }
 
-    /// 查询系统终端已绑定的通道终端列表
+    /// 查询商户终端已绑定的通道终端列表
     public List<ChannelTerminalResult> listBoundChannel(String terminalNo) {
         DeviceTerminal system = terminalDeviceManager.findByTerminalNo(terminalNo)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         List<Long> channelIds = terminalChannelBindManager.findBySystemTerminalNo(system.getTerminalNo()).stream()
                 .map(DeviceTerminalChannelBind::getChannelTerminalId)
@@ -253,7 +253,7 @@ public class TerminalDeviceAdminService {
         return results;
     }
 
-    /// 生成系统终端号 D + 16 位数字
+    /// 生成商户终端号 D + 16 位数字
     private String generateTerminalNo() {
         String terminalNo = "D" + RandomUtil.randomNumbers(16);
         for (int i = 0; i < 10; i++) {

@@ -4,8 +4,10 @@ import cn.daxpay.open.device.linkage.param.MchAppDeviceConfigParam;
 import cn.daxpay.open.device.linkage.result.AppSimpleConfigResult;
 import cn.daxpay.open.device.linkage.service.AppDeviceConfigService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,9 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 应用设备联动配置(商户端)
 ///
-/// 商户「我的应用」编辑弹窗「播报/打印开关」区块的自助入口: 每个端点先做应用归属校验
-/// (应用必须属于当前登录商户), 业务编排复用 [AppDeviceConfigService]。
-/// 开关 UI 在应用管理入口内, 权限跟入口走: 挂商户应用菜单码(merchant:app,
+/// 商户「我的应用」工作台「收款播报」磁贴的自助入口, 独立配置页(与编辑弹窗分离, 独立保存):
+/// 每个端点先做应用归属校验(应用必须属于当前登录商户), 业务编排复用 [AppDeviceConfigService]。
+/// 权限跟应用管理入口走: 挂商户应用菜单码(merchant:app,
 /// 与 [MchAppInfoController] 同权限面)。
 @PermCode(menuCode = PermCodes.Merchant.App.MENU)
 @Validated
@@ -46,6 +48,7 @@ public class AppDeviceConfigMchController {
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存应用设备联动配置(播报/打印开关 + 版式代码)")
+    @OperateLog(title = "保存应用收款播报配置", businessType = OperateLogType.UPDATE, saveParam = true)
     @PostMapping("/simple-save")
     public Result<Void> saveSimple(@RequestBody @Validated MchAppDeviceConfigParam param) {
         checkOwnership(param.getAppId());

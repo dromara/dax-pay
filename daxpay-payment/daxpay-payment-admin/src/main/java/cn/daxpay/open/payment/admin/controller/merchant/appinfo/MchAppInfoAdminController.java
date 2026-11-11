@@ -68,6 +68,13 @@ public class MchAppInfoAdminController {
         return Res.ok(mchAppInfoService.findById(id));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "根据应用AppId获取应用详情")
+    @GetMapping("/get-by-app-id")
+    public Result<MchAppInfoResult> findByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
+        return Res.ok(mchAppInfoService.findByAppId(appId));
+    }
+
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除商户应用")
     @PostMapping("/delete")

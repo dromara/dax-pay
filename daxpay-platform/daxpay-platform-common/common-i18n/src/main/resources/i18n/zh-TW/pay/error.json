@@ -45,6 +45,7 @@
     "openIdRequired": "目前支付方式需要 openId, 請先完成授權",
     "clientEnvsRequired": "請至少配置一項環境與形態",
     "clientEnvMethodRequired": "已填寫的環境與形態須選擇支付方式",
+    "clientEnvMethodMismatch": "用戶端環境[{0}]不支援支付方式[{1}]，請調整後保存",
     "clientEnvChannelMchRequired": "直接指定時, 已填寫行的通道商戶號必填",
     "clientEnvCapabilityRequired": "直接指定時, 已填寫行的支付能力必填",
     "channelLocked": "訂單已鎖定支付方式，請勿切換",

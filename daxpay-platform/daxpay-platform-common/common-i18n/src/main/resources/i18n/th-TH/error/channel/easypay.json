@@ -3,5 +3,6 @@
   "payFailed": "ข้อผิดพลาดการชำระเงิน EasyPay: {0}",
   "refundFailed": "ข้อผิดพลาดการคืนเงิน EasyPay: {0}",
   "unsupportedPayMethod": "วิธีชำระเงินที่ EasyPay ไม่รองรับ: {0}",
-  "mchDuplicate": "มี ID ร้านค้า EasyPay นี้อยู่แล้วภายใต้ร้านค้านี้"
+  "mchDuplicate": "มี ID ร้านค้า EasyPay นี้อยู่แล้วภายใต้ร้านค้านี้",
+  "baseInfoRequired": "ต้องระบุ URL เกตเวย์แพลตฟอร์มและรหัสพันธมิตร (pid) เมื่อบันทึกครั้งแรก"
 }

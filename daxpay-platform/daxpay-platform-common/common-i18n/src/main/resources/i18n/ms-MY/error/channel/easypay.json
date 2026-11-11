@@ -3,5 +3,6 @@
   "payFailed": "Ralat pembayaran EasyPay: {0}",
   "refundFailed": "Ralat bayaran balik EasyPay: {0}",
   "unsupportedPayMethod": "Kaedah pembayaran tidak disokong oleh EasyPay: {0}",
-  "mchDuplicate": "ID merchant EasyPay ini sudah wujud di bawah merchant ini"
+  "mchDuplicate": "ID merchant EasyPay ini sudah wujud di bawah merchant ini",
+  "baseInfoRequired": "URL gerbang platform dan ID rakan kongsi (pid) diperlukan untuk simpanan pertama"
 }

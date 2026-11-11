@@ -37,13 +37,13 @@ public class ChannelTerminalAdminService {
     private final ChannelTerminalQuerySupport channelTerminalQuerySupport;
     private final ChannelTerminalManager channelTerminalManager;
 
-    /// 新增通道终端台账(建档即绑定系统终端)
+    /// 新增通道终端台账(建档即绑定商户终端)
     @Transactional(rollbackFor = Exception.class)
     public void add(ChannelTerminalParam param) {
         channelTerminalManageSupport.add(this.toSaveParam(param), param.getMchNo());
     }
 
-    /// 修改通道终端(仅名称/备注/报备参数; 通道商户/类型/系统终端绑定与登记状态不在此维护)
+    /// 修改通道终端(仅名称/备注/报备参数; 通道商户/类型/商户终端绑定与登记状态不在此维护)
     @Transactional(rollbackFor = Exception.class)
     public void update(ChannelTerminalParam param) {
         channelTerminalManageSupport.update(this.toSaveParam(param));
@@ -78,19 +78,19 @@ public class ChannelTerminalAdminService {
         channelTerminalManageSupport.delete(id);
     }
 
-    /// 绑定系统终端(存量记录修复入口; 正常关联由新增建档建立)
+    /// 绑定商户终端(存量记录修复入口; 正常关联由新增建档建立)
     @Transactional(rollbackFor = Exception.class)
     public void bind(TerminalChannelBindParam param) {
         channelTerminalManageSupport.bind(this.toCoreBindParam(param));
     }
 
-    /// 解绑系统终端
+    /// 解绑商户终端
     @Transactional(rollbackFor = Exception.class)
     public void unbind(TerminalChannelBindParam param) {
         channelTerminalManageSupport.unbind(this.toCoreBindParam(param));
     }
 
-    /// 查询通道终端已绑定的系统终端列表
+    /// 查询通道终端已绑定的商户终端列表
     public List<TerminalDeviceResult> listBoundSystem(Long channelTerminalId) {
         return channelTerminalManageSupport.listBoundSystem(channelTerminalId);
     }

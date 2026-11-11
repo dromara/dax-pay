@@ -3,5 +3,6 @@
   "payFailed": "Kesalahan pembayaran EasyPay: {0}",
   "refundFailed": "Kesalahan pengembalian dana EasyPay: {0}",
   "unsupportedPayMethod": "Metode pembayaran tidak didukung EasyPay: {0}",
-  "mchDuplicate": "ID merchant EasyPay sudah ada di bawah merchant ini"
+  "mchDuplicate": "ID merchant EasyPay sudah ada di bawah merchant ini",
+  "baseInfoRequired": "URL gateway platform dan ID mitra (pid) wajib diisi saat penyimpanan pertama"
 }

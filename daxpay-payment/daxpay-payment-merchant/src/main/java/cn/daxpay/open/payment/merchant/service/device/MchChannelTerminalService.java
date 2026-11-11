@@ -74,10 +74,10 @@ public class MchChannelTerminalService {
         return entity;
     }
 
-    /// 校验系统终端归属当前商户; 不存在与不属于当前商户统一报"不存在"
+    /// 校验商户终端归属当前商户; 不存在与不属于当前商户统一报"不存在"
     private DeviceTerminal requireOwnedSystemTerminal(String terminalNo) {
         DeviceTerminal entity = terminalDeviceManager.findByTerminalNo(terminalNo)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (!Objects.equals(entity.getMchNo(), requireMchNo())) {
             // 越权探测: 他人终端统一按不存在处理
@@ -86,7 +86,7 @@ public class MchChannelTerminalService {
         return entity;
     }
 
-    /// 分页查询(查询与系统终端回填复用内核共用逻辑, 此处只负责商户号隔离)
+    /// 分页查询(查询与商户终端回填复用内核共用逻辑, 此处只负责商户号隔离)
     public PageResult<ChannelTerminalResult> page(PageParam pageParam, ChannelTerminalQuery query) {
         // 商户端强制覆盖商户号, 防越权查询其它商户的通道终端
         query.setMchNo(requireMchNo());
@@ -99,7 +99,7 @@ public class MchChannelTerminalService {
         return channelTerminalQuerySupport.findById(id);
     }
 
-    /// 新增通道终端台账(建档即绑定系统终端)
+    /// 新增通道终端台账(建档即绑定商户终端)
     @Transactional(rollbackFor = Exception.class)
     public void add(MchChannelTerminalAddParam param) {
         ChannelTerminalSaveParam saveParam = new ChannelTerminalSaveParam()
@@ -109,7 +109,7 @@ public class MchChannelTerminalService {
                 .setName(param.getName())
                 .setExtra(param.getExtra())
                 .setRemark(param.getRemark());
-        // 商户号取上下文, 通道商户与系统终端归属由内核校验
+        // 商户号取上下文, 通道商户与商户终端归属由内核校验
         channelTerminalManageSupport.add(saveParam, requireMchNo());
     }
 
@@ -143,12 +143,12 @@ public class MchChannelTerminalService {
         channelTerminalManageSupport.delete(id);
     }
 
-    /// 终端报备(报备即绑定; 入参带系统终端时先校验该系统终端归属)
+    /// 终端报备(报备即绑定; 入参带商户终端时先校验该商户终端归属)
     @Transactional(rollbackFor = Exception.class)
     public void report(MchChannelTerminalReportParam param) {
         this.requireOwnedChannelTerminal(param.getId());
         if (StrUtil.isNotBlank(param.getSystemTerminalNo())) {
-            // 防用他人系统终端报备
+            // 防用他人商户终端报备
             this.requireOwnedSystemTerminal(param.getSystemTerminalNo());
         }
         channelTerminalManageSupport.report(
@@ -171,7 +171,7 @@ public class MchChannelTerminalService {
         channelTerminalManageSupport.cancel(id);
     }
 
-    /// 解绑当前绑定的系统终端(只传通道终端主键: 绑定关系由后端取, 商户无法伪造终端号)
+    /// 解绑当前绑定的商户终端(只传通道终端主键: 绑定关系由后端取, 商户无法伪造终端号)
     @Transactional(rollbackFor = Exception.class)
     public void unbind(Long id) {
         this.requireOwnedChannelTerminal(id);
@@ -180,7 +180,7 @@ public class MchChannelTerminalService {
             // 终端: 绑定关系不存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindNotFound");
         }
-        // 防伪造绑定: 系统终端同样须归属当前商户
+        // 防伪造绑定: 商户终端同样须归属当前商户
         this.requireOwnedSystemTerminal(systemTerminalNo);
         channelTerminalManageSupport.unbind(new ChannelTerminalBindParam()
                 .setSystemTerminalNo(systemTerminalNo)

@@ -760,7 +760,7 @@
       "size": "Mã runtime không được vượt quá 16 ký tự"
     },
     "systemTerminalNo": {
-      "notBlank": "Đầu cuối hệ thống không được để trống"
+      "notBlank": "Thiết bị người bán không được để trống"
     },
     "client": {
       "notBlank": "Mã ứng dụng không được để trống"

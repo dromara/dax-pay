@@ -789,7 +789,7 @@
       "notBlank": "이체 시나리오 이름은 비워둘 수 없습니다"
     },
     "systemTerminalNo": {
-      "notBlank": "시스템 단말은 필수입니다"
+      "notBlank": "판매자 단말은 필수입니다"
     },
     "transferNo": {
       "size": "플랫폼 송금 번호는 100자를 초과할 수 없습니다",

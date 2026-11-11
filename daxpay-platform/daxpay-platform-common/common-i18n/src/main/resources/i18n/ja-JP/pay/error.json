@@ -45,6 +45,7 @@
     "openIdRequired": "この支払い方法には openId が必要です。先に認証を完了してください",
     "clientEnvsRequired": "少なくとも1つの環境と形態を設定してください",
     "clientEnvMethodRequired": "入力済みの環境と形態には支払い方法を選択してください",
+    "clientEnvMethodMismatch": "クライアント環境[{0}]は支払い方法[{1}]をサポートしていません。修正してから保存してください",
     "clientEnvChannelMchRequired": "直接指定の場合、入力済み行のチャネル加盟店番号は必須です",
     "clientEnvCapabilityRequired": "直接指定の場合、入力済み行の支払い能力は必須です",
     "channelLocked": "この注文では支払い方法がロックされています",

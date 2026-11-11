@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-/// # 系统终端与通道终端绑定规则
+/// # 商户终端与通道终端绑定规则
 ///
 /// 建档即绑与手动绑定的关联约束(多入口共用同一套校验, 避免写出脏数据):
-/// - 一条通道终端只归属一个系统终端;
-/// - 同一系统终端在同一通道商户下按报送类型唯一(一个终端可分别做通用/微信/支付宝/银联报送)。
+/// - 一条通道终端只归属一个商户终端;
+/// - 同一商户终端在同一通道商户下按报送类型唯一(一个终端可分别做通用/微信/支付宝/银联报送)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,16 +24,16 @@ public class TerminalBindSupport {
     private final TerminalChannelBindManager terminalChannelBindManager;
     private final ChannelTerminalManager channelTerminalManager;
 
-    /// 通道终端是否已被其它系统终端占用
+    /// 通道终端是否已被其它商户终端占用
     public boolean hasOtherOwner(Long channelTerminalId, String systemTerminalNo) {
         return terminalChannelBindManager.findByChannelTerminalId(channelTerminalId).stream()
                 .anyMatch(bind -> !Objects.equals(bind.getSystemTerminalNo(), systemTerminalNo));
     }
 
-    /// 取通道终端当前绑定的系统终端号(一条通道终端只归属一个系统终端, 遗留脏数据取首个)
+    /// 取通道终端当前绑定的商户终端号(一条通道终端只归属一个商户终端, 遗留脏数据取首个)
     ///
     /// @param channelTerminalId 通道终端主键
-    /// @return 绑定的系统终端号; 未绑定时返回 null
+    /// @return 绑定的商户终端号; 未绑定时返回 null
     public String findOwner(Long channelTerminalId) {
         return terminalChannelBindManager.findByChannelTerminalId(channelTerminalId).stream()
                 .map(DeviceTerminalChannelBind::getSystemTerminalNo)
@@ -41,7 +41,7 @@ public class TerminalBindSupport {
                 .orElse(null);
     }
 
-    /// 同一系统终端在同一通道商户、同一报送类型下是否已有其它通道终端
+    /// 同一商户终端在同一通道商户、同一报送类型下是否已有其它通道终端
     ///
     /// @param excludeChannelTerminalId 排除的通道终端主键(校验自身时排除)
     public boolean hasTypeConflict(String systemTerminalNo, DeviceChannelTerminal target, Long excludeChannelTerminalId) {

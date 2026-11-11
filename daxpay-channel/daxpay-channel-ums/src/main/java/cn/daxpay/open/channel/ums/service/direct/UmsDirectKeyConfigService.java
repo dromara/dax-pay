@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.ums.dao.direct.UmsDirectKeyConfigManager;
 import cn.daxpay.open.channel.ums.entity.direct.UmsDirectKeyConfig;
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectKeyConfigParam;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,10 @@ public class UmsDirectKeyConfigService {
         var config = new UmsDirectKeyConfig()
                 .setChannelMchNo(channelMchNo)
                 .setSandbox(sandbox);
-        // 查询通用通道商户主表填充商户号
-        channelMerchantManager.findByChannelMchNo(channelMchNo)
-                .ifPresent(mch -> config.setMchNo(mch.getMchNo()));
+        // 查询通用通道商户主表填充商户号; 通道商户缺失时拒绝懒建(mch_no 为非空列, 空壳落库会违反约束)
+        var channelMerchant = channelMerchantManager.findByChannelMchNo(channelMchNo)
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        config.setMchNo(channelMerchant.getMchNo());
         umsDirectKeyConfigManager.save(config);
         return config;
     }

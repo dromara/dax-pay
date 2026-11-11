@@ -67,11 +67,11 @@ public class EasyPayKeyConfigService {
     /// 平台网关地址去尾斜杠归一; 商户ID(pid) 变更时校验同一商户下唯一(防止重复绑定同一上游商户)。
     @Transactional(rollbackFor = Exception.class)
     public void save(EasyPayKeyConfigParam param) {
-        var config = easyPayKeyConfigManager.findByChannelMchNo(param.getChannelMchNo())
-                .orElseGet(() -> this.createConfig(param.getChannelMchNo()));
-        // 对接参数归一: 网关地址去尾斜杠, 商户ID空白转 NULL(空值不覆盖原值)
+        // 对接参数归一(创建前执行, 首次落库需携带必填值): 网关地址去尾斜杠, 商户ID空白转 NULL(空值不覆盖原值)
         param.setServerUrl(StrUtil.removeSuffix(StrUtil.trimToNull(param.getServerUrl()), "/"));
         param.setPartnerId(StrUtil.trimToNull(param.getPartnerId()));
+        var config = easyPayKeyConfigManager.findByChannelMchNo(param.getChannelMchNo())
+                .orElseGet(() -> this.createConfig(param));
         // 唯一性校验: 商户ID发生变更时, 同一商户下不允许重复绑定同一易支付商户ID
         if (Objects.nonNull(param.getPartnerId()) && !param.getPartnerId().equals(config.getPartnerId())) {
             boolean duplicated = easyPayKeyConfigManager.lambdaQuery()
@@ -91,12 +91,19 @@ public class EasyPayKeyConfigService {
     /// 创建并落库新密钥记录(保存流程专用)
     ///
     /// 通道商户不存在时不允许凭空创建密钥记录(mch_no 非空约束转为友好提示);
-    /// 运营端写 [cn.daxpay.open.payment.common.entity.MchBaseEntity] 必须显式 setMchNo(单独赋值, 不链式)。
-    private EasyPayKeyConfig createConfig(String channelMchNo) {
-        var channelMerchant = channelMerchantManager.findByChannelMchNo(channelMchNo)
+    /// 运营端写 [cn.daxpay.open.payment.common.entity.MchBaseEntity] 必须显式 setMchNo(单独赋值, 不链式);
+    /// 网关地址/商户ID为表非空列, 首次落库必须携带, 缺失时转业务提示而非数据库约束报错。
+    private EasyPayKeyConfig createConfig(EasyPayKeyConfigParam param) {
+        if (StrUtil.hasBlank(param.getServerUrl(), param.getPartnerId())) {
+            // 易支付: 首次保存需填写平台网关地址与商户ID
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.easypay.baseInfoRequired");
+        }
+        var channelMerchant = channelMerchantManager.findByChannelMchNo(param.getChannelMchNo())
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         var config = new EasyPayKeyConfig()
-                .setChannelMchNo(channelMchNo);
+                .setChannelMchNo(param.getChannelMchNo())
+                .setServerUrl(param.getServerUrl())
+                .setPartnerId(param.getPartnerId());
         config.setMchNo(channelMerchant.getMchNo());
         easyPayKeyConfigManager.save(config);
         return config;

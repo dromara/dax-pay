@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManag
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectKeyConfigManager;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectKeyConfigParam;
+import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,9 +32,10 @@ public class DouyinDirectKeyConfigService {
         }
         var config = new DouyinDirectKeyConfig()
                 .setChannelMchNo(channelMchNo);
-        // 查询通道商户记录填充商户号
-        douyinDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
-                .ifPresent(mch -> config.setMchNo(mch.getMchNo()));
+        // 查询通道商户记录填充商户号; 通道商户缺失时拒绝懒建(mch_no 为非空列, 空壳落库会违反约束)
+        var channelMerchant = douyinDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        config.setMchNo(channelMerchant.getMchNo());
         douyinDirectKeyConfigManager.save(config);
         return config;
     }

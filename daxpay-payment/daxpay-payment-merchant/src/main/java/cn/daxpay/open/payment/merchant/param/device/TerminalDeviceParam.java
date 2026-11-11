@@ -9,12 +9,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 系统终端参数（商户端）
+/// # 商户终端参数（商户端）
 ///
 /// 商户号由 Controller 从 PaymentContext 写入，入参 mchNo 可忽略。
 @Data
 @Accessors(chain = true)
-@Schema(title = "系统终端参数")
+@Schema(title = "商户终端参数")
 public class TerminalDeviceParam {
 
     @Schema(description = "主键")

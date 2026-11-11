@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/// # 系统终端管理
+/// # 商户终端管理
 @Slf4j
 @Repository
 @RequiredArgsConstructor
@@ -38,14 +38,14 @@ public class TerminalDeviceManager extends BaseManager<TerminalDeviceMapper, Dev
         return existedByField(DeviceTerminal::getTerminalNo, terminalNo);
     }
 
-    /// 商户下全部系统终端
+    /// 商户下全部商户终端
     public List<DeviceTerminal> findAllByMchNo(String mchNo) {
         return lambdaQuery()
                 .eq(DeviceTerminal::getMchNo, mchNo)
                 .list();
     }
 
-    /// 商户下启用的系统终端
+    /// 商户下启用的商户终端
     public List<DeviceTerminal> findEnabledByMchNo(String mchNo) {
         return lambdaQuery()
                 .eq(DeviceTerminal::getMchNo, mchNo)
@@ -76,14 +76,14 @@ public class TerminalDeviceManager extends BaseManager<TerminalDeviceMapper, Dev
                 .oneOpt();
     }
 
-    /// 统计门店下系统终端数(不限启用态; 门店概况聚合用, 逻辑删除自动过滤)
+    /// 统计门店下商户终端数(不限启用态; 门店概况聚合用, 逻辑删除自动过滤)
     public long countByStoreNo(String storeNo) {
         return lambdaQuery()
                 .eq(DeviceTerminal::getStoreNo, storeNo)
                 .count();
     }
 
-    /// 统计商户下系统终端数(存量总数, 不限启用态; 运营端商户工作台磁贴计数用, 逻辑删除自动过滤)
+    /// 统计商户下商户终端数(存量总数, 不限启用态; 运营端商户工作台磁贴计数用, 逻辑删除自动过滤)
     ///
     /// 显式按 mchNo 过滤, 不依赖租户自动拼接: 运营端无商户上下文(租户拦截整体放开)。
     public long countByMchNo(String mchNo) {

@@ -30,8 +30,8 @@ public class ChannelTerminalSaveParam {
     @Schema(description = "报送类型(新增必填)")
     private String type;
 
-    /// 绑定的系统终端编码(建档即绑定, 新增必填)
-    @Schema(description = "绑定的系统终端编码(新增必填)")
+    /// 绑定的商户终端编码(建档即绑定, 新增必填)
+    @Schema(description = "绑定的商户终端编码(新增必填)")
     private String systemTerminalNo;
 
     @Schema(description = "终端名称")

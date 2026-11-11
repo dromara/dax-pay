@@ -92,7 +92,7 @@ public class MchChannelTerminalController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "终端报备(调通道API; 已绑定时可不传系统终端)")
+    @Operation(summary = "终端报备(调通道API; 已绑定时可不传商户终端)")
     @PostMapping("/report")
     public Result<Void> report(@RequestBody @Validated MchChannelTerminalReportParam param) {
         mchChannelTerminalService.report(param);

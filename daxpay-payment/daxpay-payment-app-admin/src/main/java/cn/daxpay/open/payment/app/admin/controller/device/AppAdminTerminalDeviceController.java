@@ -27,14 +27,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/// # 系统终端管理(小程序管理端)
+/// # 商户终端管理(小程序管理端)
 ///
-/// 小程序管理端系统终端镜像, 对应 admin 版 [TerminalDeviceAdminController]。镜像新增/编辑/删除/
+/// 小程序管理端商户终端镜像, 对应 admin 版 [TerminalDeviceAdminController]。镜像新增/编辑/删除/
 /// 门店默认终端/总览等端点; 批量绑定门店与通道终端绑定/解绑(可从通道终端侧完成)留在 Web 端,
 /// 业务编排委托 [TerminalDeviceAdminService]。
 @PermCode(menuCode = PermCodes.Merchant.Terminal.MENU)
 @Validated
-@Tag(name = "系统终端管理(小程序管理端)")
+@Tag(name = "商户终端管理(小程序管理端)")
 @RestController
 @RequestMapping("/app-admin/device/terminal/system")
 @RequiredArgsConstructor
@@ -43,14 +43,14 @@ public class AppAdminTerminalDeviceController {
     private final TerminalDeviceAdminService terminalDeviceAdminService;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "小程序管理端-系统终端分页")
+    @Operation(summary = "小程序管理端-商户终端分页")
     @GetMapping("/page")
     public Result<PageResult<TerminalDeviceResult>> page(PageParam pageParam, TerminalDeviceQuery query) {
         return Res.ok(terminalDeviceAdminService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "小程序管理端-系统终端详情")
+    @Operation(summary = "小程序管理端-商户终端详情")
     @GetMapping("/get")
     public Result<TerminalDeviceResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(terminalDeviceAdminService.findById(id));
@@ -65,7 +65,7 @@ public class AppAdminTerminalDeviceController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "新增系统终端")
+    @Operation(summary = "新增商户终端")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) TerminalDeviceParam param) {
         terminalDeviceAdminService.add(param);
@@ -73,7 +73,7 @@ public class AppAdminTerminalDeviceController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "修改系统终端")
+    @Operation(summary = "修改商户终端")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) TerminalDeviceParam param) {
         terminalDeviceAdminService.update(param);
@@ -88,7 +88,7 @@ public class AppAdminTerminalDeviceController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "删除系统终端")
+    @Operation(summary = "删除商户终端")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         terminalDeviceAdminService.delete(id);

@@ -32,7 +32,7 @@ public abstract class AbsChannelTerminalStrategy implements PaymentStrategy {
 
     /// 报备(调通道 API, 成功回执带通道侧终端号)
     ///
-    /// @param systemTerminalNo 报备锚点的系统终端号(编排层取绑定关系中的首个系统终端)
+    /// @param systemTerminalNo 报备锚点的商户终端号(编排层取绑定关系中的首个商户终端)
     public abstract TerminalOperateResult submit(DeviceChannelTerminal terminal, String systemTerminalNo);
 
     /// 注销(默认不支持)

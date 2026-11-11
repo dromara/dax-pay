@@ -23,7 +23,7 @@ import java.util.Map;
 ///
 /// 编排壳: 组装凭证与差异参数后经 [HkrtChannelClient] 转发子应用执行
 /// (绑定 new-bind / 解绑 new-unbound / 查询 new-query), 语义移植自商业版 3.x。
-/// 报备以系统终端号为 SN, 成功回传海科 pn 作通道侧终端号。
+/// 报备以商户终端号为 SN, 成功回传海科 pn 作通道侧终端号。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -90,7 +90,7 @@ public class HkrtTerminalStrategy extends AbsChannelTerminalStrategy {
         return true;
     }
 
-    /// 组装转发请求: 服务商凭证 + 系统终端号(SN) + extra 差异参数
+    /// 组装转发请求: 服务商凭证 + 商户终端号(SN) + extra 差异参数
     private HkrtTerminalOperateReq buildReq(DeviceChannelTerminal terminal, String systemTerminalNo) {
         return new HkrtTerminalOperateReq()
                 .setCredential(hkrtIsvConfigAssembler.buildConfig(

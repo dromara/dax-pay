@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 
 /// # 通道终端台账参数
 ///
-/// 新增建档即绑定系统终端; 通道侧终端号与登记状态由手动登记
+/// 新增建档即绑定商户终端; 通道侧终端号与登记状态由手动登记
 /// ([ChannelTerminalRegisterParam]) 动作回写, 不在本参数维护。
 @Data
 @Accessors(chain = true)
@@ -37,8 +37,8 @@ public class ChannelTerminalParam {
     @NotBlank(message = "{validation.field.type.notBlank}", groups = ValidationGroup.add.class)
     private String type;
 
-    /// 绑定的系统终端编码(建档即绑定, 新增必填)
-    @Schema(description = "绑定的系统终端编码(新增必填)")
+    /// 绑定的商户终端编码(建档即绑定, 新增必填)
+    @Schema(description = "绑定的商户终端编码(新增必填)")
     @NotBlank(message = "{validation.field.systemTerminalNo.notBlank}", groups = ValidationGroup.add.class)
     private String systemTerminalNo;
 

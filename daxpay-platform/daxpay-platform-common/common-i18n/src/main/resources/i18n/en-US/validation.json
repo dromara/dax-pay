@@ -793,7 +793,7 @@
       "notBlank": "Transfer scene name cannot be empty"
     },
     "systemTerminalNo": {
-      "notBlank": "System terminal cannot be empty"
+      "notBlank": "Merchant terminal cannot be empty"
     },
     "transferNo": {
       "size": "Platform transfer number cannot exceed 100 characters",

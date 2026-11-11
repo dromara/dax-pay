@@ -3,5 +3,6 @@
   "payFailed": "이지페이 결제 오류: {0}",
   "refundFailed": "이지페이 환불 오류: {0}",
   "unsupportedPayMethod": "이지페이가 지원하지 않는 결제 수단: {0}",
-  "mchDuplicate": "이 가맹점 아래에 이 이지페이 가맹점 ID가 이미 있습니다"
+  "mchDuplicate": "이 가맹점 아래에 이 이지페이 가맹점 ID가 이미 있습니다",
+  "baseInfoRequired": "최초 저장 시 플랫폼 게이트웨이 주소와 상점ID(pid)를 입력해야 합니다"
 }

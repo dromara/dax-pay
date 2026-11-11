@@ -3,8 +3,10 @@ package cn.daxpay.open.device.app.admin.controller;
 import cn.daxpay.open.device.linkage.param.AppSimpleConfigParam;
 import cn.daxpay.open.device.linkage.result.AppSimpleConfigResult;
 import cn.daxpay.open.device.linkage.service.AppDeviceConfigService;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 应用设备联动配置(运营小程序端镜像)
 ///
-/// 对应 Web 运营端 [AppDeviceConfigAdminController], 镜像应用编辑弹窗内
-/// 播报/打印开关与版式下拉的读写两端点, 复用同一 [AppDeviceConfigService] 与权限码,
+/// 对应 Web 运营端 [AppDeviceConfigAdminController], 镜像应用工作台「收款播报」
+/// 独立配置页的读写两端点, 复用同一 [AppDeviceConfigService] 与权限码,
 /// 仅 URL 前缀不同(/app-admin)。
 @PermCode(menuCode = PermCodes.Merchant.App.MENU)
 @Validated
@@ -42,6 +44,7 @@ public class AppAdminDeviceConfigController {
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存应用设备联动配置(播报/打印开关 + 版式代码)")
+    @OperateLog(title = "保存应用收款播报配置", businessType = OperateLogType.UPDATE, saveParam = true)
     @PostMapping("/simple-save")
     public Result<Void> saveSimple(@RequestBody @Validated AppSimpleConfigParam param) {
         appDeviceConfigService.saveSimpleConfig(param);

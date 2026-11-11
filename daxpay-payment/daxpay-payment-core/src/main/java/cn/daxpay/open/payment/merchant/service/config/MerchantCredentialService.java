@@ -58,6 +58,11 @@ public class MerchantCredentialService {
         if (StrUtil.isNotBlank(param.getPublicKey())){
             RsaSignUtil.loadPublicKeyFromPem(param.getPublicKey());
         }
+        // 通信密钥防误覆盖: 查询侧脱敏返回(abcdef******uvwxyz), 前端回填后原样提交会覆盖真密钥
+        // 留空或含 * 的脱敏回显串均视为未修改, 归一为 null, 配合 Convert 的 null-IGNORE 跳过覆盖
+        if (StrUtil.isBlank(param.getSecretKey()) || param.getSecretKey().contains("*")) {
+            param.setSecretKey(null);
+        }
         MerchantCredentialConvert.CONVERT.copy(param, credential);
         credentialManager.updateById(credential);
     }

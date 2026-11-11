@@ -45,6 +45,7 @@
     "openIdRequired": "Phương thức thanh toán này cần openId, vui lòng xác thực trước",
     "clientEnvsRequired": "Cấu hình ít nhất một môi trường và hình thức",
     "clientEnvMethodRequired": "Phương thức thanh toán là bắt buộc cho các hàng đã điền",
+    "clientEnvMethodMismatch": "Môi trường máy khách [{0}] không hỗ trợ phương thức thanh toán [{1}], vui lòng điều chỉnh trước khi lưu",
     "clientEnvChannelMchRequired": "Nhà cung cấp kênh là bắt buộc trong chế độ trực tiếp",
     "clientEnvCapabilityRequired": "Năng lực là bắt buộc trong chế độ trực tiếp",
     "channelLocked": "Phương thức thanh toán bị khóa cho đơn hàng này",

@@ -307,7 +307,7 @@ public class GatewayPayHandleService {
             return;
         }
         String terminalNo = terminal.getTerminalNo();
-        // 系统终端存在性/归属/启用校验: 失败拦截支付(不会建 Trade)
+        // 商户终端存在性/归属/启用校验: 失败拦截支付(不会建 Trade)
         terminalResolveService.validateTerminal(terminalNo, payParam.getMchNo());
         // 通道侧终端号解析: 宽松策略, 解析不到返回 null 按无报备继续
         String outTerminalNo = terminalResolveService.resolveOutTerminalNo(terminalNo, payParam.getChannelMchNo());

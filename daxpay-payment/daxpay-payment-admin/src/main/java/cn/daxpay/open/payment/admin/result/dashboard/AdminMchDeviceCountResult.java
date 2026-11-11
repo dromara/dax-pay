@@ -14,7 +14,11 @@ import lombok.experimental.Accessors;
 @Schema(title = "商户设备与应用计数")
 public class AdminMchDeviceCountResult {
 
-    /// 名下逻辑终端数(系统终端台账, 不限启用态)
+    /// 名下码牌张数(归属该商户的码牌, 不含平台未绑定码牌)
+    @Schema(description = "名下码牌张数(不含平台未绑定码牌)")
+    private Integer qrCodeCount;
+
+    /// 名下逻辑终端数(商户终端台账, 不限启用态)
     @Schema(description = "名下逻辑终端数")
     private Integer terminalCount;
 

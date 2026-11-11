@@ -126,7 +126,7 @@ public interface PermCodes {
             String MENU = "merchant:store";
         }
 
-        /// 系统终端 menuCode=merchant:terminal
+        /// 商户终端 menuCode=merchant:terminal
         interface Terminal {
             /// 菜单编码
             String MENU = "merchant:terminal";

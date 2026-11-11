@@ -760,7 +760,7 @@
       "size": "Kod runtime tidak boleh melebihi 16 aksara"
     },
     "systemTerminalNo": {
-      "notBlank": "Terminal sistem tidak boleh kosong"
+      "notBlank": "Terminal peniaga tidak boleh kosong"
     },
     "client": {
       "notBlank": "Kod klien tidak boleh kosong"

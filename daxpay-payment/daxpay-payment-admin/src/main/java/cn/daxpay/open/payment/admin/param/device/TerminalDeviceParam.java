@@ -9,10 +9,10 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 系统终端参数
+/// # 商户终端参数
 @Data
 @Accessors(chain = true)
-@Schema(title = "系统终端参数")
+@Schema(title = "商户终端参数")
 public class TerminalDeviceParam {
 
     @Schema(description = "主键")

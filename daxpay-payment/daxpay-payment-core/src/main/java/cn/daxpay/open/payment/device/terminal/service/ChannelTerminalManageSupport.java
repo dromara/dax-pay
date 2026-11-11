@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 /// # 通道终端台账维护(多端共用)
 ///
 /// 挂在通道商户下维护通道侧终端号与状态。关联关系在新增建档/报备/手动绑定时建立(报备即绑定):
-/// - 一条通道终端只归属一个系统终端; 同一系统终端在同一通道商户下按报送类型各一条;
+/// - 一条通道终端只归属一个商户终端; 同一商户终端在同一通道商户下按报送类型各一条;
 /// - 自动报备通道: 报备/注销/同步经通道报备策略([AbsChannelTerminalStrategy])调通道 API 回写状态与通道侧终端号;
 /// - 无报备策略的通道走人工登记([ChannelTerminalManageSupport#register]), 不调通道。
 ///
@@ -62,7 +62,7 @@ public class ChannelTerminalManageSupport {
     private final TransService transService;
     private final TerminalBindSupport terminalBindSupport;
 
-    /// 新增通道终端台账(建档即绑定系统终端)
+    /// 新增通道终端台账(建档即绑定商户终端)
     ///
     /// @param param 建档参数(不含商户号)
     /// @param mchNo 归属商户号(由调用端身份或业务参数决定, 不取自请求体)
@@ -83,7 +83,7 @@ public class ChannelTerminalManageSupport {
         PayProduct payProduct = payProductManager.findByCode(product)
                 // 产品: 支付产品不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist", product));
-        // 校验系统终端(存在性/同商户)
+        // 校验商户终端(存在性/同商户)
         DeviceTerminal systemTerminal = requireSystemTerminal(param.getSystemTerminalNo(), mchNo);
 
         DeviceChannelTerminal entity = new DeviceChannelTerminal();
@@ -100,7 +100,7 @@ public class ChannelTerminalManageSupport {
         entity.setRemark(param.getRemark());
         channelTerminalManager.save(entity);
 
-        // 建档即绑定: 同一系统终端在同一通道商户下按报送类型唯一
+        // 建档即绑定: 同一商户终端在同一通道商户下按报送类型唯一
         if (terminalBindSupport.hasTypeConflict(systemTerminal.getTerminalNo(), entity, entity.getId())) {
             // 终端: 同报送类型下已有通道终端
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.typeConflict", entity.getType());
@@ -108,7 +108,7 @@ public class ChannelTerminalManageSupport {
         terminalChannelBindManager.save(terminalBindSupport.buildBind(systemTerminal.getTerminalNo(), entity));
     }
 
-    /// 修改通道终端(仅名称/备注/报备参数; 通道商户/类型/系统终端绑定与登记状态不在此维护)
+    /// 修改通道终端(仅名称/备注/报备参数; 通道商户/类型/商户终端绑定与登记状态不在此维护)
     @Transactional(rollbackFor = Exception.class)
     public void update(ChannelTerminalSaveParam param) {
         DeviceChannelTerminal entity = channelTerminalManager.findById(param.getId())
@@ -149,29 +149,29 @@ public class ChannelTerminalManageSupport {
         channelTerminalManager.deleteById(id);
     }
 
-    /// 绑定系统终端(存量记录修复入口; 正常关联由新增建档建立)
+    /// 绑定商户终端(存量记录修复入口; 正常关联由新增建档建立)
     @Transactional(rollbackFor = Exception.class)
     public void bind(ChannelTerminalBindParam param) {
         DeviceTerminal system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         DeviceChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(system.getMchNo(), channel.getMchNo())) {
-            // 终端: 系统终端与通道终端须属于同一商户
+            // 终端: 商户终端与通道终端须属于同一商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
         }
         if (terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
             // 终端: 绑定关系已存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindExists");
         }
-        // 一条通道终端只归属一个系统终端
+        // 一条通道终端只归属一个商户终端
         if (terminalBindSupport.hasOtherOwner(channel.getId(), param.getSystemTerminalNo())) {
-            // 终端: 通道终端已绑定其他系统终端
+            // 终端: 通道终端已绑定其他商户终端
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.ownerExists");
         }
-        // 同一系统终端在同一通道商户、同一报送类型下仅一条
+        // 同一商户终端在同一通道商户、同一报送类型下仅一条
         if (terminalBindSupport.hasTypeConflict(param.getSystemTerminalNo(), channel, channel.getId())) {
             // 终端: 同报送类型下已有通道终端
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.typeConflict", channel.getType());
@@ -179,7 +179,7 @@ public class ChannelTerminalManageSupport {
         terminalChannelBindManager.save(terminalBindSupport.buildBind(param.getSystemTerminalNo(), channel));
     }
 
-    /// 解绑系统终端
+    /// 解绑商户终端
     @Transactional(rollbackFor = Exception.class)
     public void unbind(ChannelTerminalBindParam param) {
         if (!terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
@@ -189,7 +189,7 @@ public class ChannelTerminalManageSupport {
         terminalChannelBindManager.deleteBind(param.getSystemTerminalNo(), param.getChannelTerminalId());
     }
 
-    /// 查询通道终端已绑定的系统终端列表
+    /// 查询通道终端已绑定的商户终端列表
     public List<TerminalDeviceResult> listBoundSystem(Long channelTerminalId) {
         channelTerminalManager.findById(channelTerminalId)
                 // 终端: 通道终端不存在
@@ -248,9 +248,9 @@ public class ChannelTerminalManageSupport {
 
     /// 终端报备(报备即绑定): 调通道 API 报备并同步建立关联
     ///
-    /// - 已绑定的通道终端沿绑发起, 未绑定须选择系统终端;
+    /// - 已绑定的通道终端沿绑发起, 未绑定须选择商户终端;
     /// - 已报送状态拒绝重复报备, 须先注销;
-    /// - 更换系统终端须先注销(通道侧设备标识已上交, 换终端等于换设备);
+    /// - 更换商户终端须先注销(通道侧设备标识已上交, 换终端等于换设备);
     /// - 通道调用失败保留绑定关系并落 error, 重试无需重新选择;
     /// - 不支持自动报备的通道请使用手动登记([ChannelTerminalManageSupport#register])。
     @Transactional(rollbackFor = Exception.class)
@@ -317,20 +317,20 @@ public class ChannelTerminalManageSupport {
         this.applyOperateResult(entity, result);
     }
 
-    /// 取报备锚点的系统终端号(绑定关系中的首个)
+    /// 取报备锚点的商户终端号(绑定关系中的首个)
     private String requireBoundSystemTerminalNo(DeviceChannelTerminal entity) {
         return terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
                 .map(DeviceTerminalChannelBind::getSystemTerminalNo)
                 .findFirst()
-                // 终端: 未绑定系统终端
+                // 终端: 未绑定商户终端
                 .orElseThrow(() -> new OperationFailException(CommonCode.FAIL_CODE,
                         "error.device.terminal.ownerMissing"));
     }
 
-    /// 解析报备锚定的系统终端号并确保绑定就绪(入参优先, 沿用已绑定, 均无则报错)
+    /// 解析报备锚定的商户终端号并确保绑定就绪(入参优先, 沿用已绑定, 均无则报错)
     ///
-    /// - 首次绑定: 校验系统终端存在性与同商户、同报送类型唯一后建立绑定;
-    /// - 更换系统终端: 已报送须先注销; 未报送则替换原绑定。
+    /// - 首次绑定: 校验商户终端存在性与同商户、同报送类型唯一后建立绑定;
+    /// - 更换商户终端: 已报送须先注销; 未报送则替换原绑定。
     private String resolveAndEnsureBind(DeviceChannelTerminal entity, String inputTerminalNo) {
         DeviceTerminalChannelBind owner = terminalChannelBindManager.findByChannelTerminalId(entity.getId()).stream()
                 .findFirst()
@@ -339,10 +339,10 @@ public class ChannelTerminalManageSupport {
                 ? inputTerminalNo.trim()
                 : (owner == null ? null : owner.getSystemTerminalNo());
         if (StrUtil.isBlank(systemTerminalNo)) {
-            // 终端: 未选择系统终端
+            // 终端: 未选择商户终端
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.terminalNotSelected");
         }
-        // 更换系统终端: 已报送须先注销; 未报送则替换原绑定
+        // 更换商户终端: 已报送须先注销; 未报送则替换原绑定
         if (owner != null && !Objects.equals(owner.getSystemTerminalNo(), systemTerminalNo)) {
             if (ChannelTerminalStatusEnum.SUBMIT.getCode().equals(entity.getStatus())) {
                 // 终端: 已报送不可直接换绑
@@ -378,13 +378,13 @@ public class ChannelTerminalManageSupport {
         channelTerminalManager.updateById(entity);
     }
 
-    /// 校验系统终端(存在性/同商户), 返回系统终端实体
+    /// 校验商户终端(存在性/同商户), 返回商户终端实体
     private DeviceTerminal requireSystemTerminal(String systemTerminalNo, String mchNo) {
         DeviceTerminal systemTerminal = terminalDeviceManager.findByTerminalNo(systemTerminalNo)
-                // 终端: 系统终端不存在
+                // 终端: 商户终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (!Objects.equals(systemTerminal.getMchNo(), mchNo)) {
-            // 终端: 系统终端与通道终端须属于同一商户
+            // 终端: 商户终端与通道终端须属于同一商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
         }
         return systemTerminal;

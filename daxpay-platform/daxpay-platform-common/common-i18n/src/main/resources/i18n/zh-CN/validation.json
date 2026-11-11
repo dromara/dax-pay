@@ -793,7 +793,7 @@
       "notBlank": "转账场景名称不可为空"
     },
     "systemTerminalNo": {
-      "notBlank": "系统终端不可为空"
+      "notBlank": "商户终端不可为空"
     },
     "transferNo": {
       "size": "平台转账单号不可超过100位",

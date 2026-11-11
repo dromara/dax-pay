@@ -19,7 +19,7 @@ import lombok.experimental.FieldNameConstants;
 /// 挂在通道商户 [channelMchNo] 下, 登记通道侧终端号与状态。
 /// 已实现报备策略([cn.daxpay.open.payment.device.terminal.strategy.AbsChannelTerminalStrategy])的产品
 /// 经通道报备 API 报备/注销/同步并回写终端号与状态; 无实现的产品由运营人工登记维护。
-/// 与系统终端通过 [DeviceTerminalChannelBind] 多对多绑定。
+/// 与商户终端通过 [DeviceTerminalChannelBind] 多对多绑定。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants

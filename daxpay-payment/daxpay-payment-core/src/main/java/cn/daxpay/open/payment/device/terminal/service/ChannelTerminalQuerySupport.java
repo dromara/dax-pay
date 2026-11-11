@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 /// # 通道终端台账查询(多端共用)
 ///
-/// 运营端与商户端的通道终端分页/详情共用同一套查询、字典翻译与已绑定系统终端回填,
+/// 运营端与商户端的通道终端分页/详情共用同一套查询、字典翻译与已绑定商户终端回填,
 /// 避免两端各自拼装导致字段口径漂移。商户号隔离由调用方在查询条件上写入, 本类不做商户过滤。
 @Slf4j
 @Service
@@ -37,7 +37,7 @@ public class ChannelTerminalQuerySupport {
     private final TerminalDeviceManager terminalDeviceManager;
     private final TransService transService;
 
-    /// 分页查询(含字典翻译与已绑定系统终端回填)
+    /// 分页查询(含字典翻译与已绑定商户终端回填)
     public PageResult<ChannelTerminalResult> page(PageParam pageParam, ChannelTerminalQuery query) {
         PageResult<ChannelTerminalResult> pageResult = MpUtil.toPageResult(channelTerminalManager.page(pageParam, query));
         fillSystemTerminals(pageResult.getRecords());
@@ -45,7 +45,7 @@ public class ChannelTerminalQuerySupport {
         return pageResult;
     }
 
-    /// 详情查询(含字典翻译与已绑定系统终端回填)
+    /// 详情查询(含字典翻译与已绑定商户终端回填)
     public ChannelTerminalResult findById(Long id) {
         ChannelTerminalResult result = channelTerminalManager.findById(id)
                 .map(DeviceChannelTerminal::toResult)
@@ -56,7 +56,7 @@ public class ChannelTerminalQuerySupport {
         return result;
     }
 
-    /// 批量填充通道终端已绑定的系统终端列表(一条通道终端只归属一个系统终端, 列表形态兼容遗留脏数据)
+    /// 批量填充通道终端已绑定的商户终端列表(一条通道终端只归属一个商户终端, 列表形态兼容遗留脏数据)
     public void fillSystemTerminals(List<ChannelTerminalResult> results) {
         if (results.isEmpty()) {
             return;
@@ -74,7 +74,7 @@ public class ChannelTerminalQuerySupport {
         if (bindGroup.isEmpty()) {
             return;
         }
-        // 批量查系统终端并按编码索引
+        // 批量查商户终端并按编码索引
         List<String> terminalNos = bindGroup.values().stream()
                 .flatMap(List::stream)
                 .map(DeviceTerminalChannelBind::getSystemTerminalNo)

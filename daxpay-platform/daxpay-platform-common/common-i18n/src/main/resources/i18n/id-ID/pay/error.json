@@ -45,6 +45,7 @@
     "openIdRequired": "Metode pembayaran ini memerlukan openId, silakan otorisasi terlebih dahulu",
     "clientEnvsRequired": "Konfigurasi setidaknya satu lingkungan dan formulir",
     "clientEnvMethodRequired": "Metode pembayaran diperlukan untuk baris yang diisi",
+    "clientEnvMethodMismatch": "Lingkungan klien [{0}] tidak mendukung metode pembayaran [{1}], silakan sesuaikan sebelum menyimpan",
     "clientEnvChannelMchRequired": "Pedagang saluran diperlukan dalam mode langsung",
     "clientEnvCapabilityRequired": "Kemampuan diperlukan dalam mode langsung",
     "channelLocked": "Metode pembayaran dikunci untuk pesanan ini",

@@ -11,15 +11,15 @@ import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 
-/// # 系统终端
+/// # 商户终端
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@Schema(title = "系统终端")
+@Schema(title = "商户终端")
 public class TerminalDeviceResult extends MchBaseResult {
 
-    @Schema(description = "系统终端编码")
+    @Schema(description = "商户终端编码")
     private String terminalNo;
 
     @Schema(description = "终端名称")

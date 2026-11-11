@@ -24,7 +24,7 @@ public class MockTerminalOperateReq {
     /// 报送类型(common/wechat/alipay/union)
     private String type;
 
-    /// 系统终端号(报备锚点)
+    /// 商户终端号(报备锚点)
     private String systemTerminalNo;
 
     /// 通道侧终端号(注销/同步定位用; 报备时为空)

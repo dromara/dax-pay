@@ -3,5 +3,6 @@
   "payFailed": "Lỗi thanh toán EasyPay: {0}",
   "refundFailed": "Lỗi hoàn tiền EasyPay: {0}",
   "unsupportedPayMethod": "Phương thức thanh toán không được EasyPay hỗ trợ: {0}",
-  "mchDuplicate": "ID merchant EasyPay đã tồn tại dưới merchant này"
+  "mchDuplicate": "ID merchant EasyPay đã tồn tại dưới merchant này",
+  "baseInfoRequired": "Cần nhập địa chỉ cổng nền tảng và ID đối tác (pid) khi lưu lần đầu"
 }

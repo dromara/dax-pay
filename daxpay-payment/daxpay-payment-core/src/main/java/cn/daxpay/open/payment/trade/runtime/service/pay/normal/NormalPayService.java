@@ -178,7 +178,7 @@ public class NormalPayService {
 
     /// 终端校验与通道侧终端号解析
     ///
-    /// 上送终端号时: 先校验系统终端(存在/归属/启用, 失败拦截下单, 不会建单),
+    /// 上送终端号时: 先校验商户终端(存在/归属/启用, 失败拦截下单, 不会建单),
     /// 再按绑定关系解析通道侧终端号回填到 [TerminalInfo#getResolvedOutTerminalNo] 供建单落库
     /// (宽松策略, 解析不到按无报备继续)。
     ///
@@ -203,7 +203,7 @@ public class NormalPayService {
             return;
         }
         String terminalNo = terminal.getTerminalNo();
-        // 系统终端存在性/归属/启用校验: 失败拦截下单
+        // 商户终端存在性/归属/启用校验: 失败拦截下单
         terminalResolveService.validateTerminal(terminalNo, payParam.getMchNo());
         // 通道侧终端号解析: 宽松策略, 解析不到返回 null 按无报备继续
         String outTerminalNo = terminalResolveService.resolveOutTerminalNo(terminalNo, payParam.getChannelMchNo());

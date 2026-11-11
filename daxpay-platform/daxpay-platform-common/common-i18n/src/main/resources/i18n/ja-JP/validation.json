@@ -789,7 +789,7 @@
       "notBlank": "振込シーン名は空にできません"
     },
     "systemTerminalNo": {
-      "notBlank": "システム端末は必須です"
+      "notBlank": "マーチャント端末は必須です"
     },
     "transferNo": {
       "size": "プラットフォーム送金番号は100文字を超えることはできません",

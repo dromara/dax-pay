@@ -3,7 +3,9 @@ package cn.daxpay.open.payment.app.merchant.service.channel;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
+import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantReferenceResult;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
+import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantReferenceService;
 import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -25,6 +27,7 @@ import java.util.Objects;
 public class AppMerchantChannelMerchantService {
 
     private final ChannelMerchantService channelMerchantService;
+    private final ChannelMerchantReferenceService channelMerchantReferenceService;
     private final PaymentContext paymentContext;
 
     /// 当前登录商户号
@@ -62,6 +65,14 @@ public class AppMerchantChannelMerchantService {
     /// 查询当前商户全部通道商户（通道路由基础配置等选择弹层候选，不按渠道过滤）
     public List<ChannelMerchantResult> findAllOfCurrentMch() {
         return channelMerchantService.findAllByMchNo(requireMchNo());
+    }
+
+    /// 引用明细查询(按应用分组, 停用影响面提示用)
+    ///
+    /// 按 channelMchNo 直查; mch_channel_merchant 走 TenantLine 按 mchNo 行级隔离,
+    /// 非本商户的通道商户号在服务层即查不到而抛不存在, 天然防越权, 无需再 assertOwned。
+    public ChannelMerchantReferenceResult referenceDetail(String channelMchNo) {
+        return channelMerchantReferenceService.referenceDetail(channelMchNo);
     }
 
     /// 更新启用状态（先校验归属再改状态）
