@@ -210,6 +210,8 @@ public class MchVirtualDeviceService {
     public VirtualDeviceResult findById(Long id) {
         DeviceVirtual entity = requireOwned(id);
         VirtualDeviceResult result = entity.toResult();
+        // 运行态组装(激活/在线), 与列表页、运营端详情同口径
+        fillRuntime(List.of(entity), List.of(result));
         // 试播/试打回执快照(Redis, 1 小时内有效; 与收款回执三列语义分开)
         virtualTestAckTracker.load(entity.getDeviceNo()).ifPresent(ack -> result
                 .setLastTestAckTime(ack.time())
