@@ -70,7 +70,8 @@ public class SaExceptionHandler {
     public ResponseEntity<Result<Void>> handleNotLoginException(NotLoginException ex, HttpServletRequest request){
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
-        log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
+        log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key);
+        log.debug("鉴权异常堆栈", ex);
         // SSE 建连未登录: 无 body 401
         if (isEventStreamRequest(request)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -118,7 +119,8 @@ public class SaExceptionHandler {
     public ResponseEntity<Result<Void>> handleBusinessException(RouterCheckException ex, HttpServletRequest request) {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
-        log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
+        log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key);
+        log.debug("鉴权异常堆栈", ex);
         // SSE 连接无权限: 无 body 403, 机制见 [#handleNotLoginException]
         if (isEventStreamRequest(request)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
