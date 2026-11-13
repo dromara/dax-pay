@@ -1,14 +1,12 @@
 package cn.daxpay.open.platform.capability.alipay.openapi;
 
+import cn.daxpay.open.platform.core.util.RsaKeyLoader;
 import lombok.experimental.UtilityClass;
 
 import java.nio.charset.StandardCharsets;
-import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
@@ -21,7 +19,7 @@ import java.util.Objects;
 /// 对齐官方 SDK `AlipaySignature` 的 RSA2 行为:
 /// - 签名串: 除 sign 外非空参数按 key 字典序 `k=v&k=v`
 /// - 算法: SHA256withRSA + Base64
-/// - 密钥: 支持 PEM 与裸 Base64(PKCS8 私钥 / X509 公钥)
+/// - 密钥: 支持 PEM 与裸 Base64(PKCS#8/PKCS#1 私钥 / X.509/PKCS#1 公钥)
 /// - 字符集固定 UTF-8(避免平台默认编码差异)
 ///
 @UtilityClass
@@ -78,34 +76,21 @@ public class AlipayOpenApiSigner {
         }
     }
 
-    /// 加载 PKCS8 私钥(兼容 PEM 头与裸 Base64)
+    /// 加载私钥(PKCS#8 优先, 回退 PKCS#1; 兼容 PEM 头与裸 Base64)
     public PrivateKey loadPrivateKey(String keyContent) {
         try {
-            byte[] decoded = Base64.getDecoder().decode(stripKey(keyContent));
-            return KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(decoded));
+            return RsaKeyLoader.loadPrivateKey(keyContent);
         } catch (Exception e) {
             throw new IllegalStateException("alipay private key parse failed: " + e.getMessage(), e);
         }
     }
 
-    /// 加载 X509 公钥(兼容 PEM 头与裸 Base64)
+    /// 加载公钥(X.509 优先, 回退 PKCS#1; 兼容 PEM 头与裸 Base64)
     public PublicKey loadPublicKey(String keyContent) {
         try {
-            byte[] decoded = Base64.getDecoder().decode(stripKey(keyContent));
-            return KeyFactory.getInstance("RSA").generatePublic(new X509EncodedKeySpec(decoded));
+            return RsaKeyLoader.loadPublicKey(keyContent);
         } catch (Exception e) {
             throw new IllegalStateException("alipay public key parse failed: " + e.getMessage(), e);
         }
-    }
-
-    private String stripKey(String keyContent) {
-        return keyContent
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
     }
 }

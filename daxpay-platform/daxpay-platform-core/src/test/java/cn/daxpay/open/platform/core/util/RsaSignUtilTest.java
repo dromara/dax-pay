@@ -1,14 +1,25 @@
 package cn.daxpay.open.platform.core.util;
 
+import cn.daxpay.open.platform.core.exception.ValidationFailedException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class RsaSignUtilTest {
+
+    @Test
+    void loadPublicKeyFromPem_invalidPemHeader_shouldThrowValidationFailedException() {
+        // 关键回归: PEM 头未匹配(如 PKCS#1 公钥头)时, Base64 解码异常必须收敛为校验异常, 不能冒泡成系统错误(500)
+        assertThrows(ValidationFailedException.class, () -> RsaSignUtil.loadPublicKeyFromPem(
+                "-----BEGIN RSA PUBLIC KEY-----\nnot-a-valid-key\n-----END RSA PUBLIC KEY-----"));
+        assertThrows(ValidationFailedException.class, () -> RsaSignUtil.loadPrivateKeyFromPem(
+                "-----BEGIN RSA PRIVATE KEY-----\nnot-a-valid-key\n-----END RSA PRIVATE KEY-----"));
+    }
 
     @Test
     void normalizePublicKeyPem_foldedSingleLine_shouldReturnStandardPem() {

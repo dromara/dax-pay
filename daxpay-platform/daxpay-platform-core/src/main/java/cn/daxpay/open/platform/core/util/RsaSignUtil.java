@@ -6,8 +6,7 @@ import lombok.experimental.UtilityClass;
 
 import javax.crypto.Cipher;
 import java.security.*;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
+import java.security.spec.InvalidKeySpecException;
 import java.util.Base64;
 
 /// # Rsa签名工具类
@@ -18,40 +17,25 @@ public class RsaSignUtil {
     private static final String SIGNATURE_ALGORITHM = "SHA256withRSA";
 
     /// 读取私钥
+    ///
+    /// 支持 PKCS#8 与 PKCS#1 两种格式(各来源粘贴的密钥格式不统一), PEM 头尾与换行可选。
     public PrivateKey loadPrivateKeyFromPem(String pemContent) {
-        String privateKeyPEM = pemContent
-                .replace("-----BEGIN PRIVATE KEY-----", "")
-                .replace("-----END PRIVATE KEY-----", "")
-                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
-                .replace("-----END RSA PRIVATE KEY-----", "")
-                .replaceAll("\\s", "");
-
-        byte[] decoded = Base64.getDecoder().decode(privateKeyPEM);
-
         try {
-            var keySpec = new PKCS8EncodedKeySpec(decoded);
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            return kf.generatePrivate(keySpec);
-        } catch (Exception e) {
-            // 通用: 私钥解析失败，需要为 PKCS#8 格式的Rsa私钥
+            return RsaKeyLoader.loadPrivateKey(pemContent);
+        } catch (InvalidKeySpecException e) {
+            // 通用: 私钥解析失败，需要为 PKCS#8/PKCS#1 格式的Rsa私钥
             throw new ValidationFailedException("error.common.rsaPrivateKeyParseFailed");
         }
     }
 
     /// 从 PEM 文件读取公钥
+    ///
+    /// 支持 X.509 与 PKCS#1 两种格式(公钥标准形态为 X.509/SPKI, 部分工具导出 PKCS#1), PEM 头尾与换行可选。
     public PublicKey loadPublicKeyFromPem(String pemContent) {
-        String publicKeyPEM = pemContent
-                .replace("-----BEGIN PUBLIC KEY-----", "")
-                .replace("-----END PUBLIC KEY-----", "")
-                .replaceAll("\\s", "");
-
-        byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
-        var keySpec = new X509EncodedKeySpec(decoded);
         try {
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            return kf.generatePublic(keySpec);
-        } catch (Exception e) {
-            // 通用: 公钥解析失败，需要为 PKCS#8 格式的Rsa公钥
+            return RsaKeyLoader.loadPublicKey(pemContent);
+        } catch (InvalidKeySpecException e) {
+            // 通用: 公钥解析失败，需要为 X.509/PKCS#1 格式的Rsa公钥
             throw new ValidationFailedException("error.common.rsaPublicKeyParseFailed");
         }
     }
